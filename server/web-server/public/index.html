@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Demo Client</title>
+
+		<link type="text/css" rel="stylesheet" href="css/base.css" />
+
+		<script src="js/lib/build/build.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			require('boot');
+		</script> 
+		<script type="text/javascript">
+			var pomelo = window.pomelo;
+			var host = "127.0.0.1";
+			var port = "3010";
+			function Connect() {
+				// Basically connect and send a hello world
+				pomelo.init({host: host, port: port, log: true},function() {
+					pomelo.request("connector.entryHandler.entry", "What a pleb.", function(data) {
+						alert(data.msg);
+					});
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div>
+			<input type="button" value="Hello World" onclick="Connect()"/>
+		</div>
+	</body>
+</html>
