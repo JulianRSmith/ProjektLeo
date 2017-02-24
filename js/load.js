@@ -1,9 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+//                               Load.js                                      //
+////////////////////////////////////////////////////////////////////////////////
+
 var loadState = {
     
     preload: function () {
         var loadText = game.add.text(screenWidth/2,100,'loading...',{ font: "15px Arial", fill: "#ffffff" });
-        game.stage.backgroundColor = "#660066";
-        var menuText;
+        ////////////////////////////////////////////////////////////////////////
+        // IMAGES
+        game.load.spritesheet('playButton', './assets/buttons/playButton.png', 200, 100);
+        //////////////////////////////////////////////////////////////////////// 
     },
     
     create: function () {
