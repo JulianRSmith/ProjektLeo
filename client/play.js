@@ -29,5 +29,6 @@ var playState = {
     
     render: function () {
         game.debug.spriteInfo(player, 32, 32);
+        game.debug.body(player);
     }
 }

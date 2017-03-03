@@ -13,7 +13,8 @@ var game = new Phaser.Game(screenWidth, 600, Phaser.AUTO, 'gameViewpoint');
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
 game.state.add('menu', menuState);
-// game.state.add('play', playState);
+game.state.add('play', playState);
+game.state.add('char', charState);
 
 // Call boot state
 game.state.start('boot');
