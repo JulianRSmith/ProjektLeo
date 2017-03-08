@@ -6,8 +6,12 @@
 var screenWidth = window.innerWidth;
 var screenHeight = window.innerHeight;
 
+// Keep these values just for future access based on their name
+var viewportWidth = screenWidth;
+var viewportHeight = 600;
+
 // Set up game enviornemnt
-var game = new Phaser.Game(screenWidth, 600, Phaser.AUTO, 'gameViewpoint');
+var game = new Phaser.Game(screenWidth, viewportHeight, Phaser.AUTO, 'gameViewpoint');
 
 // Game States
 game.state.add('boot', bootState);

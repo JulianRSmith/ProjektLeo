@@ -1,0 +1,7 @@
+var lobbyState = {
+    
+    create: function () {
+        
+    }
+    
+}

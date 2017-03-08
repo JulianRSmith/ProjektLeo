@@ -1,16 +1,10 @@
 var network = {
 
-	connect: function(host, port) {
-		debugText.text += "Connecting to server " + host + ":" + port + "..."
-		pomelo.init({host: host, port: port, log: true}, function() {
-			pomelo.request("connector.entryHandler.entry", "Hello", function(data) {4
-				debugText.text += "\nConnected";
-				debugText.text += "\nServer Message: " + data.msg;
-			});
-		});
-
-		pomelo.on('disconnect', function(reason) {
-			debugText.text += "Server Message: " + reason;
-		});
+	/**
+	 * Sends a request to the server and specified route then sends the response to the callback method.
+	 */
+	request: function(host, port, callback) {
+		pomelo.init({host: host, port: port, log: true}, callback);
 	}
+	
 }
