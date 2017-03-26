@@ -37,9 +37,7 @@ var charState = {
         btnSound = game.add.audio('btnSound');
         btnSound.allowMultiple = true;
         
-        // Confirm Button
-        var buttonPlay = createBtnMid('selectButton', 500, this.actionOnClickChar);
-        
+        var buttonPlay = createLabelButton('Select', screenWidth / 2, viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.actionOnClickChar, labelHover, labelOut);
         var buttonMenu = createLabelButton('Menu', 138, viewportHeight - 70, '#FFFFFF', "bGreenNormal", returnMenuOnClick, labelHover, labelOut);
         
     },

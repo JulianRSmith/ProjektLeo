@@ -16,7 +16,7 @@ var loadState = {
         game.stage.backgroundColor = "#ffffff";
         
         // Display loading text
-        var loadText = game.add.text(0, 0,'loading...',{font: "40px Calibri", fill: "#111111", boundsAlignH: "center", boundsAlignV: "middle"});
+        var loadText = game.add.text(0, 0,'Loading...',{font: "40px Calibri", fill: "#111111", boundsAlignH: "center", boundsAlignV: "middle"});
         loadText.setTextBounds(0, 100, screenWidth, 100);
         
         // Call asset loading functions
