@@ -10,17 +10,11 @@ var lobbyList = [];
 
 Handler.prototype.onEntry = function(msg, session, next) {
 	console.log(session);
-	next(null, {code: 200, msg: 'Welcome to the server!'});
+	next(null, {msg: 'Welcome to the server!'});
 };
 
 Handler.prototype.onGetLobbies = function(msg, session, next) {
-	next(null, 
-		{
-			code: 200, 
-			lobbyCount: lobbyList.length,
-			lobbyData: lobbyList
-		}
-	)
+	next(null, { lobbyCount: lobbyList.length, lobbyData: lobbyList});
 }
 
 Handler.prototype.onCreateLobby = function(msg, session, next){
@@ -32,5 +26,10 @@ Handler.prototype.onCreateLobby = function(msg, session, next){
 }
 
 Handler.prototype.onGetPing = function(msg, session, next) {
-	next(null, {code: 200});
+	next(null, {msg: "ping"});
+}
+
+Handler.prototype.onDisconnect = function(msg, session, next){
+	next(null, {msg: "Disconnect requested."});
+	kickBySessionId(session);
 }
