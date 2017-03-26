@@ -27,3 +27,4 @@ Handler.prototype.createLobby = function(msg, session, next){
 	lobbyList.push({name: "New Lobby", slots: 2, players: []});
 	next(null, {code: 200, name: "New Lobby", slots: 2, players: []});
 }
+

@@ -7,6 +7,13 @@
 var charState = {
     
     leoArt: '',
+    cleoArt: '',
+    Art: '',
+    imgPos1: 0,
+    imgPos2: 0,
+    imgWidth:0,
+    imgWidthHalf:0,
+    chosen: false,
     
     create: function () {
         
@@ -18,31 +25,81 @@ var charState = {
         charText.setTextBounds(0, 50, screenWidth, 50);
         
         // Character Buttons
-        this.leoArt = createBtnArt('leoArt', 270,this.actionOnClickArt('Leo'),this.actionOnOverArt);
+        var gameXcenter = game.world.centerX;
+        this.imgWidth    = game.cache.getImage('leoArt').width;
+        this.imgWidthHalf = this.imgWidth/8;
+        this.imgPos1      = gameXcenter - (this.imgWidth/5);
+        this.leoArt  = createCharArt(this.imgPos1,'leoArt');
+        this.boudArt  = createCharArt(gameXcenter,'boudArt');
+        this.imgPos2      = gameXcenter + (this.imgWidth/5);
+        this.cleoArt = createCharArt(this.imgPos2,'cleoArt');
+        
+        btnSound = game.add.audio('btnSound');
+        btnSound.allowMultiple = true;
         
         // Confirm Button
         var buttonPlay = createBtnMid('selectButton', 500, this.actionOnClickChar);
         
+        var buttonMenu = createLabelButton('| Menu |', 10, viewportHeight - 32, '#FFFFFF', returnMenuOnClick, labelHover, labelOut);
+        
+    },
+    
+    update: function () {
+        if (!this.chosen) {
+            
+            this.leoArt.events.onInputDown.add(function(){
+                userChar = 'playerKingL';
+                this.leoArt.frame = 0;
+                this.chosen == true;
+            }, this);
+            this.leoArt.events.onInputOver.add(function(){
+                this.leoArt.animations.play('hover');
+                this.game.canvas.style.cursor = "pointer";
+            }, this);
+            this.leoArt.events.onInputOut.add(function(){
+                this.leoArt.animations.stop('hover');
+                this.game.canvas.style.cursor = "default";
+            }, this);
+            
+            this.cleoArt.events.onInputDown.add(function(){
+                userChar = 'playerCleoL';
+                this.cleoArt.frame = 0;
+                this.chosen == true;
+            }, this);
+            this.cleoArt.events.onInputOver.add(function(){
+                this.cleoArt.animations.play('hover');
+                this.game.canvas.style.cursor = "pointer";
+            }, this);
+            this.cleoArt.events.onInputOut.add(function(){
+                this.cleoArt.animations.stop('hover');
+                this.game.canvas.style.cursor = "default";
+            }, this);
+            
+        }
     },
     
     // Function which calls when the player clicks the button
     actionOnClickChar: function () {
         console.log("CLICK");
         // Add button sound
-        btnSound = game.add.audio('btnSound');
         mainSound.stop();
-        btnSound.play();
+        this.btnSound.play();
         game.state.start('play');
     
     },
      
-    actionOnClickArt: function (chosenChar) {
-        console.log(chosenChar);
-        this.leoArt.frame = 0;
+    actionOnClickArt: function (playerChosen) {
+        userChar = playerChosen;
+        // console.log(userChar)
     },
     
     actionOnOverArt: function () {
-        console.log("Hover");
+        // userChar = chosenChar;
+        // console.log(imgPos);
+    },
+    
+    returnMenuOnClick: function() {
+        game.state.start("menu");
     }
     
 }
