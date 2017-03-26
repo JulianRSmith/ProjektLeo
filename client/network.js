@@ -1,16 +1,24 @@
+var networkConnected = false;
+
 var network = {
-
+	
+	/**
+	 * Opens a connection with the server.
+	 */
 	connect: function(host, port) {
-		debugText.text += "Connecting to server " + host + ":" + port + "..."
-		pomelo.init({host: host, port: port, log: true}, function() {
-			pomelo.request("connector.entryHandler.entry", "Hello", function(data) {4
-				debugText.text += "\nConnected";
-				debugText.text += "\nServer Message: " + data.msg;
-			});
-		});
-
-		pomelo.on('disconnect', function(reason) {
-			debugText.text += "Server Message: " + reason;
-		});
+		pomelo.init({host: host, port: port, log: true}, function(){ console.log("Connected to server!"); networkConnected = true; });
+		
+		pomelo.on('onGetPing', function(){ console.log('Server has sent a ping.'); });
+	},
+	
+	/**
+	 * Sends a request to the server and specified route then sends the response to the callback method.
+	 */
+	request: function(route, data, callback){
+		pomelo.request(route, data, callback);
+	},
+	
+	disconnect: function(){
+		pomelo.disconnect();
 	}
 }
