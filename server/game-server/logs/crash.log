@@ -1,6 +1,0 @@
-[2017-02-23 21:50:10.119] [INFO] crash-log - [32m[C:\Projects\ProjektLeo\server\game-server\node_modules\pomelo\lib\master\master.js] [39m[connector],[connector-server-1],[1487886610118],[disconnect]
-[2017-02-23 21:50:46.429] [INFO] crash-log - [32m[C:\Projects\ProjektLeo\server\game-server\node_modules\pomelo\lib\master\master.js] [39m[connector],[connector-server-1],[1487886646429],[disconnect]
-<<<<<<< HEAD
-=======
-[2017-02-25 18:20:47.053] [INFO] crash-log - [32m[C:\Projects\ProjektLeo\server\game-server\node_modules\pomelo\lib\master\master.js] [39m[connector],[connector-server-1],[1488046847053],[disconnect]
->>>>>>> d89087b5743e540ea744d69e5b139966f041ba8f

@@ -1,6 +1,0 @@
-[2017-02-23 21:50:10.111] [INFO] admin-log - [32m[C:\Projects\ProjektLeo\server\game-server\node_modules\pomelo\lib\master\master.js] [39m{"action":"execute","moduleId":"__console__","method":"clientHandler","msg":{"signal":"stop","ids":[],"clientId":"pomelo_terminal_1487886610065","username":"admin"}}
-[2017-02-23 21:50:46.424] [INFO] admin-log - [32m[C:\Projects\ProjektLeo\server\game-server\node_modules\pomelo\lib\master\master.js] [39m{"action":"execute","moduleId":"__console__","method":"clientHandler","msg":{"signal":"stop","ids":[],"clientId":"pomelo_terminal_1487886646402","username":"admin"}}
-<<<<<<< HEAD
-=======
-[2017-02-25 18:20:47.043] [INFO] admin-log - [32m[C:\Projects\ProjektLeo\server\game-server\node_modules\pomelo\lib\master\master.js] [39m{"action":"execute","moduleId":"__console__","method":"clientHandler","msg":{"signal":"stop","ids":[],"clientId":"pomelo_terminal_1488046847016","username":"admin"}}
->>>>>>> d89087b5743e540ea744d69e5b139966f041ba8f
