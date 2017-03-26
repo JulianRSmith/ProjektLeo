@@ -15,7 +15,6 @@ var protocol = {
 		console.log("protocol.onGetLobbies():");
 		console.log(data);
 		
-		lobbyCache = [];
 		lobbyCache = data.lobbyData;
 		
 		lobbyState.updateLobbyList();

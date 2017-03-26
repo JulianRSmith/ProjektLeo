@@ -62,18 +62,17 @@ var lobbyState = {
     
     emptyDrawList: function() {
 
-		if(lobbyList.length > 0) {
-			for(i = 0; i < 5; i++) {
-				lobbyList[i][0].destroy();
-				lobbyList[i][1].destroy();
-			}
-		}
         
     },
     
     updateLobbyList: function() {
         
-        this.emptyDrawList();
+		if(lobbyList.length > 0) {
+			for(i = 0; i < 5; i += 1) {
+			    lobbyList[i][0].destroy();
+			    lobbyList[i][1].destroy();
+			}
+		}
         
 		if(lobbyCache.length > 5) {
 		    var nextState = ((lobbyPage + 1) * 5 < lobbyCache.length);
@@ -90,6 +89,19 @@ var lobbyState = {
             buttonNextPage[1].alpha = nextState;
             buttonPrevPage[1].inputEnabled = prevState;
             buttonPrevPage[1].alpha = prevState;
+		}
+		else {
+		    // Text layer
+            buttonNextPage[0].inputEnabled = 0;
+            buttonNextPage[0].alpha = 0;
+            buttonPrevPage[0].inputEnabled = 0;
+            buttonPrevPage[0].alpha = 0;
+            
+            // Image layer
+            buttonNextPage[1].inputEnabled = 0;
+            buttonNextPage[1].alpha = 0;
+            buttonPrevPage[1].inputEnabled = 0;
+            buttonPrevPage[1].alpha = 0;
 		}
 		
     	for(i = 0; i < 5; i++) {
