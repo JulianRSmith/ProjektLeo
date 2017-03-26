@@ -8,12 +8,12 @@ var Handler = function(app) {
 
 var lobbyList = [];
 
-Handler.prototype.entry = function(msg, session, next) {
+Handler.prototype.onEntry = function(msg, session, next) {
 	console.log(session);
 	next(null, {code: 200, msg: 'Welcome to the server!'});
 };
 
-Handler.prototype.getLobbies = function(msg, session, next) {
+Handler.prototype.onGetLobbies = function(msg, session, next) {
 	next(null, 
 		{
 			code: 200, 
@@ -23,7 +23,14 @@ Handler.prototype.getLobbies = function(msg, session, next) {
 	)
 }
 
-Handler.prototype.createLobby = function(msg, session, next){
-	lobbyList.push({name: "New Lobby", slots: 2, players: []});
-	next(null, {code: 200, name: "New Lobby", slots: 2, players: []});
+Handler.prototype.onCreateLobby = function(msg, session, next){
+	var lobby = {id: lobbyList.length, name: msg.lobbyName, host: msg.lobbyHost, slots: 2, players: []};
+
+	lobbyList.push(lobby);
+	
+	next(null, lobby);
+}
+
+Handler.prototype.onGetPing = function(msg, session, next) {
+	next(null, {code: 200});
 }
