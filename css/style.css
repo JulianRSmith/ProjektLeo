@@ -37,7 +37,7 @@ h3 {
 
 }
 	.background{
-		background: rgba(0, 0, 0, .5);
+		background: rgba(255, 255, 255, .5);
 	}
 	
 .menu-container{
@@ -77,4 +77,15 @@ h3 {
 		color: #000000; 
 
 		transition: all ease-out .25s;
+	}
+	
+	.menu-message {
+		color: #FFFFFF;
+		background: #000000;
+		
+		border-radius: 4px;
+		
+		text-align: center;
+		
+		padding: 10px;
 	}

@@ -2,13 +2,11 @@
 //                               Load.js                                      //
 ////////////////////////////////////////////////////////////////////////////////
 
-var serverHost = "10.1.146.236";
-var serverPort = 3010;
-
 var loadState = {
     
     // Declare asset paths
     btnPath:  './assets/buttons/',
+    btnNewPath:  './assets/buttons/NewButtons/',
     plrPath: './assets/players/',
     audPath: './assets/sound/',
     backPath: './assets/backgrounds/',
@@ -45,11 +43,19 @@ var loadState = {
         game.load.spritesheet('playerKingL', this.plrPath + 'KingLeoneidus2.png', 256, 256);
         game.load.spritesheet('playerCleoL', this.plrPath + 'Cleopatra2.png', 256, 256);
         game.load.spritesheet('playerBoudicaL', this.plrPath + 'Boudica2.png', 256, 256);
-        game.load.image('charBg', this.backPath + 'charBg.png');
+        game.load.image('charBg', this.backPath + 'newBg.png');
         game.load.image('battleBG', this.backPath + 'battleBG.png');
         game.load.image('logoMain', './assets/logo/logo.png');
         game.load.image('hBarRed', './assets/other/healthBar.png');
         game.load.image('hBarBG', './assets/other/healthBarBG.png');
+        
+        // New buttons
+        game.load.image('bGreenHover', this.btnNewPath + "bGreenHover.png");
+        game.load.image('bGreenNormal', this.btnNewPath + "bGreenHover.png");
+        game.load.image('bRedHover', this.btnNewPath + "bRedHover.png");
+        game.load.image('bRedNormal', this.btnNewPath + "bRedNormal.png");
+        game.load.image('bBlueBarNormal', this.btnNewPath + "bBlueBarNormal.png");
+        game.load.image('bGreenArrowNormal', this.btnNewPath + "bGreenArrowNormal.png");
     },
     
     // Load Sound Function

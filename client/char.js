@@ -21,7 +21,7 @@ var charState = {
         tiledBackgroundX('charBg');
         
         // Title Text
-        var charText = game.add.text(0, 0, 'Pick A Character',{font: "40px Calibri", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"});
+        var charText = game.add.text(0, 0, 'Select a Character',{font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         charText.setTextBounds(0, 50, screenWidth, 50);
         
         // Character Buttons
@@ -40,7 +40,7 @@ var charState = {
         // Confirm Button
         var buttonPlay = createBtnMid('selectButton', 500, this.actionOnClickChar);
         
-        var buttonMenu = createLabelButton('| Menu |', 10, viewportHeight - 32, '#FFFFFF', returnMenuOnClick, labelHover, labelOut);
+        var buttonMenu = createLabelButton('Menu', 138, viewportHeight - 70, '#FFFFFF', "bGreenNormal", returnMenuOnClick, labelHover, labelOut);
         
     },
     

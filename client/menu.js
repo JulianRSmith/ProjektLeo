@@ -19,8 +19,8 @@ var menuState = {
         mainSound = game.add.audio('mainSound');
 
         // Disabled for now
-        mainSound.loop = true;
-        mainSound.play();
+        //mainSound.loop = true;
+        //mainSound.play();
 
         // Add tiled background
         tiledBackgroundX('charBg');
@@ -29,12 +29,10 @@ var menuState = {
         var logoImg = game.add.sprite(screenWidth / 2, 200, 'logoMain');
         logoImg.anchor.setTo(0.5);
 
-        // Add Play Button
-        var buttonPlay = createBtnMid('playButton', 500, this.actionOnClickMenu);
-
-        // Connect button
-        var buttonGetLobbies = createLabelButton('| Lobby List |', 10, viewportHeight - 32, '#FFFFFF', this.lobbyListOnClick, labelHover, labelOut);
-        var buttonServerSettings = createLabelButton('| Server Settings |', 128, viewportHeight - 32, '#FFFFFF', function() { menuToggle('start'); }, labelHover, labelOut);
+        // Menu buttons
+        var buttonPlayGame = createLabelButton('Play', viewportWidth / 2 - (110*2), viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.actionOnClickMenu, labelHover, labelOut);
+        var buttonGetLobbies = createLabelButton('Lobbies', viewportWidth / 2, viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.lobbyListOnClick, labelHover, labelOut);
+        var buttonServerSettings = createLabelButton('Settings', viewportWidth / 2 + (110*2), viewportHeight - 70, '#FFFFFF', "bGreenNormal", function() { menuToggle('server-settings'); }, labelHover, labelOut);
         
     },
 
@@ -60,16 +58,19 @@ var menuState = {
             network.connect(serverHost, serverPort);
             
             console.log("Connecting... Wait for connection.");
-        }
-        
-        var connectInterval = setInterval(function() {
-            if(networkState()) {
-                network.request("connector.entryHandler.onEntry", "", protocol.onConnect);
-                game.state.start("lobby");
-            }
             
-            clearInterval(connectInterval);
-        }, 500);
+            var connectInterval = setInterval(function() {
+                if(networkState()) {
+                    network.request("connector.entryHandler.onEntry", "", protocol.onConnect);
+                    game.state.start("lobby");
+                }
+                
+                clearInterval(connectInterval);
+            }, 500);
+        }
+        else {
+            game.state.start("lobby");
+        }
         
     },
     

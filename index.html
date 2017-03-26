@@ -9,6 +9,7 @@
         <script src="libs/phaser/phaser.js"></script>
         <script src="libs/pomelo/build/build.js"></script>
         <script type="text/javascript">require('boot');</script>
+        <script src="client/defines.js"></script>
         <script src="client/common.js"></script>
         <script src="client/protocol.js"></script>
         <script src="client/network.js"></script>
@@ -27,13 +28,24 @@
         <h1>Projekt Leo</h1>
         <div id="gameViewpoint"></div>
         
-        <h2>by Will Bradley, Ashley Scott and Julian Smith</h2>
-        
-		<div id="start" class="pause-menu background">
+		<div id="server-settings" class="pause-menu background">
 			<div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP"/>
                 <input style="text-align:left;" class="menu-input" id="server-port" type="text" placeholder="Server Port" value="3010"/>
-				<div class="menu-button" onclick="menuToggle('start');">Close</div>
+				<div class="menu-button" onclick="saveSettings();">Save</div>
+				<div class="menu-button" onclick="menuToggle('server-settings');">Cancel</div>
+			</div>
+		</div>
+		<div id="ss-confirm" class="pause-menu background">
+			<div class="menu-container">
+			    <div class="menu-message">Server settings have been saved.</div>
+				<div class="menu-button" onclick="menuToggle('ss-confirm');">Close</div>
+			</div>
+		</div>
+		<div id="ss-error" class="pause-menu background">
+			<div class="menu-container">
+			    <div class="menu-message">Server IP and Port cannot be empty.</div>
+				<div class="menu-button" onclick="menuToggle('ss-error');menuToggle('server-settings');">Close</div>
 			</div>
 		</div>
 		
@@ -41,9 +53,23 @@
 			<div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="lobby-name" type="text" placeholder="Lobby Name"/>
                 <input style="text-align:left;" class="menu-input" id="lobby-host" type="text" placeholder="Username" />
-				<div class="menu-button" onclick="menuToggle('lobby-create');lobbyState.createLobby();">Close</div>
+				<div class="menu-button" onclick="menuToggle('lobby-create'); lobbyState.createLobby();">Create</div>
+				<div class="menu-button" onclick="menuToggle('lobby-create');">Cancel</div>
 			</div>
 		</div>
+		<div id="lc-confirm" class="pause-menu background">
+			<div class="menu-container">
+			    <div class="menu-message">Lobby has been created.<br>Entering...</div>
+			</div>
+		</div>
+		<div id="lc-error" class="pause-menu background">
+			<div class="menu-container">
+			    <div class="menu-message">Lobby name and Username cannot be empty.</div>
+				<div class="menu-button" onclick="menuToggle('ss-error');menuToggle('server-settings');">Close</div>
+			</div>
+		</div>
+        
+        <h2>by Will Bradley, Ashley Scott and Julian Smith</h2>
         
     </body>
 </html>

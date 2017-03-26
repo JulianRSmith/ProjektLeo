@@ -2,12 +2,6 @@
 //                               Play.js                                      //
 ////////////////////////////////////////////////////////////////////////////////
 
-var gameFloor;
-var healthBar;
-var hit = 200;
-
-var player2;
-
 var playState = {
     
     create: function () {
@@ -25,8 +19,8 @@ var playState = {
         mainBattle = game.add.audio('mainBattle');
 
         // Disabled for now
-        mainBattle.loop = true;
-        mainBattle.play();
+        //mainBattle.loop = true;
+        //mainBattle.play();
         
         // Create the game's ground
         gameFloor = createGameGround();
@@ -52,8 +46,7 @@ var playState = {
         // Make the camera follow the player
         game.camera.follow(player);
         
-        var buttonMenu = createLabelButton('| Menu |', 10, viewportHeight - 32, '#341f0b', returnMenuOnClick, labelHover, labelOut);
-        
+        var buttonMenu = createLabelButton('Menu', 138, viewportHeight - 70, '#FFFFFF', "bGreenNormal", returnMenuOnClick, labelHover, labelOut);
     },
     
     update: function () {

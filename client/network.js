@@ -1,4 +1,3 @@
-var networkConnected = false;
 
 var network = {
 	
@@ -19,6 +18,9 @@ var network = {
 	},
 	
 	disconnect: function(){
-		pomelo.disconnect();
+	    if(networkState()) {
+	        network.request("connector.entryHandler.onDisconnect", "", protocol.onDisconnect);
+	    }
 	}
+	
 }

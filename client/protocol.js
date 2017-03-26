@@ -1,4 +1,4 @@
-var lobbyButtons = [];
+
 var protocol = {
     
     /**
@@ -15,25 +15,10 @@ var protocol = {
 		console.log("protocol.onGetLobbies():");
 		console.log(data);
 		
-		if(lobbyButtons.length > 0) {
-			for(i = 0; i < lobbyButtons.length; i++) {
-				lobbyButtons[i].destroy();
-			}
-		}
+		lobbyCache = [];
+		lobbyCache = data.lobbyData;
 		
-		lobbyButtons = [];
-		
-		for(i = 0; i < data.lobbyCount; i++) {
-		    console.log("Found lobby: ");
-		    console.log(" > ID: " + data.lobbyData[i].id);
-		    console.log(" > Name: " + data.lobbyData[i].name);
-		    console.log(" > Host: " + data.lobbyData[i].host);
-		    console.log(" > Slots: " + data.lobbyData[i].slots);
-		    console.log(" > Players: " + data.lobbyData[i].players);
-		    
-		    var tmpButton = createLabelButton('| Lobby: ' + data.lobbyData[i].name + ' / Host: ' + data.lobbyData[i].host + '  |', viewportWidth / 2, viewportHeight / 2 + (32*i), '#FFFFFF', function(){ lobbyConnect(data.lobbyData[i].id); }, labelHover, labelOut)
-		    lobbyButtons[i] = tmpButton;
-		}
+		lobbyState.updateLobbyList();
 	},
 	
     /**
@@ -50,6 +35,16 @@ var protocol = {
 		console.log(" > Players:" + data.players);
 		
 		lobbyState.refreshLobbyList();
+		
+		//menuToggle('lc-confirm');
+	},
+	
+	onDisconnect: function(data) {
+		console.log("Disconnected, reason: " + data.msg);
+		
+		networkConnected = false;
+		
+        game.state.start("menu");
 	}
 	
 }
