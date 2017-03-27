@@ -2,16 +2,16 @@
 //                               Boot.js                                      //
 ////////////////////////////////////////////////////////////////////////////////
 
-var bootState = {
-    
+var STATE_BOOT = {
+
     create: function () {
-        
+
         // Start phaser pysics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        
+
         // Call load state
-        game.state.start('load');
-        
+        game.state.start('STATE_LOAD');
+
     }
-    
+
 }

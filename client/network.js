@@ -1,5 +1,5 @@
 
-var network = {
+var NetworkManager = {
 	
 	/**
 	 * Opens a connection with the server.

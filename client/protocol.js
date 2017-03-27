@@ -1,5 +1,5 @@
 
-var protocol = {
+var ProtocolManager = {
     
     /**
      * Called when the client connects to the server.

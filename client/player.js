@@ -1,5 +1,5 @@
 
-var playerState = {
+var MANAGER_PLAYER = {
     
     _pCharacter: "",
     _pXPos: 0,

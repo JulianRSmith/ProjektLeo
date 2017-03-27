@@ -2,7 +2,7 @@
 //                               Load.js                                      //
 ////////////////////////////////////////////////////////////////////////////////
 
-var loadState = {
+var STATE_LOAD = {
     
     // Declare asset paths
     buttonPath:  './assets/buttons/',
@@ -10,6 +10,7 @@ var loadState = {
     playerPath: './assets/players/',
     audioPath: './assets/sound/',
     backgroundPath: './assets/backgrounds/',
+    othersPath: './assets/other/',
     
     preload: function () {
         
@@ -27,50 +28,53 @@ var loadState = {
     
     create: function () {
         
-        var gameMainTheme = game.add.audio('mainSound');
-        
-        console.log("Loading - Loaded");    
-        game.state.start('menu');
+        // Define all the music used, more for debugging
+        var gameMainTheme = game.add.audio('musicMenu');
+        var gameBattleTheme = game.add.audio('musicBattle');
+        var gameButtonClick = game.add.audio('soundButtonClick');
+
+        // Start the menu state
+        game.state.start('STATE_MENU');
+
     },
     
     // Load Images Function
     loadImages: function () {
+        game.load.image('gameLogo', './assets/logo/logo.png');
+        
         game.load.spritesheet('leoArt', this.buttonPath + 'leoArt.png',140,180);
         game.load.spritesheet('cleoArt', this.buttonPath + 'cleoArt.png',140,180);
         game.load.spritesheet('boudArt', this.buttonPath + 'boudArt.png',140,180);
         
-        game.load.spritesheet('playerKingL', this.playerPath + 'KingLeoneidus2.png', 256, 256);
+        game.load.spritesheet('playerLeo', this.playerPath + 'KingLeoneidus2.png', 256, 256);
         game.load.spritesheet('playerCleo', this.playerPath + 'Cleopatra2.png', 256, 256);
         game.load.spritesheet('playerBoud', this.playerPath + 'Boudica2.png', 256, 256);
         
-        game.load.image('charBg', this.backgroundPath + 'charBg.png');
-        game.load.image('battleBG', this.backgroundPath + 'battleBG.png');
+        game.load.image('charSelectBackground', this.backgroundPath + 'charSelectBackground.png');
+        game.load.image('battleBackground', this.backgroundPath + 'battleBackground.png');
+        game.load.image('menuBackground', this.backgroundPath + 'menuBackground.png');
+        game.load.image('woodBorder', this.othersPath + 'woodOutline.png');
+        game.load.image('backgroundSmoke', this.othersPath + 'smoke.png');
         
-        game.load.image('logoMain', './assets/logo/logo.png');
+        game.load.image('healthBarRed', this.othersPath + 'healthBar.png');
+        game.load.image('healthBarBG', this.othersPath + 'healthBarBG.png');
         
-        game.load.image('hBarRed', './assets/other/healthBar.png');
-        game.load.image('hBarBG', './assets/other/healthBarBG.png');
-        
-        game.load.image('woodOutline', './assets/other/woodOutline.png');
-        
-        game.load.image('smoke', './assets/other/smoke.png');
-        
-        game.load.image('bGreenHover', this.buttonNewPath + "bGreenHover.png");
-        game.load.image('bGreenNormal', this.buttonNewPath + "bGreenHover.png");
-        game.load.image('bRedHover', this.buttonNewPath + "bRedHover.png");
-        game.load.image('bRedNormal', this.buttonNewPath + "bRedNormal.png");
-        game.load.image('bBlueBarNormal', this.buttonNewPath + "bBlueBarNormal.png");
-        game.load.image('bGreenArrowNormal', this.buttonNewPath + "bGreenArrowNormal.png");
+        game.load.image('buttonGreenHover', this.buttonNewPath + "bGreenHover.png");
+        game.load.image('buttonGreenNormal', this.buttonNewPath + "bGreenHover.png");
+        game.load.image('buttonRedHover', this.buttonNewPath + "bRedHover.png");
+        game.load.image('buttonRedNormal', this.buttonNewPath + "bRedNormal.png");
+        game.load.image('buttonBlueBarNormal', this.buttonNewPath + "bBlueBarNormal.png");
+        game.load.image('buttonGreenArrowNormal', this.buttonNewPath + "bGreenArrowNormal.png");
     },
     
     // Load Sound Function
     loadSounds: function () {
         // https://www.freesound.org/people/braqoon/sounds/161098/
-        game.load.audio('btnSound', [this.audioPath + 'buttonSound.ogg' , this.audioPath + 'buttonSound.mp3']);
+        game.load.audio('soundButtonClick', [this.audioPath + 'buttonSound.ogg' , this.audioPath + 'buttonSound.mp3']);
         // https://www.freesound.org/people/Tristan_Lohengrin/sounds/319781/
-        game.load.audio('mainSound', this.audioPath + 'main_theme.mp3');
+        game.load.audio('musicMenu', this.audioPath + 'main_theme.mp3');
         // http://www.freesound.org/people/joshuaempyre/sounds/250856/
-        game.load.audio('mainBattle', this.audioPath + 'battle_main.mp3');
+        game.load.audio('musicBattle', this.audioPath + 'battle_main.mp3');
     }
     
 };

@@ -4,9 +4,6 @@
 //     This file contains common functions used repeatdly across the game     //
 ////////////////////////////////////////////////////////////////////////////////
 
-var mainSound;
-var mainBattle;
-
 var userChar;
 var userChosen = false;
 
@@ -22,7 +19,7 @@ var key_S;
 /**
  * Create a tiled background that repeats along the x axis
  */
-function tiledBackgroundX (imageName) {
+function tileBackground(imageName) {
     
     var imgWidth = game.cache.getImage(imageName).width;
     
@@ -35,7 +32,7 @@ function tiledBackgroundX (imageName) {
 /**
  * Create a tiled wooden border along the top and bottom edges of the screen
  */
-function borderBackground (imageName) {
+function borderBackground(imageName) {
     var imgWidth = game.cache.getImage(imageName).width;
     for (i = 0; i<screenWidth;i += imgWidth) {
         var woodBorderTop = game.add.tileSprite(i, 0, imgWidth, imgWidth, imageName);
@@ -47,7 +44,7 @@ function borderBackground (imageName) {
 /**
  * Creates a smoke effect for menu screens
  */
-function smokeBackground () {
+function smokeBackground (imageName) {
     // How long each particle "lives" for
     var lifeRate = 6000;
     
@@ -66,16 +63,16 @@ function smokeBackground () {
     emitter.setAlpha(0, 0.2, lifeRate, Phaser.Easing.Quadratic.InOut, true);
     
     // Start it
-    emitter.makeParticles('smoke');
+    emitter.makeParticles(imageName);
     emitter.start(false, lifeRate, 100, 0);
 }
 
 /**
  * Creates a button in the middle of the screen
  */
-function createBtnMid (imgName, yPos, actionOnClick) {
+function createBtnMid (imageName, yPos, actionOnClick) {
     
-    var btnMid = game.add.button(game.world.centerX, yPos, imgName, actionOnClick, this, 2, 1, 0);
+    var btnMid = game.add.button(game.world.centerX, yPos, imageName, actionOnClick, this, 2, 1, 0);
     btnMid.anchor.x = 0.5;
     btnMid.anchor.y = 0.5;
     
@@ -86,9 +83,9 @@ function createBtnMid (imgName, yPos, actionOnClick) {
 /**
  * Creates the character portraits in the char.js file
  */
-function createCharArt (imgPosition,imgName,charChosen) {
+function createCharArt (imagePosition, imageName, charChosen) {
     
-    var charArt = game.add.sprite(imgPosition,270,imgName,5);
+    var charArt = game.add.sprite(imagePosition, 270, imageName, 5);
     charArt.anchor.x = 0.5;
     charArt.anchor.y = 0.5;
     charArt.inputEnabled = true;
@@ -120,22 +117,22 @@ function createCharArt (imgPosition,imgName,charChosen) {
 /**
  * Creates a static text based button
  */
-function createLabelButton(btnTxt, btnX, btnY, btnCol, btnSprite, callBack, hoverFunct, outFunct){
+function createLabelButton(buttonText, buttonX, buttonY, buttonColour, buttonSprite, mainCallback, hoverCallback, leaveCallback){
     
-    var lbBtnBg = game.add.sprite(btnX, btnY, btnSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
-    var lbBtn = game.add.text(btnX, btnY, btnTxt, { font: '18px Arial', fill: btnCol, boundsAlignH: "center", boundsAlignV: "middle" });
+    var lbBtnBg = game.add.sprite(buttonX, buttonY, buttonSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
+    var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
     
     lbBtn.inputEnabled = true;
-    lbBtn.events.onInputUp.add(callBack, this);
-    lbBtn.events.onInputOver.add(hoverFunct, this);
-    lbBtn.events.onInputOut.add(outFunct, this);
+    lbBtn.events.onInputUp.add(mainCallback, this);
+    lbBtn.events.onInputOver.add(hoverCallback, this);
+    lbBtn.events.onInputOut.add(leaveCallback, this);
     lbBtn.anchor.x = 0.5;
     lbBtn.anchor.y = 0.5;
     
     lbBtnBg.inputEnabled = true;
-    lbBtnBg.events.onInputUp.add(callBack, this);
-    lbBtnBg.events.onInputOver.add(hoverFunct, this);
-    lbBtnBg.events.onInputOut.add(outFunct, this);
+    lbBtnBg.events.onInputUp.add(mainCallback, this);
+    lbBtnBg.events.onInputOver.add(hoverCallback, this);
+    lbBtnBg.events.onInputOut.add(leaveCallback, this);
     lbBtnBg.anchor.x = 0.5;
     lbBtnBg.anchor.y = 0.5;
     
@@ -277,27 +274,16 @@ function networkState() {
 }
 
 /**
- * Sends game back to menu state.
- */
-function returnMenuOnClick() {
-    
-    game.state.start("menu");
-    
-}
-
-/**
  * Toggles a visibility of hidden menus in the DOM.
  */
 function menuToggle(id) {
     
+    gameButtonClick.play();
+    
 	if($('#'+id).css('display') == 'none') {
-		game.paused = true;
-		
 		$('#'+id).fadeIn();
 	}
 	else {
-		game.paused = false;
-		
 		$('#'+id).fadeOut();
 	}
 	

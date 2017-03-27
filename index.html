@@ -3,7 +3,7 @@
         <meta lang="en"/>
         <meta charset="utf-8"/>
         
-        <title>Projekt Leo*</title>
+        <title>Projekt Leo</title>
         
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="libs/phaser/phaser.js"></script>
@@ -26,7 +26,7 @@
     </head>
     <body>
         <h1>Projekt Leo</h1>
-        <div id="gameViewpoint"></div>
+        <div id="game-viewport"></div>
         
 		<div id="server-settings" class="pause-menu background">
 			<div class="menu-container">
@@ -53,7 +53,7 @@
 			<div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="lobby-name" type="text" placeholder="Lobby Name"/>
                 <input style="text-align:left;" class="menu-input" id="lobby-host" type="text" placeholder="Username" />
-				<div class="menu-button" onclick="menuToggle('lobby-create'); lobbyState.createLobby();">Create</div>
+				<div class="menu-button" onclick="menuToggle('lobby-create'); lobbyState.createOnClick();">Create</div>
 				<div class="menu-button" onclick="menuToggle('lobby-create');">Cancel</div>
 			</div>
 		</div>

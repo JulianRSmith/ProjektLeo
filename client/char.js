@@ -4,7 +4,7 @@
 //            This file handles the character selection screen                //
 ////////////////////////////////////////////////////////////////////////////////
 
-var charState = {
+var STATE_CHAR = {
     
     leoArt: '',
     cleoArt: '',
@@ -16,69 +16,71 @@ var charState = {
     chosen: false,
     
     create: function () {
+
+        // Set game world size
+        game.world.setBounds(0, 0, viewportWidth, viewportHeight);
+            
+        // Init sound for state
+        gameMainTheme = game.add.audio('musicMenu');
+        gameButtonClick = game.add.audio('soundButtonClick');
+        gameButtonClick.allowMultiple = true;
         
         // Add tiled background
-        tiledBackgroundX('charBg');
+        tileBackground('menuBackground');
         
         // Add smoke
-        smokeBackground();
+        smokeBackground('backgroundSmoke');
         
         // Add border
-        borderBackground('woodOutline');
-        
+        borderBackground('woodBorder');
+
         // Title Text
         var charText = game.add.text(0, 0, 'Select a Character',{font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         charText.setTextBounds(0, 50, screenWidth, 50);
         
         // Character Buttons
         var gameXcenter = game.world.centerX;
-        this.imgWidth    = ((game.cache.getImage('leoArt').width/4)+32);
+        this.imgWidth = ((game.cache.getImage('leoArt').width/4)+32);
+
         // Leonidas
-        this.imgPos1      = gameXcenter - this.imgWidth;
-        this.leoArt  = createCharArt(this.imgPos1,'leoArt','playerKingL');
+        this.imgPos1 = gameXcenter - this.imgWidth;
+        this.leoArt = createCharArt(this.imgPos1, 'leoArt', 'playerLeo');
+
         // Boudica
-        this.boudArt  = createCharArt(gameXcenter,'boudArt','playerBoud');
+        this.boudArt = createCharArt(gameXcenter, 'boudArt', 'playerBoud');
+
         // Cleopatra
-        this.imgPos2      = gameXcenter + this.imgWidth;
-        this.cleoArt = createCharArt(this.imgPos2,'cleoArt','playerCleo');
+        this.imgPos2 = gameXcenter + this.imgWidth;
+        this.cleoArt = createCharArt(this.imgPos2, 'cleoArt', 'playerCleo');
         
-        // Set up audio
-        btnSound = game.add.audio('btnSound');
-        btnSound.allowMultiple = true;
-        
-        // Add action buttons
-        var buttonPlay = createLabelButton('Select', screenWidth / 2, viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.actionOnClickChar, labelHover, labelOut);
-        var buttonMenu = createLabelButton('Menu', 138, viewportHeight - 70, '#FFFFFF', "bGreenNormal", returnMenuOnClick, labelHover, labelOut);
-        
-    },
-    
-    update: function () {
-        
+        // Add buttons
+        var buttonPlay = createLabelButton('Select', screenWidth / 2, viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.selectOnClick, labelHover, labelOut);
+        var buttonMenu = createLabelButton('Menu', 138, viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick, labelHover, labelOut);
         
     },
     
     // Function which calls when the player clicks the button
-    actionOnClickChar: function () {
-        console.log("CLICK");
-        // Add button sound
-        mainSound.stop();
-        this.btnSound.play();
-        game.state.start('play');
+    selectOnClick: function() {
+
+        gameButtonClick.play();
+
+        gameMainTheme.stop();
+
+        game.state.start('STATE_PLAY');
     
     },
      
-    actionOnClickArt: function (playerChosen) {
+    charOnClick: function(playerChosen) {
+
         userChar = playerChosen;
-        // console.log(userChar)
+
     },
     
-    actionOnOverArt: function () {
-        // userChar = chosenChar;
-        // console.log(imgPos);
-    },
+    menuOnClick: function() {
+
+        gameButtonClick.play();
+        
+        game.state.start("STATE_MENU");
     
-    returnMenuOnClick: function() {
-        game.state.start("menu");
     }
-    
 }

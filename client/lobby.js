@@ -1,25 +1,44 @@
 
-var lobbyState = {
+var STATE_LOBBY = {
 
     create: function () {
-    
-        tiledBackgroundX('charBg');
+
+        // Set game world size
+        game.world.setBounds(0, 0, viewportWidth, viewportHeight);
+            
+        // Init sound for state
+        gameMainTheme = game.add.audio('musicMenu');
+        gameButtonClick = game.add.audio('soundButtonClick');
+        gameButtonClick.allowMultiple = true;
+
+        gameMainTheme.loop = true;
+        //gameMainTheme.stop();
+        //gameMainTheme.play();
+
+        // Add tiled background
+        tileBackground('menuBackground');
         
+        // Add smoke
+        smokeBackground('backgroundSmoke');
+        
+        // Add border
+        borderBackground('woodBorder');
+
         var charText = game.add.text(0, 0, 'Select a Lobby', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         charText.setTextBounds(0, 50, screenWidth, 50);
         
-        serverText = game.add.text(0, 0, 'Server: ', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+        var serverText = game.add.text(0, 0, 'Server: ', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         
-        var buttonMenu = createLabelButton('Menu', viewportWidth / 2 - (110*3), viewportHeight - 70, '#FFFFFF', "bGreenNormal", returnMenuOnClick, labelHover, labelOut);
-        var buttonRefreshLobby = createLabelButton('Refresh List', viewportWidth / 2 - (110*1), viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.refreshLobbyList, labelHover, labelOut);
+        var buttonMenu = createLabelButton('Menu', viewportWidth / 2 - (110*3), viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.menuOnClick, labelHover, labelOut);
+        var buttonRefreshLobby = createLabelButton('Refresh List', viewportWidth / 2 - (110*1), viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.refreshOnClick, labelHover, labelOut);
         var buttonCreateLobby = createLabelButton('Create Lobby', viewportWidth / 2 + (110*1), viewportHeight - 70, '#FFFFFF', "bGreenNormal", function(){ menuToggle("lobby-create"); }, labelHover, labelOut);
-        var buttonServerDisconnect = createLabelButton('Disconnect', viewportWidth / 2 + (110*3), viewportHeight - 70, '#FFFFFF', "bRedNormal", function(){ network.disconnect(); }, labelHover, labelOut);
+        var buttonServerDisconnect = createLabelButton('Disconnect', viewportWidth / 2 + (110*3), viewportHeight - 70, '#FFFFFF', "bRedNormal", function(){ NetworkManager.disconnect(); }, labelHover, labelOut);
         
-	    buttonNextPage = createLabelButton('>', viewportWidth / 2 + 460, viewportHeight / 2, '#FFFFFF', "bGreenArrowNormal", lobbyState.nextPage, labelHover, labelOut);
-	    buttonPrevPage = createLabelButton('<', viewportWidth / 2 - 460, viewportHeight / 2, '#FFFFFF', "bGreenArrowNormal", lobbyState.prevPage, labelHover, labelOut);
+	    buttonNextPage = createLabelButton('>', viewportWidth / 2 + 460, viewportHeight / 2, '#FFFFFF', "bGreenArrowNormal", this.nextPageOnClick, labelHover, labelOut);
+	    buttonPrevPage = createLabelButton('<', viewportWidth / 2 - 460, viewportHeight / 2, '#FFFFFF', "bGreenArrowNormal", this.prevPageOnClick, labelHover, labelOut);
 	    buttonPrevPage[1].angle = 180;
         
-        this.refreshLobbyList();
+        this.refreshOnClick();
         
     },
     
@@ -30,30 +49,30 @@ var lobbyState = {
     },
     
     
-    refreshLobbyList: function() {
+    refreshOnClick: function() {
     
         if(networkState()) {
-            network.request("connector.entryHandler.onGetLobbies", "", protocol.onGetLobbies);
+            NetworkManager.request("connector.entryHandler.onGetLobbies", "", ProtocolManager.onGetLobbies);
         }
         
     },
 
-    createLobby: function() {
+    createOnClick: function() {
         
         if(networkState()){
-            network.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, protocol.onCreateLobby);
+            NetworkManager.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, ProtocolManager.onCreateLobby);
         }
         
     },
     
-    nextPage: function() {
+    nextPageOnClick: function() {
         lobbyPage += 1;
         
         //this.updateLobbyList();
         lobbyState.updateLobbyList();
     },
     
-    prevPage: function() {
+    prevPageOnClick: function() {
         lobbyPage -= 1;
         
         //this.updateLobbyList();
@@ -63,6 +82,14 @@ var lobbyState = {
     emptyDrawList: function() {
 
         
+    },
+    
+    menuOnClick: function() {
+
+        gameButtonClick.play();
+        
+        game.state.start("STATE_MENU");
+    
     },
     
     updateLobbyList: function() {
