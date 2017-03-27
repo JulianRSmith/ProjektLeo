@@ -23,14 +23,12 @@ var gameHeightBuffer = 50;
 // The total screen height including the buffer
 var gameHeight = viewportHeight - gameHeightBuffer;
 
-
 // In-game (play state) values
 var gameFloor;
 var healthBar;
 var hit = 200;
 
 var player2;
-
 
 // For game lobby
 var lobbyList = [];

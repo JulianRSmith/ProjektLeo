@@ -33,6 +33,44 @@ function tiledBackgroundX (imageName) {
 }
 
 /**
+ * Create a tiled wooden border along the top and bottom edges of the screen
+ */
+function borderBackground (imageName) {
+    var imgWidth = game.cache.getImage(imageName).width;
+    for (i = 0; i<screenWidth;i += imgWidth) {
+        var woodBorderTop = game.add.tileSprite(i, 0, imgWidth, imgWidth, imageName);
+        var woodBorderBtm = game.add.tileSprite(i, viewportHeight-imgWidth, imgWidth, imgWidth, imageName);
+    }
+}
+
+
+/**
+ * Creates a smoke effect for menu screens
+ */
+function smokeBackground () {
+    // How long each particle "lives" for
+    var lifeRate = 6000;
+    
+    // Create the emitter
+    emitter = game.add.emitter(game.world.centerX, game.height, 50);
+    emitter.width = viewportWidth;
+    
+    // Add behaviour
+    emitter.minParticleScale = 0.1;
+    emitter.maxParticleScale = 0.9;
+    emitter.minRotation = -5;
+    emitter.maxRotation = 5;
+    emitter.setYSpeed(-2, -5);
+    emitter.setXSpeed(10, 20);
+    emitter.gravity = -10;
+    emitter.setAlpha(0, 0.2, lifeRate, Phaser.Easing.Quadratic.InOut, true);
+    
+    // Start it
+    emitter.makeParticles('smoke');
+    emitter.start(false, lifeRate, 100, 0);
+}
+
+/**
  * Creates a button in the middle of the screen
  */
 function createBtnMid (imgName, yPos, actionOnClick) {
@@ -48,7 +86,7 @@ function createBtnMid (imgName, yPos, actionOnClick) {
 /**
  * Creates the character portraits in the char.js file
  */
-function createCharArt (imgPosition,imgName) {
+function createCharArt (imgPosition,imgName,charChosen) {
     
     var charArt = game.add.sprite(imgPosition,270,imgName,5);
     charArt.anchor.x = 0.5;
@@ -56,6 +94,24 @@ function createCharArt (imgPosition,imgName) {
     charArt.inputEnabled = true;
     charArt.animations.add('hover', [1, 2, 3], 5, true);
     charArt.frame = 1;
+    
+    charArt.events.onInputOver.add(function(){
+        charArt.animations.play('hover');
+        game.canvas.style.cursor = "pointer";
+    }, this);
+    
+    charArt.events.onInputOut.add(function(){
+        charArt.animations.stop('hover');
+        game.canvas.style.cursor = "default";
+    }, this);
+    
+    charArt.events.onInputDown.add(function(){
+        charArt.animations.stop('hover');
+        charArt.inputEnabled = false;
+        userChar = charChosen;
+        charArt.frame = 0;
+        userChosen == true;
+    }, this);
     
     return charArt;
     
@@ -177,6 +233,9 @@ function addCharNames (charName) {
     
     if(charName == 'playerKingL') {
         name = 'King Leoneidus';
+    }
+    else if (charName == 'playerBoud') {
+        name = 'Boudica';
     }
     else {
         name = 'Cleopatra';

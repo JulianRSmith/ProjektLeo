@@ -13,17 +13,21 @@ var menuState = {
         
          // Set game world size
         game.world.setBounds(0, 0, viewportWidth, viewportHeight);
-        
             
-        // Declare and play main theme music
+        // Play the menu sound
         mainSound = game.add.audio('mainSound');
-
-        // Disabled for now
-        //mainSound.loop = true;
-        //mainSound.play();
+        mainSound.loop = true;
+        mainSound.stop();
+        mainSound.play();
 
         // Add tiled background
         tiledBackgroundX('charBg');
+        
+        // Add smoke
+        smokeBackground();
+        
+        // Add border
+        borderBackground('woodOutline');
 
         // Add game logo
         var logoImg = game.add.sprite(screenWidth / 2, 200, 'logoMain');

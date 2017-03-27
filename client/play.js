@@ -13,14 +13,11 @@ var playState = {
         
         // Change background colour
         // game.stage.backgroundColor = "#4488AA";
-        var gameBackground = game.add.sprite(0,0,'battleBG');
+        var gameBackground = game.add.sprite(0, 0, 'battleBG');
         
-        // Declare and play main theme music
         mainBattle = game.add.audio('mainBattle');
-
-        // Disabled for now
-        //mainBattle.loop = true;
-        //mainBattle.play();
+        mainBattle.loop = true;
+        mainBattle.play();
         
         // Create the game's ground
         gameFloor = createGameGround();
