@@ -17,70 +17,6 @@ var key_A;
 var key_S;
 
 /**
- * Create a tiled background that repeats along the x axis
- */
-function tileBackground(imageName) {
-    
-    var imgWidth = game.cache.getImage(imageName).width;
-    
-    for (i = 0; i<screenWidth;i += imgWidth) {
-        var background = game.add.tileSprite(i, 0, imgWidth, imgWidth, imageName);
-    }
-    
-}
-
-/**
- * Create a tiled wooden border along the top and bottom edges of the screen
- */
-function borderBackground(imageName) {
-    var imgWidth = game.cache.getImage(imageName).width;
-    for (i = 0; i<screenWidth;i += imgWidth) {
-        var woodBorderTop = game.add.tileSprite(i, 0, imgWidth, imgWidth, imageName);
-        var woodBorderBtm = game.add.tileSprite(i, viewportHeight-imgWidth, imgWidth, imgWidth, imageName);
-    }
-}
-
-
-/**
- * Creates a smoke effect for menu screens
- */
-function smokeBackground (imageName) {
-    // How long each particle "lives" for
-    var lifeRate = 6000;
-    
-    // Create the emitter
-    emitter = game.add.emitter(game.world.centerX, game.height, 50);
-    emitter.width = viewportWidth;
-    
-    // Add behaviour
-    emitter.minParticleScale = 0.1;
-    emitter.maxParticleScale = 0.9;
-    emitter.minRotation = -5;
-    emitter.maxRotation = 5;
-    emitter.setYSpeed(-2, -5);
-    emitter.setXSpeed(10, 20);
-    emitter.gravity = -10;
-    emitter.setAlpha(0, 0.2, lifeRate, Phaser.Easing.Quadratic.InOut, true);
-    
-    // Start it
-    emitter.makeParticles(imageName);
-    emitter.start(false, lifeRate, 100, 0);
-}
-
-/**
- * Creates a button in the middle of the screen
- */
-function createBtnMid (imageName, yPos, actionOnClick) {
-    
-    var btnMid = game.add.button(game.world.centerX, yPos, imageName, actionOnClick, this, 2, 1, 0);
-    btnMid.anchor.x = 0.5;
-    btnMid.anchor.y = 0.5;
-    
-    return btnMid;
-    
-}
-
-/**
  * Creates the character portraits in the char.js file
  */
 function createCharArt (imagePosition, imageName, charChosen) {
@@ -112,31 +48,6 @@ function createCharArt (imagePosition, imageName, charChosen) {
     
     return charArt;
     
-}
-
-/**
- * Creates a static text based button
- */
-function createLabelButton(buttonText, buttonX, buttonY, buttonColour, buttonSprite, mainCallback, hoverCallback, leaveCallback){
-    
-    var lbBtnBg = game.add.sprite(buttonX, buttonY, buttonSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
-    var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
-    
-    lbBtn.inputEnabled = true;
-    lbBtn.events.onInputUp.add(mainCallback, this);
-    lbBtn.events.onInputOver.add(hoverCallback, this);
-    lbBtn.events.onInputOut.add(leaveCallback, this);
-    lbBtn.anchor.x = 0.5;
-    lbBtn.anchor.y = 0.5;
-    
-    lbBtnBg.inputEnabled = true;
-    lbBtnBg.events.onInputUp.add(mainCallback, this);
-    lbBtnBg.events.onInputOver.add(hoverCallback, this);
-    lbBtnBg.events.onInputOut.add(leaveCallback, this);
-    lbBtnBg.anchor.x = 0.5;
-    lbBtnBg.anchor.y = 0.5;
-    
-    return [ lbBtn, lbBtnBg ];
 }
 
 /**
@@ -245,67 +156,17 @@ function addCharNames (charName) {
 }
 
 /**
- * Change cursor to pointer state.
- */
-function labelHover(btnRef) {
-    
-    this.game.canvas.style.cursor = "pointer";
-    
-}
-
-/**
- * Change the cursor to the default state.
- */
-function labelOut(btnRef) {
-    
-    this.game.canvas.style.cursor = "default";
-    
-}
-
-
-/**
- * Checks if the client is connected to the server
- * Returns: true (connected to server) | false (not connected to server)
- */
-function networkState() {
-    
-    return networkConnected;
-    
-}
-
-/**
  * Toggles a visibility of hidden menus in the DOM.
  */
 function menuToggle(id) {
     
     gameButtonClick.play();
     
-	if($('#'+id).css('display') == 'none') {
-		$('#'+id).fadeIn();
-	}
-	else {
-		$('#'+id).fadeOut();
-	}
-	
-}
-
-/**
- * Saves the server settings (IP and PORT)
- */
-function saveSettings() {
-    
-    menuToggle('server-settings');
-    
-    if($("#server-ip").val() != "" && $('#server-port').val() != "") {
-        network.disconnect();
-        
-        serverHost = $('#server-ip').val();
-        serverPort = $('#server-port').val();
-        
-        menuToggle('ss-confirm');
+    if($('#'+id).css('display') == 'none') {
+        $('#'+id).fadeIn();
     }
     else {
-        menuToggle('ss-error');
+        $('#'+id).fadeOut();
     }
     
 }

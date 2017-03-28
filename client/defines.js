@@ -1,8 +1,4 @@
-// Server address
-var serverHost = "127.0.0.1";
-var serverPort = 3010;
-
-// If connected to server or not, fetched by networkState()
+// If connected to server or not, fetched by NetworkManager.connected()
 var networkConnected = false;
 
 // Get the width of the users screen
@@ -12,6 +8,10 @@ var screenHeight = window.innerHeight;
 // Keep these values just for future access based on their name
 var viewportWidth = screenWidth;
 var viewportHeight = 600;
+
+// Viewport X and Y centre points
+var viewportCentreX = viewportWidth / 2;
+var viewportCentreY = viewportHeight / 2
 
 // The buffer height of the play area from the bottom
 var gameHeightBuffer = 50;

@@ -1,5 +1,17 @@
 
 var STATE_LOBBY = {
+    serverText: 0,
+    lobbyText: 0,
+
+    lobbyList: [],
+
+    buttonMenu: 0,
+    buttonRefreshLobby: 0,
+    buttonCreateLobby: 0,
+    buttonServerDisconnect: 0,
+
+    nextState: 0,
+    prevState: 0,
 
     create: function () {
 
@@ -10,78 +22,86 @@ var STATE_LOBBY = {
         gameMainTheme = game.add.audio('musicMenu');
         gameButtonClick = game.add.audio('soundButtonClick');
         gameButtonClick.allowMultiple = true;
-
         gameMainTheme.loop = true;
         //gameMainTheme.stop();
         //gameMainTheme.play();
 
-        // Add tiled background
-        tileBackground('menuBackground');
-        
-        // Add smoke
-        smokeBackground('backgroundSmoke');
-        
-        // Add border
-        borderBackground('woodBorder');
+        // Background objects
+        GUIManager.backgroundTile('menuBackground');
+        GUIManager.backgroundSmoke('backgroundSmoke');
+        GUIManager.backgroundBorder('woodBorder');
 
-        var charText = game.add.text(0, 0, 'Select a Lobby', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
-        charText.setTextBounds(0, 50, screenWidth, 50);
+        // Text objects
+        serverText = game.add.text(10, 40, 'Server: ' + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected", {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+        lobbyText = game.add.text(0, 0, 'Select a Lobby', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+        lobbyText.setTextBounds(0, 30, screenWidth, 50);
         
-        var serverText = game.add.text(0, 0, 'Server: ', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
-        
-        var buttonMenu = createLabelButton('Menu', viewportWidth / 2 - (110*3), viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.menuOnClick, labelHover, labelOut);
-        var buttonRefreshLobby = createLabelButton('Refresh List', viewportWidth / 2 - (110*1), viewportHeight - 70, '#FFFFFF', "bGreenNormal", this.refreshOnClick, labelHover, labelOut);
-        var buttonCreateLobby = createLabelButton('Create Lobby', viewportWidth / 2 + (110*1), viewportHeight - 70, '#FFFFFF', "bGreenNormal", function(){ menuToggle("lobby-create"); }, labelHover, labelOut);
-        var buttonServerDisconnect = createLabelButton('Disconnect', viewportWidth / 2 + (110*3), viewportHeight - 70, '#FFFFFF', "bRedNormal", function(){ NetworkManager.disconnect(); }, labelHover, labelOut);
-        
-	    buttonNextPage = createLabelButton('>', viewportWidth / 2 + 460, viewportHeight / 2, '#FFFFFF', "bGreenArrowNormal", this.nextPageOnClick, labelHover, labelOut);
-	    buttonPrevPage = createLabelButton('<', viewportWidth / 2 - 460, viewportHeight / 2, '#FFFFFF', "bGreenArrowNormal", this.prevPageOnClick, labelHover, labelOut);
-	    buttonPrevPage[1].angle = 180;
-        
-        this.refreshOnClick();
+        // Menu buttons 
+        buttonMenu = GUIManager.createButton('Menu', viewportWidth / 2 - (110*3), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        buttonRefreshLobby = GUIManager.createButton('Refresh List', viewportWidth / 2 - (110*1), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.refreshOnClick);
+        buttonCreateLobby = GUIManager.createButton('Create Lobby', viewportWidth / 2 + (110*1), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", function(){ menuToggle("lobby-create"); });
+        buttonServerDisconnect = GUIManager.createButton('Disconnect', viewportWidth / 2 + (110*3), viewportHeight - 70, '#FFFFFF', "buttonRedNormal", this.disconnectOnClick);
+
+        // Lobby buttons
+        buttonNextPage = GUIManager.createButton('>', viewportWidth / 2 + 460, viewportHeight / 2, '#FFFFFF', "buttonGreenArrowNormal", this.nextPageOnClick);
+        buttonPrevPage = GUIManager.createButton('<', viewportWidth / 2 - 460, viewportHeight / 2, '#FFFFFF', "buttonGreenArrowNormal", this.prevPageOnClick);
+        buttonPrevPage[1].angle = 180;
+
+        this.refreshOnCreate();
         
     },
-    
+
     render: function() {
-        
-        serverText.setText("Server: " + serverHost + ":" + serverPort);
+
+        serverText.setText("Server: " + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected");
         
     },
+
     
+    refreshOnCreate: function() {
+
+        if(NetworkManager.connected()) {
+            NetworkManager.request("connector.entryHandler.onGetLobbies", "", ProtocolManager.onGetLobbies);
+        }
+        
+    },
     
     refreshOnClick: function() {
+
+        gameButtonClick.play();
     
-        if(networkState()) {
+        if(NetworkManager.connected()) {
             NetworkManager.request("connector.entryHandler.onGetLobbies", "", ProtocolManager.onGetLobbies);
         }
         
     },
 
     createOnClick: function() {
+
+        gameButtonClick.play();
         
-        if(networkState()){
+        if(NetworkManager.connected()){
             NetworkManager.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, ProtocolManager.onCreateLobby);
         }
         
     },
     
     nextPageOnClick: function() {
+
+        gameButtonClick.play();
+
         lobbyPage += 1;
-        
-        //this.updateLobbyList();
-        lobbyState.updateLobbyList();
+        STATE_LOBBY.updateLobbyList();
+
     },
     
     prevPageOnClick: function() {
-        lobbyPage -= 1;
-        
-        //this.updateLobbyList();
-        lobbyState.updateLobbyList();
-    },
-    
-    emptyDrawList: function() {
 
-        
+        gameButtonClick.play();
+
+        lobbyPage -= 1;
+        STATE_LOBBY.updateLobbyList();
+
     },
     
     menuOnClick: function() {
@@ -91,21 +111,33 @@ var STATE_LOBBY = {
         game.state.start("STATE_MENU");
     
     },
+
+    disconnectOnClick: function() {
+
+        gameButtonClick.play();
+
+        NetworkManager.disconnect();
+
+    },
     
     updateLobbyList: function() {
         
-		if(lobbyList.length > 0) {
-			for(i = 0; i < 5; i += 1) {
-			    lobbyList[i][0].destroy();
-			    lobbyList[i][1].destroy();
-			}
-		}
+        if(lobbyList.length > 0) {
+            for(i = 0; i < 5; i += 1) {
+                if(i >= lobbyList.length) {
+                    break;
+                }
+                
+                lobbyList[i][0].destroy();
+                lobbyList[i][1].destroy();
+            }
+        }
         
-		if(lobbyCache.length > 5) {
-		    var nextState = ((lobbyPage + 1) * 5 < lobbyCache.length);
-		    var prevState = (lobbyPage > 0);
-		    
-		    // Text layer
+        if(lobbyCache.length > 5) {
+            nextState = ((lobbyPage + 1) * 5 < lobbyCache.length);
+            prevState = (lobbyPage > 0);
+            
+            // Text layer
             buttonNextPage[0].inputEnabled = nextState;
             buttonNextPage[0].alpha = nextState;
             buttonPrevPage[0].inputEnabled = prevState;
@@ -116,9 +148,9 @@ var STATE_LOBBY = {
             buttonNextPage[1].alpha = nextState;
             buttonPrevPage[1].inputEnabled = prevState;
             buttonPrevPage[1].alpha = prevState;
-		}
-		else {
-		    // Text layer
+        }
+        else {
+            // Text layer
             buttonNextPage[0].inputEnabled = 0;
             buttonNextPage[0].alpha = 0;
             buttonPrevPage[0].inputEnabled = 0;
@@ -129,24 +161,19 @@ var STATE_LOBBY = {
             buttonNextPage[1].alpha = 0;
             buttonPrevPage[1].inputEnabled = 0;
             buttonPrevPage[1].alpha = 0;
-		}
-		
-    	for(i = 0; i < 5; i++) {
-    		item = i + (5 * lobbyPage);
-    		
-    		if(lobbyCache.length < item + 1) {
-    	        console.log("End of lobby list.");
-    		    break;
-    		}
-    		
-    	    console.log("Found lobby: ");
-    	    console.log(" > ID: " + lobbyCache[item].id);
-    	    console.log(" > Name: " + lobbyCache[item].name);
-    	    console.log(" > Host: " + lobbyCache[item].host);
-    	    console.log(" > Slots: " + lobbyCache[item].slots);
-    	    console.log(" > Players: " + lobbyCache[item].players);
-    	    
-    	    lobbyList[i] = createLabelButton('Lobby: ' + lobbyCache[item].name + " | Host: " + lobbyCache[item].host + " | Players: " + (lobbyCache[item].players == "" ? "None" : lobbyCache[item].players), viewportWidth / 2, 160 + (70 * i), '#FFFFFF', "bBlueBarNormal", function(){ lobbyConnect(lobbyCache[item].id); }, labelHover, labelOut)
-    	}
+        }
+        
+        for(i = 0; i < 5; i++) {
+            item = i + (5 * lobbyPage);
+            
+            if(lobbyCache.length < item + 1) {
+                console.log("End of lobby list.");
+                break;
+            }
+
+            console.log("Found lobby: [id: " + lobbyCache[item].id + ", name: " + lobbyCache[item].name + ", host: " + lobbyCache[item].host + ", slots: " + lobbyCache[item].slots + ", players: " + lobbyCache[item].players + "]");
+            
+            lobbyList[i] = GUIManager.createButton('Lobby: ' + lobbyCache[item].name + " | Host: " + lobbyCache[item].host + " | Players: " + (lobbyCache[item].players == "" ? "None" : lobbyCache[item].players), viewportWidth / 2, 160 + (70 * i), '#FFFFFF', "buttonBlueBarNormal", function(){ lobbyConnect(lobbyCache[item].id); })
+        }
     }
 }

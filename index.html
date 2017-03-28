@@ -5,24 +5,71 @@
         
         <title>Projekt Leo</title>
         
+        <!-- External libs -->
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        
+        <!-- Client libs -->
         <script src="libs/phaser/phaser.js"></script>
         <script src="libs/pomelo/build/build.js"></script>
+
+        <!-- Pomelo startup -->
         <script type="text/javascript">require('boot');</script>
+
+        <!-- Client global definitions and common functions -->
         <script src="client/defines.js"></script>
         <script src="client/common.js"></script>
+
+        <!-- Client data management --> 
+        <script src="client/settings.js"></script>
         <script src="client/protocol.js"></script>
         <script src="client/network.js"></script>
+        <script src="client/guimanager.js"></script>
+        
+        <!-- Client init states -->
         <script src="client/boot.js"></script>
         <script src="client/load.js"></script>
+        
+        <!-- Client game states -->
         <script src="client/menu.js"></script>
         <script src="client/lobby.js"></script>
         <script src="client/play.js"></script>
         <script src="client/char.js"></script>
+        
+        <!-- Client startup -->
         <script src="client/main.js"></script>
         
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
+
+        <script>
+        	var Index = {
+        		serverSettingsSave: function() {
+        			SettingsManager.saveServerSettings();
+        		},
+
+        		serverSettingsClose: function() {
+        			menuToggle('server-settings');
+        		},
+
+        		serverSettingsConfirm: function() {
+        			menuToggle('ss-confirm');
+        		},
+
+        		serverSettingsError: function() {
+        			menuToggle('ss-error');
+        			menuToggle('server-settings');
+        		},
+
+        		lobbyCreateSave: function() {
+					menuToggle('lobby-create');
+					STATE_LOBBY.createOnClick();
+        		},
+
+        		lobbyCreateClose: function() {
+        			menuToggle('lobby-create');
+        		}
+        	}
+        </script>
     </head>
     <body>
         <h1>Projekt Leo</h1>
@@ -32,20 +79,23 @@
 			<div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP"/>
                 <input style="text-align:left;" class="menu-input" id="server-port" type="text" placeholder="Server Port" value="3010"/>
-				<div class="menu-button" onclick="saveSettings();">Save</div>
-				<div class="menu-button" onclick="menuToggle('server-settings');">Cancel</div>
+
+				<div class="menu-button" onclick="Index.serverSettingsSave();">Save</div>
+				<div class="menu-button" onclick="Index.serverSettingsClose();">Cancel</div>
 			</div>
 		</div>
 		<div id="ss-confirm" class="pause-menu background">
 			<div class="menu-container">
 			    <div class="menu-message">Server settings have been saved.</div>
-				<div class="menu-button" onclick="menuToggle('ss-confirm');">Close</div>
+
+				<div class="menu-button" onclick="Index.serverSettingsConfirm();">Close</div>
 			</div>
 		</div>
 		<div id="ss-error" class="pause-menu background">
 			<div class="menu-container">
 			    <div class="menu-message">Server IP and Port cannot be empty.</div>
-				<div class="menu-button" onclick="menuToggle('ss-error');menuToggle('server-settings');">Close</div>
+
+				<div class="menu-button" onclick="Index.serverSettingsError();">Close</div>
 			</div>
 		</div>
 		
@@ -53,8 +103,9 @@
 			<div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="lobby-name" type="text" placeholder="Lobby Name"/>
                 <input style="text-align:left;" class="menu-input" id="lobby-host" type="text" placeholder="Username" />
-				<div class="menu-button" onclick="menuToggle('lobby-create'); lobbyState.createOnClick();">Create</div>
-				<div class="menu-button" onclick="menuToggle('lobby-create');">Cancel</div>
+
+				<div class="menu-button" onclick="Index.lobbyCreateSave();">Create</div>
+				<div class="menu-button" onclick="Index.lobbyCreateClose();">Cancel</div>
 			</div>
 		</div>
 		<div id="lc-confirm" class="pause-menu background">

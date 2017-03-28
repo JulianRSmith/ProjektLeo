@@ -5,8 +5,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 var STATE_MENU = {
+    serverText: 0,
+    gameLogo: 0,
+
+    connectInterval: 0,
+
+    buttonPlayGame: 0,
+    buttonGetLobbies: 0,
+    buttonServerSettings: 0,
 
     create: function() {
+
         // Set game world size
         game.world.setBounds(0, 0, viewportWidth, viewportHeight);
             
@@ -14,29 +23,33 @@ var STATE_MENU = {
         gameMainTheme = game.add.audio('musicMenu');
         gameButtonClick = game.add.audio('soundButtonClick');
         gameButtonClick.allowMultiple = true;
-
         gameMainTheme.loop = true;
         //gameMainTheme.stop();
         //gameMainTheme.play();
 
-        // Add tiled background
-        tileBackground('menuBackground');
-        
-        // Add smoke
-        smokeBackground('backgroundSmoke');
-        
-        // Add border
-        borderBackground('woodBorder');
+        // Background objects
+        GUIManager.backgroundTile('menuBackground');
+        GUIManager.backgroundSmoke('backgroundSmoke');
+        GUIManager.backgroundBorder('woodBorder');
 
+        // Text objects
+        serverText = game.add.text(10, 40, 'Server: ' + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected", {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+        
         // Add game logo
-        var gameLogo = game.add.sprite(screenWidth / 2, 200, 'gameLogo');
+        gameLogo = game.add.sprite(screenWidth / 2, 200, 'gameLogo');
         gameLogo.anchor.setTo(0.5);
 
         // Menu buttons
-        var buttonPlayGame = createLabelButton('Play', viewportWidth / 2 - (110*2), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick, labelHover, labelOut);
-        var buttonGetLobbies = createLabelButton('Lobbies', viewportWidth / 2, viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick, labelHover, labelOut);
-        var buttonServerSettings = createLabelButton('Settings', viewportWidth / 2 + (110*2), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick, labelHover, labelOut);
+        buttonPlayGame = GUIManager.createButton('Play', viewportWidth / 2 - (110*2), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        buttonGetLobbies = GUIManager.createButton('Lobbies', viewportWidth / 2, viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick);
+        buttonServerSettings = GUIManager.createButton('Settings', viewportWidth / 2 + (110*2), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick);
         
+    },
+
+    render: function() {
+
+        serverText.setText("Server: " + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected");
+
     },
 
     // Function which calls when the player clicks the button
@@ -53,13 +66,13 @@ var STATE_MENU = {
 
         gameButtonClick.play();
         
-        if(!networkState()) {
-            NetworkManager.connect(serverHost, serverPort);
+        if(!NetworkManager.connected()) {
+            NetworkManager.connect(SettingsManager.serverIP, SettingsManager.serverPort);
             
             console.log("Connecting... Wait for connection.");
             
-            var connectInterval = setInterval(function() {
-                if(networkState()) {
+            connectInterval = setInterval(function() {
+                if(NetworkManager.connected()) {
                     NetworkManager.request("connector.entryHandler.onEntry", "", ProtocolManager.onConnect);
                     game.state.start("STATE_LOBBY");
                 }

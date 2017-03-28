@@ -11,6 +11,12 @@ var STATE_LOAD = {
     audioPath: './assets/sound/',
     backgroundPath: './assets/backgrounds/',
     othersPath: './assets/other/',
+
+    loadText: 0,
+
+    gameMainTheme: 0, 
+    gameBattleTheme: 0, 
+    gameButtonClick: 0, 
     
     preload: function () {
         
@@ -18,20 +24,21 @@ var STATE_LOAD = {
         game.stage.backgroundColor = "#FFFFFF";
         
         // Display loading text
-        var loadText = game.add.text(0, 0, 'Loading...', {font: "40px Calibri", fill: "#111111", boundsAlignH: "center", boundsAlignV: "middle"});
+        loadText = game.add.text(0, 0, 'Loading...', {font: "40px Calibri", fill: "#111111", boundsAlignH: "center", boundsAlignV: "middle"});
         loadText.setTextBounds(0, 100, screenWidth, 100);
         
         // Call asset loading functions
         this.loadImages();
         this.loadSounds();
+
     },
     
     create: function () {
         
         // Define all the music used, more for debugging
-        var gameMainTheme = game.add.audio('musicMenu');
-        var gameBattleTheme = game.add.audio('musicBattle');
-        var gameButtonClick = game.add.audio('soundButtonClick');
+        gameMainTheme = game.add.audio('musicMenu');
+        gameBattleTheme = game.add.audio('musicBattle');
+        gameButtonClick = game.add.audio('soundButtonClick');
 
         // Start the menu state
         game.state.start('STATE_MENU');
@@ -40,6 +47,7 @@ var STATE_LOAD = {
     
     // Load Images Function
     loadImages: function () {
+
         game.load.image('gameLogo', './assets/logo/logo.png');
         
         game.load.spritesheet('leoArt', this.buttonPath + 'leoArt.png',140,180);
@@ -65,16 +73,19 @@ var STATE_LOAD = {
         game.load.image('buttonRedNormal', this.buttonNewPath + "bRedNormal.png");
         game.load.image('buttonBlueBarNormal', this.buttonNewPath + "bBlueBarNormal.png");
         game.load.image('buttonGreenArrowNormal', this.buttonNewPath + "bGreenArrowNormal.png");
+
     },
     
     // Load Sound Function
     loadSounds: function () {
+
         // https://www.freesound.org/people/braqoon/sounds/161098/
         game.load.audio('soundButtonClick', [this.audioPath + 'buttonSound.ogg' , this.audioPath + 'buttonSound.mp3']);
         // https://www.freesound.org/people/Tristan_Lohengrin/sounds/319781/
         game.load.audio('musicMenu', this.audioPath + 'main_theme.mp3');
         // http://www.freesound.org/people/joshuaempyre/sounds/250856/
         game.load.audio('musicBattle', this.audioPath + 'battle_main.mp3');
+
     }
     
 };
