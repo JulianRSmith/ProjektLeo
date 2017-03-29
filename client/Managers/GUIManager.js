@@ -14,15 +14,15 @@ var GUIManager = {
         
         lbBtn.inputEnabled = true;
         lbBtn.events.onInputUp.add(mainCallback, this);
-        lbBtn.events.onInputOver.add(this.buttonHoverState, this);
-        lbBtn.events.onInputOut.add(this.buttonLeavestate, this);
+        lbBtn.events.onInputOver.add(GUIListeners.buttonHoverState, this);
+        lbBtn.events.onInputOut.add(GUIListeners.buttonLeavestate, this);
         lbBtn.anchor.x = 0.5;
         lbBtn.anchor.y = 0.5;
         
         lbBtnBg.inputEnabled = true;
         lbBtnBg.events.onInputUp.add(mainCallback, this);
-        lbBtnBg.events.onInputOver.add(this.buttonHoverState, this);
-        lbBtnBg.events.onInputOut.add(this.buttonLeavestate, this);
+        lbBtnBg.events.onInputOver.add(GUIListeners.buttonHoverState, this);
+        lbBtnBg.events.onInputOut.add(GUIListeners.buttonLeavestate, this);
         lbBtnBg.anchor.x = 0.5;
         lbBtnBg.anchor.y = 0.5;
     
@@ -70,32 +70,6 @@ var GUIManager = {
         }, this);
         
         return charButton;
-    },
-
-    /**
-     * Button hover listener.
-     * TODO: MOVE TO GUIListener
-     */
-    buttonHoverState: function() {
-
-        // For debug
-        console.log("GUIManager::buttonHoverState() : Running");
-
-        game.canvas.style.cursor = "pointer";
-
-    },
-
-    /**
-     * Button leave listener.
-     * TODO: MOVE TO GUIListener
-     */
-    buttonLeavestate: function() {
-
-        // For debug
-        console.log("GUIManager::buttonLeavestate() : Running");
-
-        game.canvas.style.cursor = "default";
-
     },
 
     /**
