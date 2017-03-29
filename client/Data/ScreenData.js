@@ -16,7 +16,7 @@ var ScreenData = {
 	init: function() {
 
         // For debug
-        console.log("ScreenData::init() : Running");
+        ConsoleManager.log("ScreenData::init() : Running", false);
 
 		this.viewportWidth = this.screenWidth;
 		this.viewportHeight = 600;
@@ -32,16 +32,16 @@ var ScreenData = {
 	debug: function() {
 
         // For debug
-        console.log("ScreenData::debug() : Running");
+        ConsoleManager.log("ScreenData::debug() : Running", false);
 
-		console.log("ScreenData::debug() : [screenWidth: " + this.screenWidth + "]");
-		console.log("ScreenData::debug() : [screenHeight: " + this.screenHeight + "]");
-		console.log("ScreenData::debug() : [viewportWidth: " + this.viewportWidth + "]");
-		console.log("ScreenData::debug() : [viewportHeight: " + this.viewportHeight + "]");
-		console.log("ScreenData::debug() : [viewportCentreX: " + this.viewportCentreX + "]");
-		console.log("ScreenData::debug() : [viewportCentreY: " + this.viewportCentreY + "]");
-		console.log("ScreenData::debug() : [gameHeightBuffer: " + this.gameHeightBuffer + "]");
-		console.log("ScreenData::debug() : [gameHeight: " + this.gameHeight + "]");
+		ConsoleManager.log("ScreenData::debug() : [screenWidth: " + this.screenWidth + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [screenHeight: " + this.screenHeight + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [viewportWidth: " + this.viewportWidth + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [viewportHeight: " + this.viewportHeight + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [viewportCentreX: " + this.viewportCentreX + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [viewportCentreY: " + this.viewportCentreY + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [gameHeightBuffer: " + this.gameHeightBuffer + "]", false);
+		ConsoleManager.log("ScreenData::debug() : [gameHeight: " + this.gameHeight + "]", false);
 
 	}
 	

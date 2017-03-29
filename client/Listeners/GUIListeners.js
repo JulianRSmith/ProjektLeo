@@ -7,7 +7,7 @@ var GUIListeners = {
     buttonHoverState: function() {
 
         // For debug
-        console.log("GUIListeners::buttonHoverState() : Running");
+        ConsoleManager.log("GUIListeners::buttonHoverState() : Running", false);
 
         game.canvas.style.cursor = "pointer";
 
@@ -19,7 +19,7 @@ var GUIListeners = {
     buttonLeavestate: function() {
 
         // For debug
-        console.log("GUIListeners::buttonLeavestate() : Running");
+        ConsoleManager.log("GUIListeners::buttonLeavestate() : Running", false);
 
         game.canvas.style.cursor = "default";
 

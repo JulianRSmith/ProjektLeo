@@ -9,7 +9,7 @@ var PlayerData = {
     setSelectedCharacter: function(char) {
         
         // For debug
-        console.log("PlayerData::setSelectedCharacter() : Running");
+        ConsoleManager.log("PlayerData::setSelectedCharacter() : Running", false);
 
         _pCharacter = char;
 
@@ -18,7 +18,7 @@ var PlayerData = {
     getSelectedCharacter: function() {
 
         // For debug
-        console.log("PlayerData::getSelectedCharacter() : Running");
+        ConsoleManager.log("PlayerData::getSelectedCharacter() : Running", false);
 
         return _pCharacter;
 

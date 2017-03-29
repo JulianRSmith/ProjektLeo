@@ -1,7 +1,7 @@
 <html>
     <head>
-        <meta lang="en"/>
-        <meta charset="utf-8"/>
+        <meta lang="en" />
+        <meta charset="utf-8" />
         
         <title>Projekt Leo</title>
         
@@ -9,132 +9,180 @@
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         
         <!-- Client libs -->
-        <script src="libs/phaser/phaser.js"></script>
-        <script src="libs/pomelo/build/build.js"></script>
-
+        <script src="./libs/phaser/phaser.js"></script>
+        <script src="./libs/pomelo/build/build.js"></script>
+        <script src="./libs/toastr/toastr.min.js"></script>
 
         <!-- Client global definitions and common functions -->
-        <script src="client/Global/defines.js"></script>
-        <script src="client/Global/common.js"></script>
+        <script src="./client/Global/defines.js"></script>
+        <script src="./client/Global/common.js"></script>
 
         <!-- Game data management -->
-        <script src="client/Data/ScreenData.js"></script>
-        <script src="client/Data/PlayerData.js"></script>
+        <script src="./client/Data/ScreenData.js"></script>
+        <script src="./client/Data/PlayerData.js"></script>
 
         <!-- Event listeners -->
-        <script src="client/Listeners/GUIListeners.js"></script>
+        <script src="./client/Listeners/GUIListeners.js"></script>
 
         <!-- Client data management --> 
-        <script src="client/Managers/SettingsManager.js"></script>
-        <script src="client/Managers/ProtocolManager.js"></script>
-        <script src="client/Managers/NetworkManager.js"></script>
-        <script src="client/Managers/AudioManager.js"></script>
-        <script src="client/Managers/GUIManager.js"></script>
+        <script src="./client/Managers/ConsoleManager.js"></script>
+        <script src="./client/Managers/SettingsManager.js"></script>
+        <script src="./client/Managers/ProtocolManager.js"></script>
+        <script src="./client/Managers/NetworkManager.js"></script>
+        <script src="./client/Managers/AudioManager.js"></script>
+        <script src="./client/Managers/GUIManager.js"></script>
+        <script src="./client/Managers/DOMManager.js"></script>
         
         <!-- Client init states -->
-        <script src="client/States/BootState.js"></script>
-        <script src="client/States/Loadstate.js"></script>
+        <script src="./client/States/BootState.js"></script>
+        <script src="./client/States/Loadstate.js"></script>
         
         <!-- Client game states -->
-        <script src="client/States/MenuState.js"></script>
-        <script src="client/States/LobbyState.js"></script>
-        <script src="client/States/PlayState.js"></script>
-        <script src="client/States/CharState.js"></script>
+        <script src="./client/States/MenuState.js"></script>
+        <script src="./client/States/LobbyState.js"></script>
+        <script src="./client/States/PlayState.js"></script>
+        <script src="./client/States/CharState.js"></script>
         
-        <!-- Main startup -->
+        <!-- ScreenData and Pomelo startup -->
         <script type="text/javascript">
-	        // Screen related data
-	        ScreenData.init();
-	        ScreenData.debug();
+            // Screen related data
+            ScreenData.init();
+            ScreenData.debug();
 
-	        // Pomelo boot
-        	require('boot');
+            // Pomelo boot
+            require('boot');
+
+            // Toastr settings
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
         </script>
 
         <!-- Client startup -->
-        <script src="client/main.js"></script>
+        <script src="./client/main.js"></script>
         
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-        <link rel="stylesheet" href="css/style.css">
+
+        <link href="./css/toastr.css" rel="stylesheet">
+        <link href="./css/style.css" rel="stylesheet">
 
         <script>
-        	var Index = {
-        		serverSettingsSave: function() {
-        			SettingsManager.saveServerSettings();
-        		},
+            var Index = {
+                serverSettingsSave: function() {
+                    SettingsManager.saveServerSettings();
+                },
 
-        		serverSettingsClose: function() {
-        			menuToggle('server-settings');
-        		},
+                serverSettingsClose: function() {
+                    DOMManager.menuToggle('server-settings');
+                },
 
-        		serverSettingsConfirm: function() {
-        			menuToggle('ss-confirm');
-        		},
+                serverSettingsConfirm: function() {
+                    DOMManager.menuToggle('ss-confirm');
+                },
 
-        		serverSettingsError: function() {
-        			menuToggle('ss-error');
-        			menuToggle('server-settings');
-        		},
+                serverSettingsError: function() {
+                    DOMManager.menuToggle('ss-error');
+                    DOMManager.menuToggle('server-settings');
+                },
 
-        		lobbyCreateSave: function() {
-					menuToggle('lobby-create');
-					LobbyState.createOnClick();
-        		},
+                lobbyCreateSave: function() {
+                    LobbyState.createOnClick();
+                },
 
-        		lobbyCreateClose: function() {
-        			menuToggle('lobby-create');
-        		}
-        	}
+                lobbyCreateClose: function() {
+                    DOMManager.menuToggle('lobby-create');
+                }
+            }
         </script>
     </head>
     <body>
         <h1>Projekt Leo</h1>
         <div id="game-viewport"></div>
         
-		<div id="server-settings" class="pause-menu background">
-			<div class="menu-container">
-                <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP"/>
-                <input style="text-align:left;" class="menu-input" id="server-port" type="text" placeholder="Server Port" value="3010"/>
+        <div id="server-settings" class="pause-menu background">
+            <div class="menu-container">
+                <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP" value="localhost" />
+                <input style="text-align:left;" class="menu-input" id="server-port" type="number" placeholder="Server Port" value="3010" min="1" max="65535"/>
 
-				<div class="menu-button" onclick="Index.serverSettingsSave();">Save</div>
-				<div class="menu-button" onclick="Index.serverSettingsClose();">Cancel</div>
-			</div>
-		</div>
-		<div id="ss-confirm" class="pause-menu background">
-			<div class="menu-container">
-			    <div class="menu-message">Server settings have been saved.</div>
+                <div class="menu-button" onclick="Index.serverSettingsSave();">Save</div>
+                <div class="menu-button" onclick="Index.serverSettingsClose();">Cancel</div>
+            </div>
+        </div>
+        <div id="ss-confirm" class="pause-menu background">
+            <div class="menu-container">
+                <div class="menu-message">Server settings have been saved.</div>
 
-				<div class="menu-button" onclick="Index.serverSettingsConfirm();">Close</div>
-			</div>
-		</div>
-		<div id="ss-error" class="pause-menu background">
-			<div class="menu-container">
-			    <div class="menu-message">Server IP and Port cannot be empty.</div>
+                <div class="menu-button" onclick="Index.serverSettingsConfirm();">Close</div>
+            </div>
+        </div>
+        <div id="ss-error" class="pause-menu background">
+            <div class="menu-container">
+                <div class="menu-message">
+                    Unable to save server settings.
+                    
+                    <p style="border-top: 2px solid #EEEEEE;">
+                        Check that the IP or Hostname is valid.
+                    </p>
 
-				<div class="menu-button" onclick="Index.serverSettingsError();">Close</div>
-			</div>
-		</div>
-		
-		<div id="lobby-create" class="pause-menu background">
-			<div class="menu-container">
-                <input style="text-align:left;" class="menu-input" id="lobby-name" type="text" placeholder="Lobby Name"/>
-                <input style="text-align:left;" class="menu-input" id="lobby-host" type="text" placeholder="Username" />
+                    <p>
+                        Example IP:<br>127.0.0.1<br>10.0.0.1<br>93.184.216.34
+                    </p>
 
-				<div class="menu-button" onclick="Index.lobbyCreateSave();">Create</div>
-				<div class="menu-button" onclick="Index.lobbyCreateClose();">Cancel</div>
-			</div>
-		</div>
-		<div id="lc-confirm" class="pause-menu background">
-			<div class="menu-container">
-			    <div class="menu-message">Lobby has been created.<br>Entering...</div>
-			</div>
-		</div>
-		<div id="lc-error" class="pause-menu background">
-			<div class="menu-container">
-			    <div class="menu-message">Lobby name and Username cannot be empty.</div>
-				<div class="menu-button" onclick="menuToggle('ss-error');menuToggle('server-settings');">Close</div>
-			</div>
-		</div>
+                    <p>
+                        Example Hostnames:<br>localhost<br>example.com<br>myserver.example.com
+                    </p>
+
+                    <p style="border-top: 2px solid #EEEEEE;">
+                        Check that the port is valid.
+                    </p>
+
+                    <p>
+                        Must be a number
+                        <br>
+                        Must be more than 0
+                        <br>
+                        Must be less than 65535
+                    </p>
+                </div>
+
+                <div class="menu-button" onclick="Index.serverSettingsError();">Close</div>
+            </div>
+        </div>
+        
+        <div id="lobby-create" class="pause-menu background">
+            <div class="menu-container">
+                <input style="text-align:left;" class="menu-input" id="lobby-name" type="text" placeholder="Lobby Name" maxlength="20"/>
+                <input style="text-align:left;" class="menu-input" id="lobby-host" type="text" placeholder="Username" maxlength="14"/>
+
+                <div class="menu-button" onclick="Index.lobbyCreateSave();">Create</div>
+                <div class="menu-button" onclick="Index.lobbyCreateClose();">Cancel</div>
+            </div>
+        </div>
+        <div id="lc-confirm" class="pause-menu background">
+            <div class="menu-container">
+                <div class="menu-message">Lobby has been created.<br>Entering...</div>
+            </div>
+        </div>
+        <div id="lc-error" class="pause-menu background">
+            <div class="menu-container">
+                <div class="menu-message">Lobby name and Username cannot be empty.</div>
+                <div class="menu-button" onclick="DOMManager.menuToggle('ss-error');DOMManager.menuToggle('server-settings');">Close</div>
+            </div>
+        </div>
         
         <h2>by Will Bradley, Ashley Scott and Julian Smith</h2>
         

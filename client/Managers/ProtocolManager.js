@@ -7,8 +7,8 @@ var ProtocolManager = {
     onConnect: function(data) { 
 
         // For debug
-        console.log("ProtocolManager::onConnect() : Running");
-        console.log("ProtocolManager::onConnect() : " + data.msg);
+        ConsoleManager.log("ProtocolManager::onConnect() : Running", false);
+        ConsoleManager.log("ProtocolManager::onConnect() : " + data.msg, false);
 
     },
     
@@ -18,12 +18,11 @@ var ProtocolManager = {
     onGetLobbies: function(data) {
 
         // For debug
-        console.log("ProtocolManager::onGetLobbies() : Running");
-        console.log("ProtocolManager::onGetLobbies() :");
-        console.log(data);
+        ConsoleManager.log("ProtocolManager::onGetLobbies() : Running", false);
+        ConsoleManager.log("ProtocolManager::onGetLobbies() :", false);
+        ConsoleManager.log(data, false);
         
-        lobbyCache = data.lobbyData;
-        
+        LobbyState.lobbyCache = data.lobbyData;
         LobbyState.updateLobbyList();
 
     },
@@ -31,16 +30,40 @@ var ProtocolManager = {
     /**
      * Called when the server gives the client a new lobby.
      */
-    onCreateLobby: function (data) {
+    onCreateLobby: function(data) {
 
         // For debug
-        console.log("ProtocolManager::onCreateLobby() : Running");
-        console.log("ProtocolManager::onCreateLobby() :");
-        console.log("Created a lobby: [id: " + data.id + ", name: " + data.name + ", host: " + data.host + ", slots: " + data.slots + ", players: " + data.players + "]");
+        ConsoleManager.log("ProtocolManager::onCreateLobby() : Running", false);
+        ConsoleManager.log("ProtocolManager::onCreateLobby() :", false);
+        ConsoleManager.log("Created a lobby: [id: " + data.lobby.id + ", name: " + data.lobby.name + ", host: " + data.lobby.host + ", slots: " + data.lobby.slots + ", players: " + data.lobby.players + "]", false);
         
-        LobbyState.refreshOnClick();
-        
-        //menuToggle('lc-confirm');
+        ConsoleManager.success("Created lobby, entering...", true);
+
+        NetworkManager.request("connector.entryHandler.onEnterLobby", { lobbyId: data.lobby.id, playerName: data.lobby.host }, ProtocolManager.onEnterLobby);
+
+    },
+
+    /**
+     * Called when the client enters a lobby.
+     */
+    onEnterLobby: function(data) {
+        if(data.error) { 
+            ConsoleManager.error("Unable to join lobby<br>Reason: " + data.msg, true);
+        }
+        else {
+            ConsoleManager.success("Joined lobby successfully", true);
+
+            // TODO: Start character select state in networked mode.
+        }
+
+    },
+
+    /**
+     * Called when a player joines the lobby.
+     */
+    onPlayerJoined: function(data) {
+
+        ConsoleManager.log(data.playerName + " joined the lobby", true);
 
     },
     
@@ -50,11 +73,13 @@ var ProtocolManager = {
     onDisconnect: function(data) {
 
         // For debug
-        console.log("ProtocolManager::onDisconnect() : Running");
-        console.log("ProtocolManager::onDisconnect() :")
-        console.log("Disconnected reason: [" + data.msg + "]");
+        ConsoleManager.log("ProtocolManager::onDisconnect() : Running", false);
+        ConsoleManager.log("ProtocolManager::onDisconnect() :", false);
+        ConsoleManager.log("Disconnected reason: [" + data.msg + "]", false);
+
+        ConsoleManager.warning("Disconnected by server<br>Reason: " + data.msg, true);
         
-        networkConnected = false;
+        NetworkManager.networkConnected = false;
         
         game.state.start("MenuState");
 

@@ -5,7 +5,8 @@ var LobbyState = {
     lobbyText: 0,
     lobbyPage: 0,
 
-    lobbyList: 0,
+    lobbyList: [],
+    lobbyCache: [],
 
     buttonMenu: 0,
     buttonRefreshLobby: 0,
@@ -18,7 +19,7 @@ var LobbyState = {
     create: function () {
 
         // For debug
-        console.log("LobbyState::create() : Running");
+        ConsoleManager.log("LobbyState::create() : Running", false);
 
         // Set game world size
         game.world.setBounds(0, 0, ScreenData.viewportWidth, ScreenData.viewportHeight);
@@ -28,16 +29,13 @@ var LobbyState = {
         GUIManager.backgroundSmoke('backgroundSmoke');
         GUIManager.backgroundBorder('woodBorder');
 
-        // Setup lobby page
-        this.lobbyPage = 0;
-
         // Text objects
-        this.serverText = game.add.text(10, 40, 'Server: ' + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected", {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+        this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.lobbyText = game.add.text(0, 0, 'Select a Lobby', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.lobbyText.setTextBounds(0, 30, ScreenData.screenWidth, 50);
         
         // Menu buttons 
-        this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", function(){ menuToggle("lobby-create"); });
+        this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", function(){ DOMManager.menuToggle("lobby-create"); });
         this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.refreshOnClick);
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + (110*1), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
         this.buttonServerDisconnect = GUIManager.createButton('Disconnect', ScreenData.viewportWidth / 2 + (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonRedNormal", this.disconnectOnClick);
@@ -53,15 +51,14 @@ var LobbyState = {
 
     render: function() {
 
-        this.serverText.setText("Server: " + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + " | Page: " + (this.lobbyPage + 1));
+        this.serverText.setText("Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + " | Page: " + (LobbyState.lobbyPage + 1));
         
     },
-
     
     refreshOnCreate: function() {
 
         // For debug
-        console.log("LobbyState::refreshOnCreate() : Running");
+        ConsoleManager.log("LobbyState::refreshOnCreate() : Running", false);
 
         if(NetworkManager.connected()) {
             NetworkManager.request("connector.entryHandler.onGetLobbies", "", ProtocolManager.onGetLobbies);
@@ -72,7 +69,7 @@ var LobbyState = {
     refreshOnClick: function() {
 
         // For debug
-        console.log("LobbyState::refreshOnClick() : Running");
+        ConsoleManager.log("LobbyState::refreshOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
     
@@ -83,14 +80,31 @@ var LobbyState = {
     },
 
     createOnClick: function() {
-
         // For debug
-        console.log("LobbyState::createOnClick() : Running");
+        ConsoleManager.log("LobbyState::createOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
-        
-        if(NetworkManager.connected()){
-            NetworkManager.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, ProtocolManager.onCreateLobby);
+
+        if($('#lobby-name').val().length > 20) { 
+            ConsoleManager.warning("Lobby name must be less than 21 characters.", true);
+        }
+        else if($('#lobby-host').val().length > 15) {
+            ConsoleManager.warning("Host name must be less than 15 characters.", true);
+        }
+        else if($('#lobby-name').val().length < 1) { 
+            ConsoleManager.warning("Lobby name must be more than 0 characters.", true);
+            
+        }
+        else if($('#lobby-host').val().length < 1) { 
+            ConsoleManager.warning("Host name must be more than 0 characters.", true);
+            
+        }
+        else {
+            DOMManager.menuToggle('lobby-create');
+
+            if(NetworkManager.connected()){
+                NetworkManager.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, ProtocolManager.onCreateLobby);
+            }
         }
         
     },
@@ -98,12 +112,11 @@ var LobbyState = {
     nextPageOnClick: function() {
 
         // For debug
-        console.log("LobbyState::nextPageOnClick() : Running");
+        ConsoleManager.log("LobbyState::nextPageOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
 
-        lobbyPage += 1;
-
+        LobbyState.lobbyPage++;
         LobbyState.updateLobbyList();
 
     },
@@ -111,12 +124,11 @@ var LobbyState = {
     prevPageOnClick: function() {
 
         // For debug
-        console.log("LobbyState::prevPageOnClick() : Running");
+        ConsoleManager.log("LobbyState::prevPageOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
 
-        lobbyPage -= 1;
-
+        LobbyState.lobbyPage--;
         LobbyState.updateLobbyList();
 
     },
@@ -124,7 +136,7 @@ var LobbyState = {
     menuOnClick: function() {
 
         // For debug
-        console.log("LobbyState::menuOnClick() : Running");
+        ConsoleManager.log("LobbyState::menuOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
         
@@ -135,7 +147,7 @@ var LobbyState = {
     disconnectOnClick: function() {
 
         // For debug
-        console.log("LobbyState::disconnectOnClick() : Running");
+        ConsoleManager.log("LobbyState::disconnectOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
 
@@ -146,22 +158,21 @@ var LobbyState = {
     updateLobbyList: function() {
 
         // For debug
-        console.log("LobbyState::updateLobbyList() : Running");
-
-        console.log("Current page: " + lobbyPage);
+        ConsoleManager.log("LobbyState::updateLobbyList() : Running", false);
+        ConsoleManager.log("Current page: " + LobbyState.lobbyPage, false);
         
         for(i = 0; i < 5; i += 1) {
-            if(i >= lobbyList.length) {
-                console.log("End of lobby list.");
+            if(i >= LobbyState.lobbyList.length) {
+                ConsoleManager.log("End of lobby list.", false);
                 break;
             }
             
-            lobbyList[i][0].destroy();
-            lobbyList[i][1].destroy();
+            LobbyState.lobbyList[i][0].destroy();
+            LobbyState.lobbyList[i][1].destroy();
         }
         
-        this.nextState = ((lobbyPage + 1) * 5 < lobbyCache.length);
-        this.prevState = (lobbyPage > 0);
+        this.nextState = ((LobbyState.lobbyPage + 1) * 5 < LobbyState.lobbyCache.length);
+        this.prevState = (LobbyState.lobbyPage > 0);
         
         // Text layer
         this.buttonNextPage[0].inputEnabled = this.nextState;
@@ -176,16 +187,41 @@ var LobbyState = {
         this.buttonPrevPage[1].alpha = this.prevState;
         
         for(i = 0; i < 5; i++) {
-            item = i + (5 * lobbyPage);
+            item = i + (5 * LobbyState.lobbyPage);
             
-            if(lobbyCache.length < item + 1) {
-                console.log("End of lobby list.");
+            if(LobbyState.lobbyCache.length < item + 1) {
+                ConsoleManager.log("End of lobby list.", false);
                 break;
             }
 
-            console.log("Found lobby: [id: " + lobbyCache[item].id + ", name: " + lobbyCache[item].name + ", host: " + lobbyCache[item].host + ", slots: " + lobbyCache[item].slots + ", players: " + lobbyCache[item].players + "]");
+            ConsoleManager.log(
+                "Found lobby: [id: " + LobbyState.lobbyCache[item].id + 
+                ", name: " + LobbyState.lobbyCache[item].name + 
+                ", host: " + LobbyState.lobbyCache[item].host + 
+                ", slots: " + LobbyState.lobbyCache[item].slots + 
+                ", players: " + LobbyState.lobbyCache[item].players + "]",
+
+                false
+            );
             
-            lobbyList[i] = GUIManager.createButton('Lobby: ' + lobbyCache[item].name + " | Host: " + lobbyCache[item].host + " | Players: " + (lobbyCache[item].players == "" ? "None" : lobbyCache[item].players), ScreenData.viewportWidth / 2, 160 + (70 * i), '#FFFFFF', "buttonBlueBarNormal", function(){ lobbyConnect(lobbyCache[item].id); })
+            var currentLobbyID = LobbyState.lobbyCache[item].id;
+            LobbyState.lobbyList[i] = GUIManager.createButton(
+                // Lobby name
+                'Lobby: ' + LobbyState.lobbyCache[item].name + 
+                " | Host: " + LobbyState.lobbyCache[item].host + 
+                " | Players: " + (LobbyState.lobbyCache[item].players == "" ? "None" : LobbyState.lobbyCache[item].players), 
+                
+                // Button position
+                ScreenData.viewportWidth / 2, 
+                160 + (70 * i), 
+
+                // Button style
+                '#FFFFFF', // Text
+                "buttonBlueBarNormal", // Button image
+
+                // OnClick Callback
+                function(){ NetworkManager.request("connector.entryHandler.onEnterLobby", {lobbyId: currentLobbyID, playerName: "unknown"}, ProtocolManager.onEnterLobby); }
+            );
         }
     }
 }

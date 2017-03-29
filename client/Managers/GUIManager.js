@@ -7,7 +7,7 @@ var GUIManager = {
     createButton: function(buttonText, buttonX, buttonY, buttonColour, buttonSprite, mainCallback) {
 
         // For debug
-        console.log("GUIManager::createButton() : Running");
+        ConsoleManager.log("GUIManager::createButton() : Running", false);
 
         var lbBtnBg = game.add.sprite(buttonX, buttonY, buttonSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
         var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
@@ -36,7 +36,7 @@ var GUIManager = {
     createCharacterPanel: function(characterName, imageName, imagePosition) {
 
         // For debug
-        console.log("GUIManager::createCharacterPanel() : Running");
+        ConsoleManager.log("GUIManager::createCharacterPanel() : Running", false);
 
         var charButton = game.add.sprite(imagePosition, 270, imageName, 5);
         charButton.anchor.x = 0.5;
@@ -78,7 +78,7 @@ var GUIManager = {
     backgroundSmoke: function(image) {
 
         // For debug
-        console.log("GUIManager::backgroundSmoke() : Running");
+        ConsoleManager.log("GUIManager::backgroundSmoke() : Running", false);
 
         emitter = game.add.emitter(game.world.centerX, game.height, 50);
         emitter.width = ScreenData.viewportWidth;
@@ -90,7 +90,7 @@ var GUIManager = {
         emitter.setYSpeed(-2, -5);
         emitter.setXSpeed(10, 20);
         emitter.gravity = -10;
-        emitter.setAlpha(0, 0.2, 6000, Phaser.Easing.Quadratic.InOut, true);
+        emitter.setAlpha(0, 0.2, 6000, Phaser.Easing.Quadratic.InOut, false);
         
         emitter.makeParticles(image);
         emitter.start(false, 6000, 100, 0);
@@ -103,7 +103,7 @@ var GUIManager = {
     backgroundBorder: function(image) {
 
         // For debug
-        console.log("GUIManager::backgroundBorder() : Running");
+        ConsoleManager.log("GUIManager::backgroundBorder() : Running", false);
 
         var imageWidth = game.cache.getImage(image).width;
 
@@ -120,7 +120,7 @@ var GUIManager = {
     backgroundTile: function(image) { 
 
         // For debug
-        console.log("GUIManager::backgroundTile() : Running");
+        ConsoleManager.log("GUIManager::backgroundTile() : Running", false);
 
         var imageWidth = game.cache.getImage(image).width;
         

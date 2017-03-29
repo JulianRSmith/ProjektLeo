@@ -1,20 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
-//                                  common.js                                 //
-////////////////////////////////////////////////////////////////////////////////
-//     This file contains common functions used repeatdly across the game     //
-////////////////////////////////////////////////////////////////////////////////
+/************************************************************
 
-var userChar;
-var userChosen = false;
+    The final few functions in here should be moved into a
+    new manager likely called "GameEngine.js" as it contains
+    the functions related to making the game fun and playable
 
-// Make keyboard keys global
-var key_Space; 
-var key_Left; 
-var key_Right;
-var key_Up; 
-var key_Down;
-var key_A;
-var key_S;
+************************************************************/
 
 /**
  * Creates the player
@@ -118,21 +108,5 @@ function addCharNames (charName) {
     var charNamesText = game.add.text(0, 0, name, {font: "25px Calibri", fill: "#ffffff", stroke: "#362f2d", strokeThickness: 4});
     charNamesText.fixedToCamera = true;
     charNamesText.cameraOffset.setTo(32, 65);
-    
-}
-
-/**
- * Toggles a visibility of hidden menus in the DOM.
- */
-function menuToggle(id) {
-    
-    AudioManager.gameButtonClick.play();
-    
-    if($('#'+id).css('display') == 'none') {
-        $('#'+id).fadeIn();
-    }
-    else {
-        $('#'+id).fadeOut();
-    }
     
 }

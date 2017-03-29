@@ -9,9 +9,8 @@ var CharState = {
     leoCharacterPanel: 0,
     boudCharacterPanel: 0,
     cleoCharaterPanel: 0,
-    panelImageWidth: 0,
 
-    characterSelected: 0,
+    panelImageWidth: 0,
 
     charText: 0,
 
@@ -19,6 +18,9 @@ var CharState = {
     buttonMenu: 0,
     
     create: function () {
+        
+        // For debug
+        console.log("CharState::create() : Running");
 
         // Set game world size
         game.world.setBounds(0, 0, ScreenData.viewportWidth, ScreenData.viewportHeight);
@@ -33,14 +35,14 @@ var CharState = {
         this.charText.setTextBounds(0, 30, ScreenData.screenWidth, 50);
         
         // Character Buttons
-        this.panelImageWidth = ((game.cache.getImage('leoArt').width/4)+32);
+        this.panelImageWidth = ((game.cache.getImage('leoArt').width / 4) + 32);
         this.leoCharacterPanel = GUIManager.createCharacterPanel('playerLeo', 'leoArt', ScreenData.viewportCentreX - this.panelImageWidth);
         this.boudCharacterPanel = GUIManager.createCharacterPanel('playerBoud', 'boudArt', ScreenData.viewportCentreX);
         this.cleoCharacterPanel = GUIManager.createCharacterPanel('playerCleo', 'cleoArt', ScreenData.viewportCentreX + this.panelImageWidth);
         
         // Add buttons
-        this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.selectOnClick);
-        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.selectOnClick);
+        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
         
     },
     
@@ -48,6 +50,9 @@ var CharState = {
      * Starts the play state on click.
      */
     selectOnClick: function() {
+        
+        // For debug
+        console.log("CharState::selectOnClick() : Running");
 
         AudioManager.gameButtonClick.play();
         AudioManager.gameMainTheme.stop();
@@ -60,6 +65,9 @@ var CharState = {
      * Sets the currently selected character.
      */
     charOnClick: function(characterName) {
+        
+        // For debug
+        console.log("CharState::charOnClick() : Running");
 
         AudioManager.gameButtonClick.play();
 
@@ -71,6 +79,9 @@ var CharState = {
      * Return to menu on click.
      */
     menuOnClick: function() {
+        
+        // For debug
+        console.log("CharState::menuOnClick() : Running");
 
         AudioManager.gameButtonClick.play();
         

@@ -9,8 +9,6 @@ var MenuState = {
     serverText: 0,
     gameLogo: 0,
 
-    connectInterval: 0,
-
     buttonPlayGame: 0,
     buttonGetLobbies: 0,
     buttonServerSettings: 0,
@@ -18,7 +16,7 @@ var MenuState = {
     create: function() {
 
         // For debug
-        console.log("MenuState::create() : Running");
+        ConsoleManager.log("MenuState::create() : Running", false);
 
         // Set game world size
         game.world.setBounds(0, 0, ScreenData.viewportWidth, ScreenData.viewportHeight);
@@ -32,22 +30,22 @@ var MenuState = {
         GUIManager.backgroundBorder('woodBorder');
 
         // Text objects
-        serverText = game.add.text(10, 40, 'Server: ' + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected", {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+        this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         
         // Add game logo
-        gameLogo = game.add.sprite(ScreenData.screenWidth / 2, 200, 'gameLogo');
-        gameLogo.anchor.setTo(0.5);
+        this.gameLogo = game.add.sprite(ScreenData.screenWidth / 2, 200, 'gameLogo');
+        this.gameLogo.anchor.setTo(0.5);
 
         // Menu buttons
-        buttonPlayGame = GUIManager.createButton('Play', ScreenData.viewportWidth / 2 - (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
-        buttonGetLobbies = GUIManager.createButton('Lobbies', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick);
-        buttonServerSettings = GUIManager.createButton('Settings', ScreenData.viewportWidth / 2 + (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick);
+        this.buttonPlayGame = GUIManager.createButton('Play', ScreenData.viewportWidth / 2 - (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        this.buttonGetLobbies = GUIManager.createButton('Lobbies', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick);
+        this.buttonServerSettings = GUIManager.createButton('Settings', ScreenData.viewportWidth / 2 + (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick);
         
     },
 
     render: function() {
 
-        serverText.setText("Server: " + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected");
+        this.serverText.setText("Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected");
 
     },
 
@@ -55,11 +53,13 @@ var MenuState = {
     menuOnClick: function() {
 
         // For debug
-        console.log("MenuState::menuOnClick() : Running");
+        ConsoleManager.log("MenuState::menuOnClick() : Running", false);
         
         AudioManager.gameButtonClick.play();
 
-        game.state.start('CharState');
+
+        // TODO: Start character select state in single player mode.
+        //game.state.start('CharState');
         
     },
 
@@ -67,19 +67,20 @@ var MenuState = {
     lobbyListOnClick: function() {
 
         // For debug
-        console.log("MenuState::lobbyListOnClick() : Running");
+        ConsoleManager.log("MenuState::lobbyListOnClick() : Running", false);
 
         AudioManager.gameButtonClick.play();
         
         if(!NetworkManager.connected()) {
             NetworkManager.connect(SettingsManager.serverIP, SettingsManager.serverPort);
             
-            console.log("Connecting... Wait for connection.");
+            ConsoleManager.log("Connecting...", true);
             
-            connectInterval = setInterval(function() {
+            var connectInterval = setInterval(function() {
                 if(NetworkManager.connected()) {
                     NetworkManager.request("connector.entryHandler.onEntry", "", ProtocolManager.onConnect);
                     
+
                     game.state.start("LobbyState");
                 }
                 
@@ -95,10 +96,10 @@ var MenuState = {
     settingsOnClick: function() {
 
         // For debug
-        console.log("MenuState::settingsOnClick() : Running");
+        ConsoleManager.log("MenuState::settingsOnClick() : Running", false);
 
         // No need to play sound as menuToggle handles button clicks for the DOM
-        menuToggle('server-settings');
+        DOMManager.menuToggle('server-settings');
 
     }
 };

@@ -1,5 +1,7 @@
 
 var NetworkManager = {
+
+    networkConnected: false,
     
     /**
      * Opens a connection with the server.
@@ -7,11 +9,11 @@ var NetworkManager = {
     connect: function(host, port) {
 
         // For debug
-        console.log("NetworkManager::connect() : Running");
+        ConsoleManager.log("NetworkManager::connect() : Running", false);
 
-        pomelo.init({host: host, port: port, log: true}, function(){ console.log("Connected to server!"); networkConnected = true; });
+        pomelo.init({host: host, port: port, log: true}, function(){ ConsoleManager.success("Connected to server!", true); NetworkManager.networkConnected = true; }, false);
         
-        pomelo.on('onGetPing', function(){ console.log('Server has sent a ping.'); });
+        pomelo.on('onGetPing', function(){ ConsoleManager.log('Server has sent a ping.', false); });
 
     },
     
@@ -21,7 +23,7 @@ var NetworkManager = {
     request: function(route, data, callback) {
 
         // For debug
-        console.log("NetworkManager::request() : Running");
+        ConsoleManager.log("NetworkManager::request() : Running", false);
 
         pomelo.request(route, data, callback);
 
@@ -33,7 +35,7 @@ var NetworkManager = {
     disconnect: function() {
 
         // For debug
-        console.log("NetworkManager::disconnect() : Running");
+        ConsoleManager.log("NetworkManager::disconnect() : Running", false);
 
         if(NetworkManager.connected()) {
             NetworkManager.request("connector.entryHandler.onDisconnect", "", ProtocolManager.onDisconnect);
@@ -47,9 +49,9 @@ var NetworkManager = {
     connected: function() {
 
         // For debug
-        // console.log("NetworkManager::connected() : Running");
+        // ConsoleManager.log("NetworkManager::connected() : Running", false);
 
-        return networkConnected;
+        return this.networkConnected;
 
     }
     
