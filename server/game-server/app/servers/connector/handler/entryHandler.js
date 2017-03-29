@@ -9,7 +9,7 @@ var Handler = function(app) {
 var lobbyList = [];
 
 Handler.prototype.onEntry = function(msg, session, next) {
-	
+
 	next(null, { error: false, msg: "Welcome to the server!" });
 
 };
@@ -43,7 +43,7 @@ Handler.prototype.onEnterLobby = function(msg, session, next) {
 
 Handler.prototype.onGetPing = function(msg, session, next) {
 
-	next(null, { error:: false, msg: "ping" });
+	next(null, { error: false, msg: "ping" });
 
 }
 
