@@ -10,6 +10,11 @@ var ProtocolManager = {
         ConsoleManager.log("ProtocolManager::onConnect() : Running", false);
         ConsoleManager.log("ProtocolManager::onConnect() : " + data.msg, false);
 
+        // Setup the player data
+        PlayerData.playerId = data.playerData["playerID"];
+        PlayerData.playerName = data.playerData["playerName"];
+        PlayerData.playerCharacter = data.playerData["playerCharacter"];
+
     },
     
     /**

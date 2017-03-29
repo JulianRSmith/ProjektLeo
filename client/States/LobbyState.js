@@ -35,7 +35,7 @@ var LobbyState = {
         this.lobbyText.setTextBounds(0, 30, ScreenData.screenWidth, 50);
         
         // Menu buttons 
-        this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", function(){ DOMManager.menuToggle("lobby-create"); });
+        this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", function(){ $('#lobby-host').val(PlayerData.playerName); DOMManager.menuToggle("lobby-create"); });
         this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.refreshOnClick);
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + (110*1), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
         this.buttonServerDisconnect = GUIManager.createButton('Disconnect', ScreenData.viewportWidth / 2 + (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonRedNormal", this.disconnectOnClick);
@@ -51,7 +51,12 @@ var LobbyState = {
 
     render: function() {
 
-        this.serverText.setText("Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + " | Page: " + (LobbyState.lobbyPage + 1));
+        this.serverText.setText(
+            "Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + 
+            " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + 
+            " | Page: " + (LobbyState.lobbyPage + 1) + 
+            "\nPlayer: [ID: " + PlayerData.playerId + ", Name: " + PlayerData.playerName + "]"
+        );
         
     },
     
@@ -103,7 +108,13 @@ var LobbyState = {
             DOMManager.menuToggle('lobby-create');
 
             if(NetworkManager.connected()){
+
+                // Update the player name here since it will also update on the server
+                PlayerData.playerName = $('#lobby-host').val();
+
+                // Ask server to make a new lobby
                 NetworkManager.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, ProtocolManager.onCreateLobby);
+
             }
         }
         
@@ -171,7 +182,7 @@ var LobbyState = {
             LobbyState.lobbyList[i][1].destroy();
         }
         
-        this.nextState = ((LobbyState.lobbyPage + 1) * 5 < LobbyState.lobbyCache.length);
+        this.nextState = ((LobbyState.lobbyPage + 1) * 5 < Object.keys(LobbyState.lobbyCache).length);
         this.prevState = (LobbyState.lobbyPage > 0);
         
         // Text layer
@@ -189,7 +200,7 @@ var LobbyState = {
         for(i = 0; i < 5; i++) {
             item = i + (5 * LobbyState.lobbyPage);
             
-            if(LobbyState.lobbyCache.length < item + 1) {
+            if(Object.keys(LobbyState.lobbyCache).length < item + 1) {
                 ConsoleManager.log("End of lobby list.", false);
                 break;
             }
@@ -203,9 +214,8 @@ var LobbyState = {
 
                 false
             );
-            
-            var currentLobbyID = LobbyState.lobbyCache[item].id;
-            LobbyState.lobbyList[i] = GUIManager.createButton(
+
+            LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name
                 'Lobby: ' + LobbyState.lobbyCache[item].name + 
                 " | Host: " + LobbyState.lobbyCache[item].host + 
@@ -215,12 +225,18 @@ var LobbyState = {
                 ScreenData.viewportWidth / 2, 
                 160 + (70 * i), 
 
+                LobbyState.lobbyCache[item].id,
+                LobbyState.lobbyCache[item].name,
+
                 // Button style
                 '#FFFFFF', // Text
                 "buttonBlueBarNormal", // Button image
 
                 // OnClick Callback
-                function(){ NetworkManager.request("connector.entryHandler.onEnterLobby", {lobbyId: currentLobbyID, playerName: "unknown"}, ProtocolManager.onEnterLobby); }
+                function(spr, ptr, bool, args){ 
+                    ConsoleManager.log("Connecting to lobby:<br>" + args.lobbyId + ":" + args.lobbyName + " as " + PlayerData.playerName, true);
+                    NetworkManager.request("connector.entryHandler.onEnterLobby", {lobbyId: args.lobbyId, playerName: PlayerData.playerName}, ProtocolManager.onEnterLobby); 
+                }
             );
         }
     }

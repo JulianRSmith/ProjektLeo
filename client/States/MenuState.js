@@ -98,6 +98,9 @@ var MenuState = {
         // For debug
         ConsoleManager.log("MenuState::settingsOnClick() : Running", false);
 
+        $("#server-ip").val(SettingsManager.serverIP);
+        $("#server-port").val(SettingsManager.serverPort);
+
         // No need to play sound as menuToggle handles button clicks for the DOM
         DOMManager.menuToggle('server-settings');
 

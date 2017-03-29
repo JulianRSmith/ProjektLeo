@@ -31,6 +31,36 @@ var GUIManager = {
     },
 
     /**
+     * Creates a button element with text and a background.
+     * Identical to createButton, but accepts lobbyId and lobbyName that can be passed into the mainCallback on the onInputUp event.
+     */
+    createLobbyButton: function(buttonText, buttonX, buttonY, lobbyId, lobbyName, buttonColour, buttonSprite, mainCallback) {
+
+        // For debug
+        ConsoleManager.log("GUIManager::createButton() : Running", false);
+
+        var lbBtnBg = game.add.sprite(buttonX, buttonY, buttonSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
+        var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
+        
+        lbBtn.inputEnabled = true;
+        lbBtn.events.onInputUp.add(mainCallback, this, 0, {lobbyId, lobbyName});
+        lbBtn.events.onInputOver.add(GUIListeners.buttonHoverState, this);
+        lbBtn.events.onInputOut.add(GUIListeners.buttonLeavestate, this);
+        lbBtn.anchor.x = 0.5;
+        lbBtn.anchor.y = 0.5;
+        
+        lbBtnBg.inputEnabled = true;
+        lbBtnBg.events.onInputUp.add(mainCallback, this, 0, {lobbyId, lobbyName});
+        lbBtnBg.events.onInputOver.add(GUIListeners.buttonHoverState, this);
+        lbBtnBg.events.onInputOut.add(GUIListeners.buttonLeavestate, this);
+        lbBtnBg.anchor.x = 0.5;
+        lbBtnBg.anchor.y = 0.5;
+    
+        return [ lbBtn, lbBtnBg ];
+
+    },
+
+    /**
      * Creates a button for the character panel
      */
     createCharacterPanel: function(characterName, imageName, imagePosition) {
