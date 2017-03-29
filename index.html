@@ -12,29 +12,42 @@
         <script src="libs/phaser/phaser.js"></script>
         <script src="libs/pomelo/build/build.js"></script>
 
-        <!-- Pomelo startup -->
-        <script type="text/javascript">require('boot');</script>
 
         <!-- Client global definitions and common functions -->
-        <script src="client/defines.js"></script>
-        <script src="client/common.js"></script>
+        <script src="client/Global/defines.js"></script>
+        <script src="client/Global/common.js"></script>
+
+        <!-- Game data management -->
+        <script src="client/Data/ScreenData.js"></script>
+        <script src="client/Data/PlayerData.js"></script>
 
         <!-- Client data management --> 
-        <script src="client/settings.js"></script>
-        <script src="client/protocol.js"></script>
-        <script src="client/network.js"></script>
-        <script src="client/guimanager.js"></script>
+        <script src="client/Managers/SettingsManager.js"></script>
+        <script src="client/Managers/ProtocolManager.js"></script>
+        <script src="client/Managers/NetworkManager.js"></script>
+        <script src="client/Managers/AudioManager.js"></script>
+        <script src="client/Managers/GUIManager.js"></script>
         
         <!-- Client init states -->
-        <script src="client/boot.js"></script>
-        <script src="client/load.js"></script>
+        <script src="client/States/BootState.js"></script>
+        <script src="client/States/Loadstate.js"></script>
         
         <!-- Client game states -->
-        <script src="client/menu.js"></script>
-        <script src="client/lobby.js"></script>
-        <script src="client/play.js"></script>
-        <script src="client/char.js"></script>
+        <script src="client/States/MenuState.js"></script>
+        <script src="client/States/LobbyState.js"></script>
+        <script src="client/States/PlayState.js"></script>
+        <script src="client/States/CharState.js"></script>
         
+        <!-- Main startup -->
+        <script type="text/javascript">
+	        // Screen related data
+	        ScreenData.init();
+	        ScreenData.debug();
+
+	        // Pomelo boot
+        	require('boot');
+        </script>
+
         <!-- Client startup -->
         <script src="client/main.js"></script>
         
@@ -62,7 +75,7 @@
 
         		lobbyCreateSave: function() {
 					menuToggle('lobby-create');
-					STATE_LOBBY.createOnClick();
+					LobbyState.createOnClick();
         		},
 
         		lobbyCreateClose: function() {

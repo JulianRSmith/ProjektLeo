@@ -2,7 +2,7 @@
 //                               Load.js                                      //
 ////////////////////////////////////////////////////////////////////////////////
 
-var STATE_LOAD = {
+var LoadState = {
     
     // Declare asset paths
     buttonPath:  './assets/buttons/',
@@ -19,34 +19,52 @@ var STATE_LOAD = {
     gameButtonClick: 0, 
     
     preload: function () {
-        
+
+        // For debug
+        console.log("LoadState::preload() : Running");
+
+        // Set game world size
+        game.world.setBounds(0, 0, ScreenData.viewportWidth, ScreenData.viewportHeight);
+
         // Set load background colour
         game.stage.backgroundColor = "#FFFFFF";
         
         // Display loading text
         loadText = game.add.text(0, 0, 'Loading...', {font: "40px Calibri", fill: "#111111", boundsAlignH: "center", boundsAlignV: "middle"});
-        loadText.setTextBounds(0, 100, screenWidth, 100);
+        loadText.setTextBounds(0, 100, ScreenData.screenWidth, 100);
         
         // Call asset loading functions
         this.loadImages();
         this.loadSounds();
 
+        // For debug
+        console.log("LoadState::preload() : Done Preloading");
+
     },
     
     create: function () {
+
+        // For debug
+        console.log("LoadState::create() : Running");
         
-        // Define all the music used, more for debugging
-        gameMainTheme = game.add.audio('musicMenu');
-        gameBattleTheme = game.add.audio('musicBattle');
-        gameButtonClick = game.add.audio('soundButtonClick');
+        // Define all the music used
+        AudioManager.gameMainTheme = game.add.audio('musicMenu');
+        AudioManager.gameBattleTheme = game.add.audio('musicBattle');
+        AudioManager.gameButtonClick = game.add.audio('soundButtonClick');
+
+        AudioManager.gameButtonClick.allowMultiple = true;
+        AudioManager.gameMainTheme.loop = true;
 
         // Start the menu state
-        game.state.start('STATE_MENU');
+        game.state.start('MenuState');
 
     },
     
     // Load Images Function
     loadImages: function () {
+
+        // For debug
+        console.log("LoadState::loadImages() : Running");
 
         game.load.image('gameLogo', './assets/logo/logo.png');
         
@@ -78,6 +96,9 @@ var STATE_LOAD = {
     
     // Load Sound Function
     loadSounds: function () {
+
+        // For debug
+        console.log("LoadState::loadSounds() : Running");
 
         // https://www.freesound.org/people/braqoon/sounds/161098/
         game.load.audio('soundButtonClick', [this.audioPath + 'buttonSound.ogg' , this.audioPath + 'buttonSound.mp3']);

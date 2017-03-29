@@ -17,40 +17,6 @@ var key_A;
 var key_S;
 
 /**
- * Creates the character portraits in the char.js file
- */
-function createCharArt (imagePosition, imageName, charChosen) {
-    
-    var charArt = game.add.sprite(imagePosition, 270, imageName, 5);
-    charArt.anchor.x = 0.5;
-    charArt.anchor.y = 0.5;
-    charArt.inputEnabled = true;
-    charArt.animations.add('hover', [1, 2, 3], 5, true);
-    charArt.frame = 1;
-    
-    charArt.events.onInputOver.add(function(){
-        charArt.animations.play('hover');
-        game.canvas.style.cursor = "pointer";
-    }, this);
-    
-    charArt.events.onInputOut.add(function(){
-        charArt.animations.stop('hover');
-        game.canvas.style.cursor = "default";
-    }, this);
-    
-    charArt.events.onInputDown.add(function(){
-        charArt.animations.stop('hover');
-        charArt.inputEnabled = false;
-        userChar = charChosen;
-        charArt.frame = 0;
-        userChosen == true;
-    }, this);
-    
-    return charArt;
-    
-}
-
-/**
  * Creates the player
  */
 function createPlayer (xPos,spriteName) {
@@ -160,7 +126,7 @@ function addCharNames (charName) {
  */
 function menuToggle(id) {
     
-    gameButtonClick.play();
+    AudioManager.gameButtonClick.play();
     
     if($('#'+id).css('display') == 'none') {
         $('#'+id).fadeIn();

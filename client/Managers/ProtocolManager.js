@@ -6,7 +6,9 @@ var ProtocolManager = {
      */
     onConnect: function(data) { 
 
-        console.log("ProtocolManager.onConnect(): " + data.msg);
+        // For debug
+        console.log("ProtocolManager::onConnect() : Running");
+        console.log("ProtocolManager::onConnect() : " + data.msg);
 
     },
     
@@ -15,12 +17,14 @@ var ProtocolManager = {
      */
     onGetLobbies: function(data) {
 
-        console.log("ProtocolManager.onGetLobbies():");
+        // For debug
+        console.log("ProtocolManager::onGetLobbies() : Running");
+        console.log("ProtocolManager::onGetLobbies() :");
         console.log(data);
         
         lobbyCache = data.lobbyData;
         
-        STATE_LOBBY.updateLobbyList();
+        LobbyState.updateLobbyList();
 
     },
     
@@ -29,10 +33,12 @@ var ProtocolManager = {
      */
     onCreateLobby: function (data) {
 
-        console.log("ProtocolManager.onCreateLobby():");
+        // For debug
+        console.log("ProtocolManager::onCreateLobby() : Running");
+        console.log("ProtocolManager::onCreateLobby() :");
         console.log("Created a lobby: [id: " + data.id + ", name: " + data.name + ", host: " + data.host + ", slots: " + data.slots + ", players: " + data.players + "]");
         
-        STATE_LOBBY.refreshOnClick();
+        LobbyState.refreshOnClick();
         
         //menuToggle('lc-confirm');
 
@@ -43,12 +49,14 @@ var ProtocolManager = {
      */
     onDisconnect: function(data) {
 
-        console.log("ProtocolManager.onDisconnect():")
+        // For debug
+        console.log("ProtocolManager::onDisconnect() : Running");
+        console.log("ProtocolManager::onDisconnect() :")
         console.log("Disconnected reason: [" + data.msg + "]");
         
         networkConnected = false;
         
-        game.state.start("STATE_MENU");
+        game.state.start("MenuState");
 
     }
     

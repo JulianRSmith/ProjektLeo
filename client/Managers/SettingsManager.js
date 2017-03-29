@@ -6,6 +6,9 @@ var SettingsManager = {
 
     saveServerSettings: function() {
 
+        // For debug
+        console.log("SettingsManager::saveServerSettings() : Running");
+
         menuToggle('server-settings');
         
         if($("#server-ip").val() != "" && $('#server-port').val() != "") {

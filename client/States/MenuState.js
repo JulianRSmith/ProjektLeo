@@ -4,7 +4,8 @@
 //                     This file displays the menu screen                     //
 ////////////////////////////////////////////////////////////////////////////////
 
-var STATE_MENU = {
+var MenuState = {
+
     serverText: 0,
     gameLogo: 0,
 
@@ -16,16 +17,14 @@ var STATE_MENU = {
 
     create: function() {
 
+        // For debug
+        console.log("MenuState::create() : Running");
+
         // Set game world size
-        game.world.setBounds(0, 0, viewportWidth, viewportHeight);
-            
-        // Init sound for state
-        gameMainTheme = game.add.audio('musicMenu');
-        gameButtonClick = game.add.audio('soundButtonClick');
-        gameButtonClick.allowMultiple = true;
-        gameMainTheme.loop = true;
-        //gameMainTheme.stop();
-        //gameMainTheme.play();
+        game.world.setBounds(0, 0, ScreenData.viewportWidth, ScreenData.viewportHeight);
+
+        // AudioManager.gameMainTheme.stop();
+        // AudioManager.gameMainTheme.play();
 
         // Background objects
         GUIManager.backgroundTile('menuBackground');
@@ -36,13 +35,13 @@ var STATE_MENU = {
         serverText = game.add.text(10, 40, 'Server: ' + SettingsManager.serverIP + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected", {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         
         // Add game logo
-        gameLogo = game.add.sprite(screenWidth / 2, 200, 'gameLogo');
+        gameLogo = game.add.sprite(ScreenData.screenWidth / 2, 200, 'gameLogo');
         gameLogo.anchor.setTo(0.5);
 
         // Menu buttons
-        buttonPlayGame = GUIManager.createButton('Play', viewportWidth / 2 - (110*2), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
-        buttonGetLobbies = GUIManager.createButton('Lobbies', viewportWidth / 2, viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick);
-        buttonServerSettings = GUIManager.createButton('Settings', viewportWidth / 2 + (110*2), viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick);
+        buttonPlayGame = GUIManager.createButton('Play', ScreenData.viewportWidth / 2 - (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        buttonGetLobbies = GUIManager.createButton('Lobbies', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick);
+        buttonServerSettings = GUIManager.createButton('Settings', ScreenData.viewportWidth / 2 + (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick);
         
     },
 
@@ -54,17 +53,23 @@ var STATE_MENU = {
 
     // Function which calls when the player clicks the button
     menuOnClick: function() {
-        
-        gameButtonClick.play();
 
-        game.state.start('STATE_CHAR');
+        // For debug
+        console.log("MenuState::menuOnClick() : Running");
+        
+        AudioManager.gameButtonClick.play();
+
+        game.state.start('CharState');
         
     },
 
     // Opens a connection to the server and displays the lobby on connect.
     lobbyListOnClick: function() {
 
-        gameButtonClick.play();
+        // For debug
+        console.log("MenuState::lobbyListOnClick() : Running");
+
+        AudioManager.gameButtonClick.play();
         
         if(!NetworkManager.connected()) {
             NetworkManager.connect(SettingsManager.serverIP, SettingsManager.serverPort);
@@ -74,19 +79,23 @@ var STATE_MENU = {
             connectInterval = setInterval(function() {
                 if(NetworkManager.connected()) {
                     NetworkManager.request("connector.entryHandler.onEntry", "", ProtocolManager.onConnect);
-                    game.state.start("STATE_LOBBY");
+                    
+                    game.state.start("LobbyState");
                 }
                 
                 clearInterval(connectInterval);
             }, 500);
         }
         else {
-            game.state.start("STATE_LOBBY");
+            game.state.start("LobbyState");
         }
         
     },
 
     settingsOnClick: function() {
+
+        // For debug
+        console.log("MenuState::settingsOnClick() : Running");
 
         // No need to play sound as menuToggle handles button clicks for the DOM
         menuToggle('server-settings');

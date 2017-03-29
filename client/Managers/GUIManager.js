@@ -6,6 +6,9 @@ var GUIManager = {
      */
     createButton: function(buttonText, buttonX, buttonY, buttonColour, buttonSprite, mainCallback) {
 
+        // For debug
+        console.log("GUIManager::createButton() : Running");
+
         var lbBtnBg = game.add.sprite(buttonX, buttonY, buttonSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
         var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
         
@@ -28,9 +31,55 @@ var GUIManager = {
     },
 
     /**
+     * Creates a button for the character panel
+     */
+    createCharacterPanel: function(characterName, imageName, imagePosition) {
+
+        // For debug
+        console.log("GUIManager::createCharacterPanel() : Running");
+
+        var charButton = game.add.sprite(imagePosition, 270, imageName, 5);
+        charButton.anchor.x = 0.5;
+        charButton.anchor.y = 0.5;
+        charButton.inputEnabled = true;
+        charButton.animations.add('hover', [1, 2, 3], 5, true);
+        charButton.frame = 1;
+        
+        charButton.events.onInputOver.add(function(){
+            
+            charButton.animations.play('hover');
+            game.canvas.style.cursor = "pointer";
+
+        }, this);
+        
+        charButton.events.onInputOut.add(function(){
+
+            charButton.animations.stop('hover');
+            game.canvas.style.cursor = "default";
+
+        }, this);
+        
+        charButton.events.onInputDown.add(function(){
+            
+            charButton.animations.stop('hover');
+            charButton.inputEnabled = false;
+            charButton.frame = 0;
+
+            PlayerData.setSelectedCharacter(characterName);
+
+        }, this);
+        
+        return charButton;
+    },
+
+    /**
      * Button hover listener.
+     * TODO: MOVE TO GUIListener
      */
     buttonHoverState: function() {
+
+        // For debug
+        console.log("GUIManager::buttonHoverState() : Running");
 
         game.canvas.style.cursor = "pointer";
 
@@ -38,8 +87,12 @@ var GUIManager = {
 
     /**
      * Button leave listener.
+     * TODO: MOVE TO GUIListener
      */
     buttonLeavestate: function() {
+
+        // For debug
+        console.log("GUIManager::buttonLeavestate() : Running");
 
         game.canvas.style.cursor = "default";
 
@@ -50,8 +103,11 @@ var GUIManager = {
      */
     backgroundSmoke: function(image) {
 
+        // For debug
+        console.log("GUIManager::backgroundSmoke() : Running");
+
         emitter = game.add.emitter(game.world.centerX, game.height, 50);
-        emitter.width = viewportWidth;
+        emitter.width = ScreenData.viewportWidth;
         
         emitter.minParticleScale = 0.1;
         emitter.maxParticleScale = 0.9;
@@ -72,11 +128,14 @@ var GUIManager = {
      */
     backgroundBorder: function(image) {
 
+        // For debug
+        console.log("GUIManager::backgroundBorder() : Running");
+
         var imageWidth = game.cache.getImage(image).width;
 
-        for (i = 0; i<screenWidth;i += imageWidth) {
+        for (i = 0; i < ScreenData.screenWidth; i += imageWidth) {
             var woodBorderTop = game.add.tileSprite(i, 0, imageWidth, imageWidth, image);
-            var woodBorderBtm = game.add.tileSprite(i, viewportHeight-imageWidth, imageWidth, imageWidth, image);
+            var woodBorderBtm = game.add.tileSprite(i, ScreenData.viewportHeight - imageWidth, imageWidth, imageWidth, image);
         }
 
     },
@@ -86,9 +145,12 @@ var GUIManager = {
      */
     backgroundTile: function(image) { 
 
+        // For debug
+        console.log("GUIManager::backgroundTile() : Running");
+
         var imageWidth = game.cache.getImage(image).width;
         
-        for (i = 0; i < screenWidth; i += imageWidth) {
+        for (i = 0; i < ScreenData.screenWidth; i += imageWidth) {
             var background = game.add.tileSprite(i, 0, imageWidth, imageWidth, image);
         }
 
