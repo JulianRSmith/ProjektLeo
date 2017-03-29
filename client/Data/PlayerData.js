@@ -1,3 +1,15 @@
+/************************************************************
+
+    This object is a way to store data for the player.
+    We can keep track of:
+    
+    Player Name.
+    Player Character. (the character they selected)
+
+    Player X and Y Positions. (location in game world)
+    Player Attack State. (which attack they are using)
+
+************************************************************/
 
 var PlayerData = {
     

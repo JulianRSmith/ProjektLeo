@@ -1,9 +1,12 @@
 /************************************************************
 
     This will be a way to handle console.log calls in a 
-    nicer way. I hope to have this push errors and alerts to
-    the DOM so it will make it easier to debug without the
-    console/inspector attached to the browser.
+    nicer way. 
+
+    This makes it possible to push notifications to the DOM
+    while keeping a log of it in the console.
+
+    console.log still works for debugging in general.
 
 ************************************************************/
 

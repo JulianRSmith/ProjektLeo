@@ -1,3 +1,10 @@
+/************************************************************
+
+    This object handles the callbacks which are made after
+    a NetworkManager.request(); event gets data back
+    from the server and route requested.
+
+************************************************************/
 
 var ProtocolManager = {
     

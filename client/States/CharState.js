@@ -1,8 +1,26 @@
-////////////////////////////////////////////////////////////////////////////////
-//                                   Char.js                                  //
-////////////////////////////////////////////////////////////////////////////////
-//            This file handles the character selection screen                //
-////////////////////////////////////////////////////////////////////////////////
+/************************************************************
+
+    CharState.js
+
+    The state for the character selection screen.
+
+    // TODO:
+        This needs changing to work with the new lobby
+        system which allows multiple players to connect to
+        a lobby.
+
+        We also need to ensure this state works in single
+        player and loads an AI player if that is the case.
+
+        The easy way to check for this is to look into:
+        NetworkManager.connect(); // to check if connected
+        PlayerData.lobbyData; // to get data related to a lobby
+
+        PlayerData.lobbyData MUST be 0 if the player is not
+        in a lobby and can be used to check if we're playing
+        a multiplayer or single player game.
+
+************************************************************/
 
 var CharState = {
     
