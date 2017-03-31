@@ -37,9 +37,9 @@ var MenuState = {
         this.gameLogo.anchor.setTo(0.5);
 
         // Menu buttons
-        this.buttonPlayGame = GUIManager.createButton('Play', ScreenData.viewportWidth / 2 - (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
-        this.buttonGetLobbies = GUIManager.createButton('Lobbies', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.lobbyListOnClick);
-        this.buttonServerSettings = GUIManager.createButton('Settings', ScreenData.viewportWidth / 2 + (110*2), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.settingsOnClick);
+        this.buttonPlayGame = GUIManager.createButton('Play', ScreenData.viewportWidth / 2 - (110*2), ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
+        this.buttonGetLobbies = GUIManager.createButton('Lobbies', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.lobbyListOnClick);
+        this.buttonServerSettings = GUIManager.createButton('Settings', ScreenData.viewportWidth / 2 + (110*2), ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.settingsOnClick);
         
     },
 
@@ -59,7 +59,7 @@ var MenuState = {
 
 
         // TODO: Start character select state in single player mode.
-        //game.state.start('CharState');
+        game.state.start('CharState');
         
     },
 

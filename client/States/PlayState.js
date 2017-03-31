@@ -4,29 +4,37 @@
 
 var PlayState = {
     
+    userChar: 0,
+    buttonMenu: 0,
+    aiActivated: false,
+    
     create: function () {
         
         console.log("Game - Started")
         
         // Set game world size
-        game.world.setBounds(0, 0, gameWidth, viewportHeight);
+        game.world.setBounds(0, 0, ScreenData.gameWidth, ScreenData.viewportHeight);
         
         // Change background colour
         // game.stage.backgroundColor = "#4488AA";
-        var gameBackground = game.add.sprite(0, 0, 'battleBG');
+        var gameBackground = game.add.sprite(0, 0, 'battleBackground');
         
-        mainBattle = game.add.audio('mainBattle');
+        mainBattle = game.add.audio('musicBattle');
         mainBattle.loop = true;
         mainBattle.play();
         
         // Create the game's ground
         gameFloor = createGameGround();
         
+        // Get users chosen character
+        this.userChar = PlayerData.getSelectedCharacter();
+        console.log("CHOSEN = " + this.userChar)
+        
         // Create the health bar on screen
-        healthBar = createHealthBar(userChar);
+        healthBar = createHealthBar(this.userChar);
         
         // Add characters name
-        addCharNames(userChar);
+        addCharNames(this.userChar);
         
         // Enabled Keyboard
         this.keyboard = game.input.keyboard;
@@ -37,16 +45,20 @@ var PlayState = {
         game.physics.arcade.gravity.y = 700;
         
         // Create Player Sprite
-        player = createPlayer (32,userChar);
+        player = createPlayer (32,this.userChar);
         player.frame = 1;
         
         // Make the camera follow the player
         game.camera.follow(player);
         
-        var buttonMenu = createLabelButton('Menu', 138, viewportHeight - 70, '#FFFFFF', "bGreenNormal", returnMenuOnClick, labelHover, labelOut);
+        // this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
     },
     
     update: function () {
+        
+        if (!this.aiActivated) {
+            this.checkAiHelp();
+        }
         
         // Don't allow the gmae floor and the player to overlap each other
         game.physics.arcade.collide(player, gameFloor);
@@ -86,10 +98,10 @@ var PlayState = {
             console.log("Player Jump")
         }
         if (this.key_Space.isDown) {
-            hit--;
-            if (hit >= 0) {
-                healthBar.getAt(0).body.setSize(hit,30,0,0);
-                console.log("Player Hit!")
+            player1Health--;
+            if (player1Health >= 0) {
+                healthBar.getAt(0).body.setSize(player1Health,30,0,0);
+                console.log("Player player1Health!")
             }
         } 
     
@@ -117,5 +129,34 @@ var PlayState = {
     
     renderGroup: function(member) {    
         game.debug.body(member);
+    },
+    
+    checkAiHelp: function() {
+        // var randomNumber = game.rnd.integerInRange(0, 50); //Generate a random number between 0 and 50.
+        // console.log(randomNumber);
+        /*
+        Calculate the difference between player 1's health and player 2's health.
+        
+        Add this value to the random number.
+        
+        If the result is >= a set value then spawn the AI.
+        */
+        var playerHealthDifference;
+        if (player2Health < player1Health) {
+            playerHealthDifference = player1Health - player2Health;
+        }
+        else {
+            playerHealthDifference = player2Health - player1Health;
+        }
+        if (playerHealthDifference >= 80) {
+            console.log("Check for AI")
+            this.getAiHelp()
+        }
+    },
+    
+    getAiHelp: function () {
+        this.aiActivated = true;
+        var randomNumber = game.rnd.integerInRange(0, 50);
+        console.log("Random Number: " + randomNumber)
     }
 }

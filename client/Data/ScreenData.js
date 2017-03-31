@@ -12,6 +12,7 @@ var ScreenData = {
 
 	gameHeightBuffer: 0,
 	gameHeight: 0,
+	gameWidth: 0,
 
 	init: function() {
 
@@ -26,6 +27,7 @@ var ScreenData = {
 
 		this.gameHeightBuffer = 50;
 		this.gameHeight = this.viewportHeight - this.gameHeightBuffer;
+		this.gameWidth = 1920;
 
 	},
 

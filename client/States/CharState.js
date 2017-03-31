@@ -32,7 +32,7 @@ var CharState = {
 
         // Title Text
         this.charText = game.add.text(0, 0, 'Select a Character', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
-        this.charText.setTextBounds(0, 30, ScreenData.screenWidth, 50);
+        this.charText.setTextBounds(0, 80, ScreenData.screenWidth, 50);
         
         // Character Buttons
         this.panelImageWidth = ((game.cache.getImage('leoArt').width / 4) + 32);
@@ -41,8 +41,8 @@ var CharState = {
         this.cleoCharacterPanel = GUIManager.createCharacterPanel('playerCleo', 'cleoArt', ScreenData.viewportCentreX + this.panelImageWidth);
         
         // Add buttons
-        this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.selectOnClick);
-        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
+        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
         
     },
     

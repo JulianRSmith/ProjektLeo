@@ -10,7 +10,7 @@ var GUIManager = {
         ConsoleManager.log("GUIManager::createButton() : Running", false);
 
         var lbBtnBg = game.add.sprite(buttonX, buttonY, buttonSprite, { boundsAlignH: "center", boundsAlignV: "middle" });
-        var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
+        var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '30px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle", stroke: "#8c6239", strokeThickness: 1 });
         
         lbBtn.inputEnabled = true;
         lbBtn.events.onInputUp.add(mainCallback, this);
@@ -68,7 +68,7 @@ var GUIManager = {
         // For debug
         ConsoleManager.log("GUIManager::createCharacterPanel() : Running", false);
 
-        var charButton = game.add.sprite(imagePosition, 270, imageName, 5);
+        var charButton = game.add.sprite(imagePosition, 240, imageName, 5);
         charButton.anchor.x = 0.5;
         charButton.anchor.y = 0.5;
         charButton.inputEnabled = true;
@@ -98,6 +98,15 @@ var GUIManager = {
             PlayerData.setSelectedCharacter(characterName);
 
         }, this);
+        
+        // Add placename bellow
+        var nameBackground = game.add.sprite(imagePosition, 370, 'goldPlacename');
+        nameBackground.anchor.x = 0.5;
+        nameBackground.anchor.y = 0.5;
+        // Add character names
+        var chosenName = getCharName(characterName);
+        var placeholderText = game.add.text(0, 0, chosenName, {font: "22px Calibri", fill: "#341e09", boundsAlignH: "center", boundsAlignV: "middle", stroke: "#b8b15c", strokeThickness: 1});
+        placeholderText.setTextBounds(imagePosition-55, 345, 110, 56);
         
         return charButton;
     },

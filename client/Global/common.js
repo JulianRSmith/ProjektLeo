@@ -34,11 +34,11 @@ function createPlayer (xPos,spriteName) {
  */
 function createGameGround () {
     
-    var floor = game.add.sprite(0, gameHeight, null)
+    var floor = game.add.sprite(0, ScreenData.gameHeight, null)
     
     game.physics.enable(floor, Phaser.Physics.ARCADE);
     
-    floor.body.setSize(gameWidth, gameHeightBuffer, 0, 0);
+    floor.body.setSize(ScreenData.gameWidth, ScreenData.gameHeightBuffer, 0, 0);
     floor.body.collideWorldBounds = true;
     
     return floor;
@@ -62,15 +62,15 @@ function createHealthBar () {
     
     // Create 2 health bars
     for(i = 0; i < 2; i++) {
-        var hBarBGImg = hBarGroupBG.create(0,0,'hBarBG');
-        var hBar = hBarGroup.create(0,0,'hBarRed');
+        var hBarBGImg = hBarGroupBG.create(0,0,'healthBarBG');
+        var hBar = hBarGroup.create(0,0,'healthBarRed');
         
         // Fix the health bar to the camera
         hBar.fixedToCamera = true;
         hBarBGImg.fixedToCamera = true;
     
         if(i == 1) {
-            hBarXpos = viewportWidth - 232;
+            hBarXpos = ScreenData.viewportWidth - 232;
         }
     
         hBarBGImg.cameraOffset.setTo(hBarXpos-10, 28);
@@ -89,14 +89,13 @@ function createHealthBar () {
 }
 
 /**
- * Adds the character names to the play state.
+ * Converts the character names into user readable ones
  */
-function addCharNames (charName) {
+function getCharName (charName) {
     
     var name;
-    
-    if(charName == 'playerKingL') {
-        name = 'King Leoneidus';
+    if(charName == 'playerLeo') {
+        name = 'Leoneidus';
     }
     else if (charName == 'playerBoud') {
         name = 'Boudica';
@@ -104,8 +103,17 @@ function addCharNames (charName) {
     else {
         name = 'Cleopatra';
     }
+    return name;
     
-    var charNamesText = game.add.text(0, 0, name, {font: "25px Calibri", fill: "#ffffff", stroke: "#362f2d", strokeThickness: 4});
+}
+
+/**
+ * Adds the character names to the play state.
+ */
+function addCharNames (charName) {
+
+    var chosenName = getCharName(charName);
+    var charNamesText = game.add.text(0, 0, chosenName, {font: "25px Calibri", fill: "#ffffff", stroke: "#362f2d", strokeThickness: 4});
     charNamesText.fixedToCamera = true;
     charNamesText.cameraOffset.setTo(32, 65);
     

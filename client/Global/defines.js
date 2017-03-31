@@ -2,5 +2,6 @@
 // In-game (play state) values
 var gameFloor;
 var healthBar;
-var hit = 200;
+var player1Health = 200;
+var player2Health = 200;
 var player2;

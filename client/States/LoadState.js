@@ -85,8 +85,10 @@ var LoadState = {
         game.load.image('healthBarRed', this.othersPath + 'healthBar.png');
         game.load.image('healthBarBG', this.othersPath + 'healthBarBG.png');
         
+        game.load.image('goldPlacename', this.othersPath + 'goldArt.png');
+        
         game.load.image('buttonGreenHover', this.buttonNewPath + "bGreenHover.png");
-        game.load.image('buttonGreenNormal', this.buttonNewPath + "bGreenHover.png");
+        game.load.image('buttonGreenNormal', this.buttonPath + "buttonWood.png");
         game.load.image('buttonRedHover', this.buttonNewPath + "bRedHover.png");
         game.load.image('buttonRedNormal', this.buttonNewPath + "bRedNormal.png");
         game.load.image('buttonBlueBarNormal', this.buttonNewPath + "bBlueBarNormal.png");
