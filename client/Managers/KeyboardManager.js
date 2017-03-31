@@ -1,3 +1,12 @@
+/************************************************************
+
+    This object will be used to handle our keyboard binds.
+
+    // TODO: 
+        When the new PlayState is ready, this should be 
+        used to keep track of keyboard binds.
+
+************************************************************/
 
 var KeyboardManager = {
 

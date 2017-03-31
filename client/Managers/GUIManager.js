@@ -1,3 +1,10 @@
+/************************************************************
+
+    This object handles the creation of GUI elements used
+    within the game such as buttons and special lobby
+    buttons.
+
+************************************************************/
 
 var GUIManager = {
 

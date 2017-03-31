@@ -1,3 +1,12 @@
+/************************************************************
+
+    This object should be used to handle general GUI listener
+    events such as mouse hover and mouse leave. 
+
+    There might be more general listeners we need so they 
+    should be added here.
+
+************************************************************/
 
 var GUIListeners = {
 

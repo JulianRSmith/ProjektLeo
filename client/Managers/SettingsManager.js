@@ -1,3 +1,13 @@
+/************************************************************
+
+    This object handles saving and validation of server 
+    settings.
+
+    // TODO:
+        A button for changing the playername is needed
+        and saving of name should be handled here.
+
+************************************************************/
 
 var SettingsManager = {
 

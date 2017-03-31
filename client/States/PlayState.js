@@ -1,6 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-//                               Play.js                                      //
-////////////////////////////////////////////////////////////////////////////////
+/************************************************************
+
+    PlayState.js
+
+    State for the main game.
+
+    // TODO:
+        Refer to CharState.js for most of what is needed.
+        In this state, we should setup listeners for data
+        incoming to the client which was not invoked as this
+        is needed to send and get updates on the other player.
+
+        This state should also support single player (for debug)
+        and also to add an extra game mechanic.
+    
+************************************************************/
 
 var PlayState = {
     

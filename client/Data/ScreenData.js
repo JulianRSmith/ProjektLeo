@@ -1,3 +1,23 @@
+/************************************************************
+
+    This object is a way to store data related to the screen.
+    We can keep track of:
+
+	Screen Width and Height. (the total size of the inner window)
+	Viewport Width and Height. (the total size of the game viewport)
+	Viewport Centre X and Y. (the centre of the screen)
+
+	// gameHeightBuffer could do with a rename to make sense
+	There are some extra values here like gameHeightBuffer
+	which I assume is the distance from bottom that makes 
+	the gameworld floor.
+
+	// gameHeight could do with a rename, too
+	I also assume gameHeight is the distance from top of the
+	screen to the bottom and represents the area which the 
+	player can move through.
+
+************************************************************/
 
 var ScreenData = {
 

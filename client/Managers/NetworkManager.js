@@ -1,3 +1,9 @@
+/************************************************************
+
+    This object makes an easy wrapper for the pomelo server
+    framework.
+
+************************************************************/
 
 var NetworkManager = {
 
