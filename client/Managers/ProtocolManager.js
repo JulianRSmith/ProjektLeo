@@ -65,7 +65,9 @@ var ProtocolManager = {
         else {
             ConsoleManager.success("Joined lobby successfully", true);
 
-            // TODO: Start character select state in networked mode.
+            LobbyData.lobby = data.lobby;
+
+            game.state.start('WaitState');
         }
 
     },

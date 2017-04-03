@@ -19,7 +19,7 @@ var NetworkManager = {
 
         pomelo.init({host: host, port: port, log: true}, function(){ ConsoleManager.success("Connected to server!", true); NetworkManager.networkConnected = true; }, false);
         
-        pomelo.on('onGetPing', function(){ ConsoleManager.log('Server has sent a ping.', false); });
+        pomelo.on('onGetPing', function(){ ConsoleManager.log('Server has sent a ping.', true); });
 
     },
     

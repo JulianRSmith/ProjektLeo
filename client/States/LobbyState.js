@@ -42,14 +42,14 @@ var LobbyState = {
         this.lobbyText.setTextBounds(0, 30, ScreenData.screenWidth, 50);
         
         // Menu buttons 
-        this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", function(){ $('#lobby-host').val(PlayerData.playerName); DOMManager.menuToggle("lobby-create"); });
-        this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.refreshOnClick);
-        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + (110*1), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
-        this.buttonServerDisconnect = GUIManager.createButton('Disconnect', ScreenData.viewportWidth / 2 + (110*3), ScreenData.viewportHeight - 70, '#FFFFFF', "buttonRedNormal", this.disconnectOnClick);
+        this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", function(){ $('#lobby-host').val(PlayerData.playerName); DOMManager.menuToggle("lobby-create"); });
+        this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.refreshOnClick);
+        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.menuOnClick);
+        this.buttonServerDisconnect = GUIManager.createButton('Disconnect', ScreenData.viewportWidth / 2 + (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.disconnectOnClick);
 
         // Lobby buttons
-        this.buttonNextPage = GUIManager.createButton('>', ScreenData.viewportWidth / 2 + 460, ScreenData.viewportHeight / 2, '#FFFFFF', "buttonGreenArrowNormal", this.nextPageOnClick);
-        this.buttonPrevPage = GUIManager.createButton('<', ScreenData.viewportWidth / 2 - 460, ScreenData.viewportHeight / 2, '#FFFFFF', "buttonGreenArrowNormal", this.prevPageOnClick);
+        this.buttonNextPage = GUIManager.createButton('>', ScreenData.viewportWidth / 2 + 460, ScreenData.viewportHeight / 2, '#341e09', "buttonGreenArrowNormal", this.nextPageOnClick);
+        this.buttonPrevPage = GUIManager.createButton('<', ScreenData.viewportWidth / 2 - 460, ScreenData.viewportHeight / 2, '#341e09', "buttonGreenArrowNormal", this.prevPageOnClick);
         this.buttonPrevPage[1].angle = 180;
 
         this.refreshOnCreate();

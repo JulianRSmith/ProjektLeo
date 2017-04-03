@@ -8,11 +8,24 @@ var Handler = function(app) {
 
 var lobbyList = {};
 var playerList = {};
+var socketList = {};
 
 /**
  * Called when client connects to the server for the first time.
  */
 Handler.prototype.onEntry = function(msg, session, next) {
+
+	console.log('=========================================')
+	console.log(msg)
+	console.log('=========================================')
+
+	console.log('=========================================')
+	console.log(session)
+	console.log('=========================================')
+
+	console.log('=========================================')
+	console.log(next)
+	console.log('=========================================')
 
 	// Setup a new player.
 	var player = {
@@ -24,6 +37,7 @@ Handler.prototype.onEntry = function(msg, session, next) {
 
 	// Return new player to client.
 	next(null, { error: false, msg: "Welcome to the server!", playerData: player });
+	next(null, { __route__: 'onGetPing', error: false, msg: "Welcome to the server!", playerData: player });
 
 };
 
@@ -59,7 +73,6 @@ Handler.prototype.onCreateLobby = function(msg, session, next) {
 
 }
 
-
 /**
  * Called when a client requests to enter a lobby.
  */
@@ -72,7 +85,7 @@ Handler.prototype.onEnterLobby = function(msg, session, next) {
 		if(lobbyList[msg.lobbyId].players.length < lobbyList[msg.lobbyId].slots) {
 
 			// Add the player to the list of players.
-			lobbyList[msg.lobbyId].players.push(playerList[session.id].playerName);
+			lobbyList[msg.lobbyId].players.push(playerList[session.id]);
 
 			// Return the lobby data to confirm the player joined.
 			next(null, { error: false, lobby: lobbyList[msg.lobbyId] });
