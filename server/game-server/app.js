@@ -9,8 +9,21 @@ app.configure('production|development', 'connector', function(){
 		connector : pomelo.connectors.hybridconnector,
 		heartbeat : 3,
 		useDict : true,
-		useProtobuf : true
+		useProtobuf : true,
+		handshake : function(msg, cb){
+			cb(null, {});
+		}
 	});
+});
+
+app.configure('production|development', 'hybrid-connector', function(){
+    app.set('connectorConfig',
+    {
+        connector : pomelo.connectors.hybridconnector,
+        heartbeat : 3,
+        useDict: true,
+        useProtobuf: true
+    });
 });
 
 app.start();

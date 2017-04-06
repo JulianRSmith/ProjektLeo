@@ -2,14 +2,17 @@
 //                               Main.js                                      //
 ////////////////////////////////////////////////////////////////////////////////
 
-// Get the width of the users screen
-var screenWidth = window.screen.width;
-
 // Set up game enviornemnt
-var game = new Phaser.Game(screenWidth,600, Phaser.AUTO, 'gameViewpoint');
+var game = new Phaser.Game(ScreenData.screenWidth, ScreenData.viewportHeight, Phaser.AUTO, 'game-viewport');
 
-game.state.add('boot', bootState);
-game.state.add('load', loadState);
-game.state.add('menu', menuState);
+// Game States
+game.state.add('BootState', BootState);
+game.state.add('LoadState', LoadState);
+game.state.add('MenuState', MenuState);
+game.state.add('PlayState', PlayState);
+game.state.add('CharState', CharState);
+game.state.add('LobbyState', LobbyState);
+game.state.add('WaitState', WaitState);
 
-game.state.start('boot');
+// Call boot state
+game.state.start('BootState');

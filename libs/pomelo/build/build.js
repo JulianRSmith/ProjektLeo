@@ -1425,11 +1425,11 @@ require.register("pomelonode-pomelo-jsclient-websocket/lib/pomelo-client.js", fu
     };
     var onerror = function(event) {
       pomelo.emit('io-error', event);
-      console.error('socket error: ', event);
+      ConsoleManager.error('Unable to connect to server<br>Connection timed out', true);
     };
     var onclose = function(event){
       pomelo.emit('close',event);
-      console.error('socket close: ', event);
+      ConsoleManager.error('Socket closed', true);
     };
     socket = new WebSocket(url);
     socket.binaryType = 'arraybuffer';
@@ -1542,7 +1542,7 @@ require.register("pomelonode-pomelo-jsclient-websocket/lib/pomelo-client.js", fu
     if(gap > gapThreshold) {
       heartbeatTimeoutId = setTimeout(heartbeatTimeoutCb, gap);
     } else {
-      console.error('server heartbeat timeout');
+      ConsoleManager.error('Heartbeat timed out', true);
       pomelo.emit('heartbeat timeout');
       pomelo.disconnect();
     }
