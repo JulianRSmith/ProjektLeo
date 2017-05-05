@@ -7,20 +7,38 @@
 
 var NetworkManager = {
 
+    sfs: 0,
     networkConnected: false,
     
     /**
      * Opens a connection with the server.
      */
     connect: function(host, port) {
-
+        
         // For debug
         ConsoleManager.log("NetworkManager::connect() : Running", false);
+        ConsoleManager.log("NetworkManager::connect() : " + host + ":" + parseInt(port), false);
 
-        pomelo.init({host: host, port: port, log: true}, function(){ ConsoleManager.success("Connected to server!", true); NetworkManager.networkConnected = true; }, false);
-        
-        pomelo.on('onGetPing', function(){ ConsoleManager.log('Server has sent a ping.', true); });
+    	// Create configuration object
+    	var config = {};
+    	config.host = host;
+    	config.port = parseInt(port);
+    	config.zone = "BasicExamples";
+    	config.debug = true;
+    	
+    	// New client
+        sfs = new SFS2X.SmartFox(config);
+            
+    	// Set logging level
+    	sfs.logger.level = SFS2X.LogLevel.DEBUG;
 
+    	// Add event listeners
+    	sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, ProtocolManager.onConnect, this);
+	    sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, ProtocolManager.onDisconnect, this);
+    	
+    	// Connect
+    	sfs.connect();
+    	
     },
     
     /**
@@ -31,7 +49,7 @@ var NetworkManager = {
         // For debug
         ConsoleManager.log("NetworkManager::request() : Running", false);
 
-        pomelo.request(route, data, callback);
+        //pomelo.request(route, data, callback);
 
     },
     
@@ -44,7 +62,7 @@ var NetworkManager = {
         ConsoleManager.log("NetworkManager::disconnect() : Running", false);
 
         if(NetworkManager.connected()) {
-            NetworkManager.request("connector.entryHandler.onDisconnect", "", ProtocolManager.onDisconnect);
+            sfs.disconnect();
         }
 
     },

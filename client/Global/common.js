@@ -110,11 +110,15 @@ function getCharName (charName) {
 /**
  * Adds the character names to the play state.
  */
-function addCharNames (charName) {
+function addCharNames (charName,enemyName) {
 
     var chosenName = getCharName(charName);
     var charNamesText = game.add.text(0, 0, chosenName, {font: "25px Calibri", fill: "#ffffff", stroke: "#362f2d", strokeThickness: 4});
     charNamesText.fixedToCamera = true;
     charNamesText.cameraOffset.setTo(32, 65);
+    var oponentName = getCharName(enemyName);
+    var EnemyNameText = game.add.text(0, 0, oponentName, {font: "25px Calibri", fill: "#ffffff", stroke: "#362f2d", strokeThickness: 4});
+    EnemyNameText.fixedToCamera = true;
+    EnemyNameText.cameraOffset.setTo(ScreenData.viewportWidth - 232, 65);
     
 }

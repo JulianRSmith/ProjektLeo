@@ -125,21 +125,21 @@ var GUIManager = {
 
         // For debug
         ConsoleManager.log("GUIManager::backgroundSmoke() : Running", false);
-
-        emitter = game.add.emitter(game.world.centerX, game.height, 50);
-        emitter.width = ScreenData.viewportWidth;
+        // Set up the smoke emitter
+        smoke = game.add.emitter(game.world.centerX, game.height, 50);
+        smoke.width = ScreenData.viewportWidth;
+        // Smoke emmiter preferences
+        smoke.minParticleScale = 0.1;
+        smoke.maxParticleScale = 0.9;
+        smoke.minRotation = -5;
+        smoke.maxRotation = 5;
+        smoke.setYSpeed(-2, -5);
+        smoke.setXSpeed(10, 20);
+        smoke.gravity = -5;
+        smoke.setAlpha(0, 0.2, 6000, Phaser.Easing.Quadratic.InOut, false);
         
-        emitter.minParticleScale = 0.1;
-        emitter.maxParticleScale = 0.9;
-        emitter.minRotation = -5;
-        emitter.maxRotation = 5;
-        emitter.setYSpeed(-2, -5);
-        emitter.setXSpeed(10, 20);
-        emitter.gravity = -10;
-        emitter.setAlpha(0, 0.2, 6000, Phaser.Easing.Quadratic.InOut, false);
-        
-        emitter.makeParticles(image);
-        emitter.start(false, 6000, 100, 0);
+        smoke.makeParticles(image);
+        smoke.start(false, 6000, 100, 0);
 
     },
 

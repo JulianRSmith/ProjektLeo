@@ -11,8 +11,8 @@
 
 var SettingsManager = {
 
-    serverIP: "127.0.0.1",
-    serverPort: 3010,
+    serverIP: "projectge.com",
+    serverPort: 2020,
 
     saveServerSettings: function() {
 

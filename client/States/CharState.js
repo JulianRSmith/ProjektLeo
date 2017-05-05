@@ -62,6 +62,12 @@ var CharState = {
         this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
         
+        if (LobbyData.lobby != 0){
+            console.log("NETWORK CONNECT")
+        } else {
+            console.log("NETWORK NOT CONNECTED")
+        }
+        
     },
     
     /**

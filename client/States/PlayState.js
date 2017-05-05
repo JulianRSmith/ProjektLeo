@@ -17,13 +17,17 @@
 
 var PlayState = {
     
+    secTimer: 0,
     userChar: 0,
     buttonMenu: 0,
     aiActivated: false,
+    singlePlayer: false,
+    otherPlayerChar: false,
+    oponent: false,
+    delay: false,
+    key: "",
     
     create: function () {
-        
-        console.log("Game - Started")
         
         // Set game world size
         game.world.setBounds(0, 0, ScreenData.gameWidth, ScreenData.viewportHeight);
@@ -43,11 +47,19 @@ var PlayState = {
         this.userChar = PlayerData.getSelectedCharacter();
         console.log("CHOSEN = " + this.userChar)
         
+        if (LobbyData.lobby == 0){
+            this.singlePlayer = true;
+            this.otherPlayerChar = PlayerData.generateEnemyPlayer(this.userChar)
+            console.log("Single Player Game = " + this.singlePlayer)
+        } else {
+            console.log("Multiplayer Game Started")
+        }
+        
         // Create the health bar on screen
         healthBar = createHealthBar(this.userChar);
         
         // Add characters name
-        addCharNames(this.userChar);
+        addCharNames(this.userChar,this.otherPlayerChar);
         
         // Enabled Keyboard
         this.keyboard = game.input.keyboard;
@@ -61,13 +73,21 @@ var PlayState = {
         player = createPlayer (32,this.userChar);
         player.frame = 1;
         
+        if (this.singlePlayer) {
+            this.oponent = createPlayer(ScreenData.gameWidth-32,this.otherPlayerChar);
+        }
+        
         // Make the camera follow the player
         game.camera.follow(player);
+        
         
         // this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
     },
     
     update: function () {
+        
+        // Game time
+        this.secTimer = this.game.time.totalElapsedSeconds().toFixed(2);
         
         if (!this.aiActivated) {
             this.checkAiHelp();
@@ -75,31 +95,38 @@ var PlayState = {
         
         // Don't allow the gmae floor and the player to overlap each other
         game.physics.arcade.collide(player, gameFloor);
+        // Don't allow the gmae floor and the player to overlap each other
+        game.physics.arcade.collide(this.oponent, gameFloor);
         
         // Move player to the right
         if (this.key_Right.isDown) {
+            if (this.key != "right"){
+                this.delay = true;
+                this.key = "right";
+            } else {
+                this.key = "right";
+            }
             player.x+= 6;
             player.animations.play('right');
-            console.log("Player Move Right")
         }
         // Move player to the left
         else if (this.key_Left.isDown) {
+            if (this.key != "left"){
+                this.delay = true;
+                this.key = "left";
+            } else {
+                this.key = "left";
+            }
             player.x-= 6;
             player.animations.play('left');
-            console.log("Player Move Left")
         }
         else if(this.key_A.isDown) {
-            console.log("Player Punches!")
             player.animations.play('attack');
-            if (game.physics.arcade.collide(player, player2)) {
-                //enemy health down
-            }
+            this.game.physics.arcade.overlap(player, this.oponent,this.hit, null, this);
         }
         else if(this.key_S.isDown) {
             console.log("Player Kicks!")
-            if (game.physics.arcade.collide(player, player2)) {
-                //enemy health down
-            }
+            this.game.physics.arcade.overlap(player, this.oponent,this.hit, null, this);
         }
         else {
             player.animations.stop();
@@ -111,12 +138,9 @@ var PlayState = {
             console.log("Player Jump")
         }
         if (this.key_Space.isDown) {
-            player1Health--;
-            if (player1Health >= 0) {
-                healthBar.getAt(0).body.setSize(player1Health,30,0,0);
-                console.log("Player player1Health!")
-            }
         } 
+        
+        this.moveSinglePlayerOponent();
     
     },
     
@@ -126,6 +150,7 @@ var PlayState = {
         // game.debug.body(player);
         healthBar.forEachAlive(this.renderGroup, this);
         // game.debug.body(gameFloor);
+        this.game.debug.text('Time: ' + this.secTimer, ScreenData.screenWidth/2, 60, 'yellow', 'Segoe UI');
         
     },
     
@@ -171,5 +196,65 @@ var PlayState = {
         this.aiActivated = true;
         var randomNumber = game.rnd.integerInRange(0, 50);
         console.log("Random Number: " + randomNumber)
+    },
+    
+    hit: function () {
+        console.log("HIT");
+        if (player2Health >= 0) {
+            healthBar.getAt(1).body.setSize(player2Health,30,0,0);
+            player2Health--;
+            console.log("Player player2Health!")
+        }
+    },
+    
+    moveSinglePlayerOponent: function() {
+        var oponentHeading = "";
+        
+        if (player.x < this.oponent.x) {
+            if (this.delay) {
+                console.log("DELAY")
+                var storeTime = this.secTimer;
+                console.log("STORE = " + storeTime)
+                if (oponentHeading == "left") {
+                    if ((this.secTimer-storeTime) > 2) {
+                        console.log((this.secTimer-storeTime))
+                        this.oponent.x-= 4;
+                    }
+                } else if (oponentHeading == "right") {
+                    if ((this.secTimer-storeTime) > 2) {
+                        console.log((this.secTimer-storeTime))
+                        this.oponent.x+= 4;
+                    }
+                }
+                this.delay = false;
+            } else {
+                oponentHeading = "left"
+                this.oponent.x-= 4;
+                this.oponent.animations.play('left');
+            }
+        }
+        if (player.x > this.oponent.x) {
+            if (this.delay) {
+                console.log("DELAY")
+                var storeTime = this.secTimer;
+                console.log("STORE = " + storeTime)
+                if (oponentHeading == "left") {
+                    if ((this.secTimer-storeTime) > 2) {
+                        console.log((this.secTimer-storeTime))
+                        this.oponent.x-= 4;
+                    }
+                } else if (oponentHeading == "right") {
+                    if ((this.secTimer-storeTime) > 2) {
+                        console.log((this.secTimer-storeTime))
+                        this.oponent.x+= 4;
+                    }
+                }
+                this.delay = false;
+            } else {
+                oponentHeading = "right"
+                this.oponent.x+= 4;
+                this.oponent.animations.play('right');
+            }
+        }
     }
-}
+};

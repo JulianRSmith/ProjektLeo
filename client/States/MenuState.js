@@ -23,8 +23,9 @@ var MenuState = {
         // Set game world size
         game.world.setBounds(0, 0, ScreenData.viewportWidth, ScreenData.viewportHeight);
 
-        // AudioManager.gameMainTheme.stop();
-        // AudioManager.gameMainTheme.play();
+        // Stop a theme if it is already plying so we don't have overlapping themes
+        AudioManager.gameMainTheme.stop();
+        //AudioManager.gameMainTheme.play();
 
         // Background objects
         GUIManager.backgroundTile('menuBackground');

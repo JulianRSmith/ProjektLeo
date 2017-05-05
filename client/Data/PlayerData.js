@@ -14,7 +14,7 @@
 var PlayerData = {
     
     playerId: "Waiting...",
-    playerName: "Waiting...",
+    playerName: "Unknown Player",
     playerCharacter: "Waiting...",
 
     playerPosX: 0,
@@ -27,5 +27,19 @@ var PlayerData = {
     
     getSelectedCharacter: function () {
         return this.playerCharacter
+    },
+    
+    generateEnemyPlayer: function(characterName) {
+        var charList = ["playerLeo","playerBoud","playerCleo"];
+        for (var i = 0;i < charList.length;i++) {
+            if (charList[i] == characterName) {
+                charList.splice(i, 1);
+            }
+        }
+        var pickChar = game.rnd.integerInRange(0, 1);
+        console.log(pickChar)
+        var enemyChar = charList[pickChar];
+        console.log(enemyChar)
+        return enemyChar;
     }
-}
+};

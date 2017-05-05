@@ -10,7 +10,7 @@
         
         <!-- Client libs -->
         <script src="./libs/phaser/phaser.js"></script>
-        <script src="./libs/pomelo/build/build.js"></script>
+        <script src="./libs/sfs2x/sfs2x-api-1.7.2.js"></script>
         <script src="./libs/toastr/toastr.min.js"></script>
 
         <!-- Client global definitions and common functions -->
@@ -50,9 +50,6 @@
             // Screen related data
             ScreenData.init();
             ScreenData.debug();
-
-            // Pomelo boot
-            require('boot');
 
             // Toastr settings
             toastr.options = {

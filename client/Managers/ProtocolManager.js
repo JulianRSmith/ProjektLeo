@@ -11,17 +11,25 @@ var ProtocolManager = {
     /**
      * Called when the client connects to the server.
      */
-    onConnect: function(data) { 
+    onConnect: function(event) { 
 
         // For debug
         ConsoleManager.log("ProtocolManager::onConnect() : Running", false);
-        ConsoleManager.log("ProtocolManager::onConnect() : " + data.msg, false);
-
-        // Setup the player data
-        PlayerData.playerId = data.playerData["playerID"];
-        PlayerData.playerName = data.playerData["playerName"];
-        PlayerData.playerCharacter = data.playerData["playerCharacter"];
-
+        ConsoleManager.log("ProtocolManager::onConnect() : " + event.msg, false);
+        
+        if(event.success) {
+            
+            // For debug
+            ConsoleManager.success("Connection accepted.", true);
+            
+            if(sfs.send(new SFS2X.LoginRequest(PlayerData.playerName))) {
+                
+                NetworkManager.networkConnected = true; 
+                
+            }
+            
+        }
+        
     },
     
     /**
@@ -84,14 +92,11 @@ var ProtocolManager = {
     /**
      * Called when disconnected from the server.
      */
-    onDisconnect: function(data) {
+    onDisconnect: function(event) {
 
         // For debug
         ConsoleManager.log("ProtocolManager::onDisconnect() : Running", false);
-        ConsoleManager.log("ProtocolManager::onDisconnect() :", false);
-        ConsoleManager.log("Disconnected reason: [" + data.msg + "]", false);
-
-        ConsoleManager.warning("Disconnected by server<br>Reason: " + data.msg, true);
+        ConsoleManager.warning("Disconnected by server<br>Reason: " + event.reason, true);
         
         NetworkManager.networkConnected = false;
         
