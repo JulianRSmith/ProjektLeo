@@ -81,9 +81,6 @@ var MenuState = {
             
             var connectInterval = setInterval(function() {
                 if(NetworkManager.connected()) {
-                    NetworkManager.request("connector.entryHandler.onEntry", "", ProtocolManager.onConnect);
-                    
-
                     game.state.start("LobbyState");
                 }
                 
@@ -103,6 +100,7 @@ var MenuState = {
 
         $("#server-ip").val(SettingsManager.serverIP);
         $("#server-port").val(SettingsManager.serverPort);
+        $("#player-name").val(PlayerData.playerName);
 
         // No need to play sound as menuToggle handles button clicks for the DOM
         DOMManager.menuToggle('server-settings');
