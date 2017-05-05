@@ -14,7 +14,7 @@
 var PlayerData = {
     
     playerId: "Waiting...",
-    playerName: "Unknown Player",
+    playerName: "Unknown Gladiator",
     playerCharacter: "Waiting...",
 
     playerPosX: 0,

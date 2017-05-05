@@ -18,16 +18,9 @@ var ProtocolManager = {
         ConsoleManager.log("ProtocolManager::onConnect() : " + event.msg, false);
         
         if(event.success) {
-            
             // For debug
             ConsoleManager.success("Connection accepted.", true);
-            
-            if(sfs.send(new SFS2X.LoginRequest(PlayerData.playerName))) {
-                
-                NetworkManager.networkConnected = true; 
-                
-            }
-            
+            sfs.send(new SFS2X.LoginRequest(PlayerData.playerName));
         }
         
     },
@@ -50,16 +43,16 @@ var ProtocolManager = {
     /**
      * Called when the server gives the client a new lobby.
      */
-    onCreateLobby: function(data) {
+    onRoomAdd: function(event) {
 
         // For debug
         ConsoleManager.log("ProtocolManager::onCreateLobby() : Running", false);
         ConsoleManager.log("ProtocolManager::onCreateLobby() :", false);
-        ConsoleManager.log("Created a lobby: [id: " + data.lobby.id + ", name: " + data.lobby.name + ", host: " + data.lobby.host + ", slots: " + data.lobby.slots + ", players: " + data.lobby.players + "]", false);
+        //ConsoleManager.log("Created a lobby: [id: " + data.lobby.id + ", name: " + data.lobby.name + ", host: " + data.lobby.host + ", slots: " + data.lobby.slots + ", players: " + data.lobby.players + "]", false);
         
         ConsoleManager.success("Created lobby, entering...", true);
 
-        NetworkManager.request("connector.entryHandler.onEnterLobby", { lobbyId: data.lobby.id, playerName: data.lobby.host }, ProtocolManager.onEnterLobby);
+        //NetworkManager.request("connector.entryHandler.onEnterLobby", { lobbyId: data.lobby.id, playerName: data.lobby.host }, ProtocolManager.onEnterLobby);
 
     },
 
@@ -102,6 +95,37 @@ var ProtocolManager = {
         
         game.state.start("MenuState");
 
+    },
+
+    onLoginError: function(event) {
+
+        ConsoleManager.error("Login error:<br>[" + event.errorMessage + "]<br>[code: " + event.errorCode + "]", true);
+
+    },
+    
+    onLogin: function(event) {
+
+        PlayerData.playerName = event.user._name;
+        PlayerData.playerId = event.user._id;
+
+
+        ConsoleManager.success("Login accepted for: [" + PlayerData.playerName + ": " + PlayerData.playerId + "]", true);
+
+        NetworkManager.networkConnected = true; 
+
+    },
+        
+    onRoomJoinError: function(event) {
+
+        ConsoleManager.error("Room join error:<br>[" + event.errorMessage + "]<br>[code: " + event.errorCode + "]", true);
+
+    },
+
+    onRoomJoin: function(event) {
+
+        ConsoleManager.success("Room join accepted:<br>" + event.room, true);
+
+        trace("Room joined: " + evtParams.room);
     }
     
 }

@@ -82,7 +82,7 @@
         <script>
             var Index = {
                 serverSettingsSave: function() {
-                    SettingsManager.saveServerSettings();
+                    SettingsManager.saveSettings();
                 },
 
                 serverSettingsClose: function() {
@@ -116,6 +116,7 @@
             <div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP" value="localhost" />
                 <input style="text-align:left;" class="menu-input" id="server-port" type="number" placeholder="Server Port" value="3010" min="1" max="65535"/>
+                <input style="text-align:left;" class="menu-input" id="player-name" type="text" placeholder="Player Name" value="Unknown Gladiator" />
 
                 <div class="menu-button" onclick="Index.serverSettingsSave();">Save</div>
                 <div class="menu-button" onclick="Index.serverSettingsClose();">Cancel</div>
@@ -123,7 +124,7 @@
         </div>
         <div id="ss-confirm" class="pause-menu background">
             <div class="menu-container">
-                <div class="menu-message">Server settings have been saved.</div>
+                <div class="menu-message">Settings have been saved.</div>
 
                 <div class="menu-button" onclick="Index.serverSettingsConfirm();">Close</div>
             </div>
@@ -165,8 +166,6 @@
         <div id="lobby-create" class="pause-menu background">
             <div class="menu-container">
                 <input style="text-align:left;" class="menu-input" id="lobby-name" type="text" placeholder="Lobby Name" maxlength="20"/>
-                <input style="text-align:left;" class="menu-input" id="lobby-host" type="text" placeholder="Username" maxlength="14"/>
-
                 <div class="menu-button" onclick="Index.lobbyCreateSave();">Create</div>
                 <div class="menu-button" onclick="Index.lobbyCreateClose();">Cancel</div>
             </div>

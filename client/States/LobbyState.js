@@ -36,6 +36,9 @@ var LobbyState = {
         GUIManager.backgroundSmoke('backgroundSmoke');
         GUIManager.backgroundBorder('woodBorder');
 
+        ConsoleManager.log("Joining zone: [Lobby Zone]", true);
+        sfs.send(new SFS2X.JoinRoomRequest("Lobby Zone"));
+
         // Text objects
         this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.lobbyText = game.add.text(0, 0, 'Select a Lobby', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
@@ -43,7 +46,7 @@ var LobbyState = {
         
         // Menu buttons 
         this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", function(){ $('#lobby-host').val(PlayerData.playerName); DOMManager.menuToggle("lobby-create"); });
-        this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.refreshOnClick);
+        this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.refreshOnCreate);
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.menuOnClick);
         this.buttonServerDisconnect = GUIManager.createButton('Disconnect', ScreenData.viewportWidth / 2 + (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.disconnectOnClick);
 
@@ -67,30 +70,45 @@ var LobbyState = {
         
     },
     
+
+    // modified to seamlessly integrate the way SFS does things
     refreshOnCreate: function() {
 
         // For debug
         ConsoleManager.log("LobbyState::refreshOnCreate() : Running", false);
 
-        if(NetworkManager.connected()) {
-            NetworkManager.request("connector.entryHandler.onGetLobbies", "", ProtocolManager.onGetLobbies);
+        var rooms = sfs.roomManager.getRoomList();
+        var source = [];
+
+        console.log(rooms);
+
+        var roomCount = 0;
+        for (i = 0; i < Object.keys(rooms).length; i++)
+        {
+            var room = rooms[i];
+
+            if (room.isGame && !room.isPasswordProtected && !room.isHidden)
+            {
+                console.log(room);
+
+                LobbyState.lobbyCache[roomCount] = {
+                    id: room.id,
+                    name: room.name,
+                    slots: room.maxUsers,
+                    players: {},
+                    count: room.userCount,
+                    started: room.getVariable(SFS2X.ReservedRoomVariables.RV_GAME_STARTED).value,
+                    baseobj: room
+                }
+
+                roomCount++;
+            }
         }
-        
+
+        LobbyState.updateLobbyList();
+
     },
     
-    refreshOnClick: function() {
-
-        // For debug
-        ConsoleManager.log("LobbyState::refreshOnClick() : Running", false);
-
-        AudioManager.gameButtonClick.play();
-    
-        if(NetworkManager.connected()) {
-            NetworkManager.request("connector.entryHandler.onGetLobbies", "", ProtocolManager.onGetLobbies);
-        }
-        
-    },
-
     createOnClick: function() {
         // For debug
         ConsoleManager.log("LobbyState::createOnClick() : Running", false);
@@ -100,31 +118,29 @@ var LobbyState = {
         if($('#lobby-name').val().length > 20) { 
             ConsoleManager.warning("Lobby name must be less than 21 characters.", true);
         }
-        else if($('#lobby-host').val().length > 15) {
-            ConsoleManager.warning("Host name must be less than 15 characters.", true);
-        }
         else if($('#lobby-name').val().length < 1) { 
             ConsoleManager.warning("Lobby name must be more than 0 characters.", true);
-            
-        }
-        else if($('#lobby-host').val().length < 1) { 
-            ConsoleManager.warning("Host name must be more than 0 characters.", true);
-            
         }
         else {
             DOMManager.menuToggle('lobby-create');
 
             if(NetworkManager.connected()){
-
-                // Update the player name here since it will also update on the server
-                PlayerData.playerName = $('#lobby-host').val();
-
-                // Ask server to make a new lobby
-                NetworkManager.request("connector.entryHandler.onCreateLobby", {lobbyName: $('#lobby-name').val(), lobbyHost: $('#lobby-host').val()}, ProtocolManager.onCreateLobby);
-
+                if ($("#gameNameIn").val() != "")
+                {
+                    // Basic game settings
+                    var settings = new SFS2X.SFSGameSettings($('#lobby-name').val());
+                    settings.groupId = "games";
+                    settings.maxUsers = 2;
+                    settings.minPlayersToStartGame = 2;
+                    settings.isPublic = true;
+                    settings.leaveLastJoinedRoom = true;
+                    settings.notifyGameStarted = true;
+         
+                    // Send CreateSFSGame request
+                    sfs.send(new SFS2X.CreateSFSGameRequest(settings));
+                }
             }
         }
-        
     },
     
     nextPageOnClick: function() {

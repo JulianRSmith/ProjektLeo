@@ -14,7 +14,7 @@ var SettingsManager = {
     serverIP: "projectge.com",
     serverPort: 2020,
 
-    saveServerSettings: function() {
+    saveSettings: function() {
 
         // For debug
         ConsoleManager.log("SettingsManager::saveServerSettings() : Running", false);
@@ -28,8 +28,9 @@ var SettingsManager = {
             
             this.serverIP = $('#server-ip').val();
             this.serverPort = $('#server-port').val();
+            PlayerData.playerName = $('#player-name').val();
             
-            ConsoleManager.success("Server settings have been applied.", true);
+            ConsoleManager.success("Settings have been applied.", true);
         }
         else {
             DOMManager.menuToggle('ss-error');

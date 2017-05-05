@@ -35,6 +35,19 @@ var NetworkManager = {
     	// Add event listeners
     	sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, ProtocolManager.onConnect, this);
 	    sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, ProtocolManager.onDisconnect, this);
+
+        sfs.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, ProtocolManager.onLoginError, this);
+        sfs.addEventListener(SFS2X.SFSEvent.LOGIN, ProtocolManager.onLogin, this);
+
+        sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, ProtocolManager.onRoomJoinError, this);
+        sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, ProtocolManager.onRoomJoin, this);
+
+        sfs.addEventListener(SFS2X.SFSEvent.ROOM_ADD, ProtocolManager.onRoomAdd, this);
+        sfs.addEventListener(SFS2X.SFSEvent.ROOM_REMOVE, ProtocolManager.onRoomRemove, this);
+
+        //sfs.addEventListener(SFS2X.SFSEvent.PROXIMITY_LIST_UPDATE, onProximityListUpdate, this);
+        //sfs.addEventListener(SFS2X.SFSEvent.USER_VARIABLES_UPDATE, onUserVariablesUpdate, this);
+        //sfs.addEventListener(SFS2X.SFSEvent.PUBLIC_MESSAGE, onPublicMessage, this);
     	
     	// Connect
     	sfs.connect();
