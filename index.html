@@ -114,9 +114,27 @@
         
         <div id="server-settings" class="pause-menu background">
             <div class="menu-container">
-                <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP" value="localhost" />
-                <input style="text-align:left;" class="menu-input" id="server-port" type="number" placeholder="Server Port" value="3010" min="1" max="65535"/>
-                <input style="text-align:left;" class="menu-input" id="player-name" type="text" placeholder="Player Name" value="Unknown Gladiator" />
+                <p>
+                    Server IP:
+                    <input style="text-align:left;" class="menu-input" id="server-ip" type="text" placeholder="Server IP" value="localhost" />
+                </p>
+
+                <p>
+                    Server Port:
+                    <input style="text-align:left;" class="menu-input" id="server-port" type="number" placeholder="Server Port" value="3010" min="1" max="65535"/>
+                </p>
+
+                <p>
+                    Player Name:
+                    <input style="text-align:left;" class="menu-input" id="player-name" type="text" placeholder="Player Name" value="Unknown Gladiator" />
+                </p>
+                <p>
+                    Enable Debug Toasts:
+                    <select id="debug-toasts">
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select>
+                </p>
 
                 <div class="menu-button" onclick="Index.serverSettingsSave();">Save</div>
                 <div class="menu-button" onclick="Index.serverSettingsClose();">Cancel</div>

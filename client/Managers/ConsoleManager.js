@@ -16,7 +16,7 @@ var ConsoleManager = {
 
 		console.log(message);
 
-		if(push) {
+		if(push && SettingsManager.debugToasts) {
 			toastr.success(message)
 		}
 
@@ -26,7 +26,7 @@ var ConsoleManager = {
 
 		console.log(message);
 
-		if(push) {
+		if(push && SettingsManager.debugToasts) {
 			toastr.info(message)
 		}
 
@@ -36,7 +36,7 @@ var ConsoleManager = {
 		
 		console.error(message);
 
-		if(push) {
+		if(push && SettingsManager.debugToasts) {
 			toastr.error(message)
 		}
 
@@ -46,7 +46,7 @@ var ConsoleManager = {
 		
 		console.error(message);
 
-		if(push) {
+		if(push && SettingsManager.debugToasts) {
 			toastr.warning(message)
 		}
 

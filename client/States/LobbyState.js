@@ -76,6 +76,7 @@ var LobbyState = {
 
         // For debug
         ConsoleManager.log("LobbyState::refreshOnCreate() : Running", false);
+        ConsoleManager.log("Fetching lobby list...", true);
 
         var rooms = sfs.roomManager.getRoomList();
         var source = [];
@@ -248,8 +249,7 @@ var LobbyState = {
                 ScreenData.viewportWidth / 2, 
                 160 + (70 * i), 
 
-                LobbyState.lobbyCache[item].id,
-                LobbyState.lobbyCache[item].name,
+                LobbyState.lobbyCache[item].baseobj,
 
                 // Button style
                 '#FFFFFF', // Text
@@ -257,8 +257,9 @@ var LobbyState = {
 
                 // OnClick Callback
                 function(spr, ptr, bool, args){ 
-                    ConsoleManager.log("Connecting to lobby:<br>" + args.lobbyId + ":" + args.lobbyName + " as " + PlayerData.playerName, true);
-                    NetworkManager.request("connector.entryHandler.onEnterLobby", {lobbyId: args.lobbyId, playerName: PlayerData.playerName}, ProtocolManager.onEnterLobby); 
+                    console.log(args);
+                    ConsoleManager.log("Connecting to lobby:<br>" + args._id + ":" + args._name + " as " + PlayerData.playerName, true);
+                    sfs.send(new SFS2X.JoinRoomRequest(args)); 
                 }
             );
         }

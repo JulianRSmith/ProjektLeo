@@ -52,8 +52,36 @@ var ProtocolManager = {
         
         ConsoleManager.success("Created lobby, entering...", true);
 
-        //NetworkManager.request("connector.entryHandler.onEnterLobby", { lobbyId: data.lobby.id, playerName: data.lobby.host }, ProtocolManager.onEnterLobby);
+        LobbyState.refreshOnCreate();
 
+    },
+
+    onRoomRemove: function(event) {
+        ConsoleManager.info("Lobby closed:<br>[" + event.room._name + ":" + event.room._id + "]", true);
+        
+        LobbyState.refreshOnCreate();
+    },
+
+    onUserEnterRoom: function(event) {
+        if (event.room.name == "Lobby Zone") {
+            ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") entered the room.", true);
+        }
+        else {
+            ConsoleManager.log("User " + event.user.name + " joined the game.", true);
+        }
+    },
+
+    onUserExitRoom: function(event) {
+        if (event.room.name == "Lobby Zone") {
+            if (!event.user.isItMe) {
+                ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") left the room.", true);
+            }
+        }
+        else {
+            if (!event.user.isItMe) {
+                ConsoleManager.log("User " + event.user.name + " left the game.", true);
+            }
+        }
     },
 
     /**

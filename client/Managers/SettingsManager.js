@@ -13,6 +13,7 @@ var SettingsManager = {
 
     serverIP: "projectge.com",
     serverPort: 2020,
+    debugToasts: true,
 
     saveSettings: function() {
 
@@ -28,6 +29,7 @@ var SettingsManager = {
             
             this.serverIP = $('#server-ip').val();
             this.serverPort = $('#server-port').val();
+            this.debugToasts = ($('#debug-toasts').val() == 'true');
             PlayerData.playerName = $('#player-name').val();
             
             ConsoleManager.success("Settings have been applied.", true);

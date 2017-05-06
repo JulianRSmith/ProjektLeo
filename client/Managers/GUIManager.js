@@ -41,7 +41,7 @@ var GUIManager = {
      * Creates a button element with text and a background.
      * Identical to createButton, but accepts lobbyId and lobbyName that can be passed into the mainCallback on the onInputUp event.
      */
-    createLobbyButton: function(buttonText, buttonX, buttonY, lobbyId, lobbyName, buttonColour, buttonSprite, mainCallback) {
+    createLobbyButton: function(buttonText, buttonX, buttonY, lobbyObj, buttonColour, buttonSprite, mainCallback) {
 
         // For debug
         ConsoleManager.log("GUIManager::createButton() : Running", false);
@@ -50,14 +50,14 @@ var GUIManager = {
         var lbBtn = game.add.text(buttonX, buttonY, buttonText, { font: '18px Arial', fill: buttonColour, boundsAlignH: "center", boundsAlignV: "middle" });
         
         lbBtn.inputEnabled = true;
-        lbBtn.events.onInputUp.add(mainCallback, this, 0, {lobbyId, lobbyName});
+        lbBtn.events.onInputUp.add(mainCallback, this, 0, lobbyObj);
         lbBtn.events.onInputOver.add(GUIListeners.buttonHoverState, this);
         lbBtn.events.onInputOut.add(GUIListeners.buttonLeavestate, this);
         lbBtn.anchor.x = 0.5;
         lbBtn.anchor.y = 0.5;
         
         lbBtnBg.inputEnabled = true;
-        lbBtnBg.events.onInputUp.add(mainCallback, this, 0, {lobbyId, lobbyName});
+        lbBtnBg.events.onInputUp.add(mainCallback, this, 0, lobbyObj);
         lbBtnBg.events.onInputOver.add(GUIListeners.buttonHoverState, this);
         lbBtnBg.events.onInputOut.add(GUIListeners.buttonLeavestate, this);
         lbBtnBg.anchor.x = 0.5;
