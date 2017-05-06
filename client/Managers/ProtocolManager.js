@@ -56,60 +56,43 @@ var ProtocolManager = {
 
     },
 
+    /**
+     * Called when a the list of lobbies updates (on remove).
+     */
     onRoomRemove: function(event) {
         ConsoleManager.info("Lobby closed:<br>[" + event.room._name + ":" + event.room._id + "]", true);
         
         LobbyState.refreshOnCreate();
     },
 
-    onUserEnterRoom: function(event) {
-        if (event.room.name == "Lobby Zone") {
-            ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") entered the room.", true);
-        }
-        else {
-            ConsoleManager.log("User " + event.user.name + " joined the game.", true);
-        }
-    },
-
-    onUserExitRoom: function(event) {
-        if (event.room.name == "Lobby Zone") {
-            if (!event.user.isItMe) {
-                ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") left the room.", true);
-            }
-        }
-        else {
-            if (!event.user.isItMe) {
-                ConsoleManager.log("User " + event.user.name + " left the game.", true);
-            }
-        }
-    },
-
-    /**
-     * Called when the client enters a lobby.
-     */
-    onEnterLobby: function(data) {
-        if(data.error) { 
-            ConsoleManager.error("Unable to join lobby<br>Reason: " + data.msg, true);
-        }
-        else {
-            ConsoleManager.success("Joined lobby successfully", true);
-
-            LobbyData.lobby = data.lobby;
-
-            game.state.start('WaitState');
-        }
-
-    },
-
     /**
      * Called when a player joines the lobby.
      */
-    onPlayerJoined: function(data) {
-
-        ConsoleManager.log(data.playerName + " joined the lobby", true);
-
+    onUserEnterRoom: function(event) {
+        if (event.room.name == "Lobby Zone") {
+            ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") has connected.", true);
+        }
+        else {
+            ConsoleManager.log("User " + event.user.name + " has joined the lobby.", true);
+        }
     },
-    
+
+    /**
+     * Called when a player leaves the lobby.
+     */
+    onUserExitRoom: function(event) {
+        if (event.room.name == "Lobby Zone") {
+            if (!event.user.isItMe) {
+                ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") has disconnected.", true);
+            }
+        }
+        else {
+            if (!event.user.isItMe) {
+                ConsoleManager.log("User " + event.user.name + " has left the lobby.", true);
+            }
+        }
+    },
+
     /**
      * Called when disconnected from the server.
      */
@@ -125,12 +108,18 @@ var ProtocolManager = {
 
     },
 
+    /**
+     * Called when the client is unable to login after connecting.
+     */
     onLoginError: function(event) {
 
         ConsoleManager.error("Login error:<br>[" + event.errorMessage + "]<br>[code: " + event.errorCode + "]", true);
 
     },
     
+    /**
+     * Called when the client connects and loggs in successfully.
+     */
     onLogin: function(event) {
 
         PlayerData.playerName = event.user._name;
@@ -143,17 +132,24 @@ var ProtocolManager = {
 
     },
         
+    /**
+     * Called when the client enters a lobby, but it fails
+     */
     onRoomJoinError: function(event) {
 
         ConsoleManager.error("Room join error:<br>[" + event.errorMessage + "]<br>[code: " + event.errorCode + "]", true);
 
     },
 
+    /**
+     * Called when the client enters a lobby.
+     */
     onRoomJoin: function(event) {
 
         ConsoleManager.success("Room join accepted:<br>" + event.room, true);
+        LobbyData.lobby = event.room;
+        game.state.start('WaitState');
 
-        trace("Room joined: " + evtParams.room);
     }
     
 }
