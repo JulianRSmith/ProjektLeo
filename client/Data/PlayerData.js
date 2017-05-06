@@ -20,6 +20,8 @@ var PlayerData = {
     playerPosX: 0,
     playerPosY: 0,
     playerAttackState: 0,
+
+    currentState: "",
     
     setSelectedCharacter: function (characterName) {
         this.playerCharacter = characterName

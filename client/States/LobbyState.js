@@ -25,6 +25,8 @@ var LobbyState = {
 
     create: function () {
 
+        PlayerData.currentState = "LobbyState";
+
         // For debug
         ConsoleManager.log("LobbyState::create() : Running", false);
 

@@ -29,6 +29,8 @@ var PlayState = {
     
     create: function () {
         
+        PlayerData.currentState = "PlayState";
+
         // Set game world size
         game.world.setBounds(0, 0, ScreenData.gameWidth, ScreenData.viewportHeight);
         

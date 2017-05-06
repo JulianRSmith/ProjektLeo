@@ -37,6 +37,8 @@ var CharState = {
     
     create: function () {
         
+        PlayerData.currentState = "CharState";
+
         // For debug
         console.log("CharState::create() : Running");
 

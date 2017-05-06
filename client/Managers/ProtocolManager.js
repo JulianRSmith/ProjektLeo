@@ -48,11 +48,10 @@ var ProtocolManager = {
         // For debug
         ConsoleManager.log("ProtocolManager::onCreateLobby() : Running", false);
         ConsoleManager.log("ProtocolManager::onCreateLobby() :", false);
-        //ConsoleManager.log("Created a lobby: [id: " + data.lobby.id + ", name: " + data.lobby.name + ", host: " + data.lobby.host + ", slots: " + data.lobby.slots + ", players: " + data.lobby.players + "]", false);
         
-        ConsoleManager.success("Created lobby, entering...", true);
-
-        LobbyState.refreshOnCreate();
+        if(PlayerData.currentState == "LobbyState") {
+            LobbyState.refreshOnCreate();
+        }
 
     },
 
@@ -60,9 +59,13 @@ var ProtocolManager = {
      * Called when a the list of lobbies updates (on remove).
      */
     onRoomRemove: function(event) {
+
         ConsoleManager.info("Lobby closed:<br>[" + event.room._name + ":" + event.room._id + "]", true);
         
-        LobbyState.refreshOnCreate();
+        if(PlayerData.currentState == "LobbyState") {
+            LobbyState.refreshOnCreate();
+        }
+
     },
 
     /**

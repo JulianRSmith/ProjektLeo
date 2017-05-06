@@ -12,6 +12,8 @@ var WaitState = {
 
 	create: function() {
 
+        PlayerData.currentState = "WaitState";
+
         // For debug
         ConsoleManager.log("WaitState::create() : Running", false);
 
