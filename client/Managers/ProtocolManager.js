@@ -93,6 +93,9 @@ var ProtocolManager = {
             if (!event.user.isItMe) {
                 ConsoleManager.log("User " + event.user.name + " has left the lobby.", true);
             }
+            else {
+                game.state.start("LobbyState");
+            }
         }
     },
 

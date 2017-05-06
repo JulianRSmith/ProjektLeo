@@ -243,8 +243,7 @@ var LobbyState = {
 
             LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name
-                'Lobby: ' + LobbyState.lobbyCache[item].name + 
-                " | Players: " + (LobbyState.lobbyCache[item].players == "" ? "None" : LobbyState.lobbyCache[item].players), 
+                'Lobby: ' + LobbyState.lobbyCache[item].name, 
                 
                 // Button position
                 ScreenData.viewportWidth / 2, 
