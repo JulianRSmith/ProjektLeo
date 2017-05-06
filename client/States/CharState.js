@@ -34,6 +34,8 @@ var CharState = {
 
     buttonPlay: 0,
     buttonMenu: 0,
+
+    playerList: "Waiting...",
     
     create: function () {
         
@@ -53,7 +55,9 @@ var CharState = {
         // Title Text
         this.charText = game.add.text(0, 0, 'Select a Character', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.charText.setTextBounds(0, 80, ScreenData.screenWidth, 50);
-        
+
+        this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+
         // Character Buttons
         this.panelImageWidth = ((game.cache.getImage('leoArt').width / 4) + 32);
         this.leoCharacterPanel = GUIManager.createCharacterPanel('playerLeo', 'leoArt', ScreenData.viewportCentreX - this.panelImageWidth);
@@ -70,6 +74,21 @@ var CharState = {
             console.log("NETWORK NOT CONNECTED")
         }
         
+    },
+
+    render: function() {
+
+        playerList = "";
+        LobbyData.lobby._userManager._usersById._c.forEach(CharState.populatePlayerList);
+
+        this.serverText.setText(
+            "Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + 
+            " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + 
+            "\nPlayer: [ID: " + PlayerData.playerId + ", Name: " + PlayerData.playerName + "]" + 
+            "\nLobby: [ID: " + LobbyData.lobby.id + ", Name: " + LobbyData.lobby.name + "]" + 
+            "\n" + playerList
+        );
+
     },
     
     /**
@@ -113,5 +132,11 @@ var CharState = {
         
         game.state.start("MenuState");
     
+    },
+
+    populatePlayerList: function(value, key, map) { 
+
+        playerList += "\nPlayer: " + value._name + " [" + value._id + "]";
+
     }
 }

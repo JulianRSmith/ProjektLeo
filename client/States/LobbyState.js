@@ -244,14 +244,6 @@ var LobbyState = {
                 false
             );
 
-            try {
-                LobbyState.lobbyList[i][0].destroy();
-                LobbyState.lobbyList[i][1].destroy();
-            }
-            catch(ex) {
-                console.log("nothing to remove");
-            }
-
             LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name
                 'Lobby: ' + LobbyState.lobbyCache[item].name, 

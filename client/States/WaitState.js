@@ -10,6 +10,7 @@ var WaitState = {
 
     renderText: "Waiting...",
     startButton: 0,
+    room: 0,
 
 	create: function() {
 
@@ -41,6 +42,9 @@ var WaitState = {
         console.log(LobbyData.lobby);
         console.log(LobbyData.lobby._userManager._usersById._c.entries());
         console.log(Object.keys(LobbyData.lobby._userManager._usersById._c));
+
+        room = sfs.lastJoinedRoom;
+
 	},
 
     render: function() {
@@ -53,15 +57,25 @@ var WaitState = {
         );
 
         renderText = "";
-
         LobbyData.lobby._userManager._usersById._c.forEach(WaitState.populatePlayerList);
-
         this.playerText.setText(renderText);
 
         if(LobbyData.lobby._userCount == 2) {
-            this.lobbyText.setText("Ready to start!");
+            var gameStarted = room.getVariable(SFS2X.ReservedRoomVariables.RV_GAME_STARTED).value;
 
-            this.readyToStart = true;
+            if(!gameStarted) {
+                this.lobbyText.setText("Ready to start!");
+                
+                this.readyToStart = true;
+            }
+            else {
+                this.lobbyText.setText("Started!");
+
+                this.readyToStart = false;
+
+                game.state.start("CharState");
+            }
+
         }
         else {
             this.lobbyText.setText("Waiting for a player...");
@@ -93,6 +107,8 @@ var WaitState = {
     leaveGame: function() {
         // Leave the last joined Room
         sfs.send(new SFS2X.LeaveRoomRequest());
+
+        LobbyState.refreshOnCreate();
     },
 
     populatePlayerList: function(value, key, map) { 
