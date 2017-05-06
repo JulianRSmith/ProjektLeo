@@ -147,8 +147,11 @@ var ProtocolManager = {
     onRoomJoin: function(event) {
 
         ConsoleManager.success("Room join accepted:<br>" + event.room, true);
-        LobbyData.lobby = event.room;
-        game.state.start('WaitState');
+
+        if(event.room.isGame) {
+            LobbyData.lobby = event.room;
+            game.state.start('WaitState');
+        }
 
     }
     
