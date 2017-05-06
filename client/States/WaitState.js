@@ -34,6 +34,7 @@ var WaitState = {
         this.lobbyText = game.add.text(0, 0, 'Waiting for a player...', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.lobbyText.setTextBounds(0, 200, ScreenData.screenWidth, 50);
 
+        console.log(LobbyData.lobby);
         console.log(LobbyData.lobby._userManager._usersById._c.entries());
         console.log(Object.keys(LobbyData.lobby._userManager._usersById._c));
 	},
@@ -44,7 +45,7 @@ var WaitState = {
             "Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + 
             " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + 
             "\nPlayer: [ID: " + PlayerData.playerId + ", Name: " + PlayerData.playerName + "]" + 
-            "\nLobby: [ID: " + LobbyData.lobby.id + ", Name: " + LobbyData.lobby.name + ", Host: " + LobbyData.lobby.host + "]"
+            "\nLobby: [ID: " + LobbyData.lobby.id + ", Name: " + LobbyData.lobby.name]
         );
 
         renderText = "";
@@ -52,6 +53,13 @@ var WaitState = {
         LobbyData.lobby._userManager._usersById._c.forEach(WaitState.populatePlayerList);
 
         this.playerText.setText(renderText);
+
+        if(LobbyData.lobby._userCount == 2) {
+            this.lobbyText.setText("Ready to start!");
+        }
+        else {
+            this.lobbyText.setText("Waiting for a player...");
+        }
         
     },
 

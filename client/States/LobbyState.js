@@ -244,7 +244,6 @@ var LobbyState = {
             LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name
                 'Lobby: ' + LobbyState.lobbyCache[item].name + 
-                " | Host: " + LobbyState.lobbyCache[item].host + 
                 " | Players: " + (LobbyState.lobbyCache[item].players == "" ? "None" : LobbyState.lobbyCache[item].players), 
                 
                 // Button position

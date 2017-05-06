@@ -17,6 +17,8 @@ var MenuState = {
 
     create: function() {
 
+        PlayerData.currentState = "MenuState";
+
         // For debug
         ConsoleManager.log("MenuState::create() : Running", false);
 
@@ -101,7 +103,7 @@ var MenuState = {
         $("#server-ip").val(SettingsManager.serverIP);
         $("#server-port").val(SettingsManager.serverPort);
         $("#debug-toasts").val(SettingsManager.debugToasts);
-        
+
         $("#player-name").val(PlayerData.playerName);
 
         // No need to play sound as menuToggle handles button clicks for the DOM
