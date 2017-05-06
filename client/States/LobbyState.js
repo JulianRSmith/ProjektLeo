@@ -25,6 +25,7 @@ var LobbyState = {
 
     create: function () {
 
+        // Set state
         PlayerData.currentState = "LobbyState";
 
         // For debug
@@ -58,7 +59,7 @@ var LobbyState = {
         this.buttonPrevPage[1].angle = 180;
 
         this.refreshOnCreate();
-        
+
     },
 
     render: function() {
@@ -200,7 +201,9 @@ var LobbyState = {
         
         for(i = 0; i < 5; i += 1) {
             if(i >= LobbyState.lobbyList.length) {
-                ConsoleManager.log("End of lobby list.", false);
+                ConsoleManager.log("End of lobby list", false);
+                ConsoleManager.log(LobbyState.lobbyList, false);
+
                 break;
             }
             
@@ -241,6 +244,14 @@ var LobbyState = {
                 false
             );
 
+            try {
+                LobbyState.lobbyList[i][0].destroy();
+                LobbyState.lobbyList[i][1].destroy();
+            }
+            catch(ex) {
+                console.log("nothing to remove");
+            }
+
             LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name
                 'Lobby: ' + LobbyState.lobbyCache[item].name, 
@@ -257,8 +268,29 @@ var LobbyState = {
 
                 // OnClick Callback
                 function(spr, ptr, bool, args){ 
-                    console.log(args);
+
+                    // Debug
+                    ConsoleManager.log("Cleaning up...", false);
+
+                    // Cleanup so that we don't get the lobby in list if we disconnect
+                    for(i = 0; i < 5; i += 1) {
+                        if(i >= LobbyState.lobbyList.length) {
+                            ConsoleManager.log("End of lobby list", false);
+                            ConsoleManager.log(LobbyState.lobbyList, false);
+
+                            break;
+                        }
+                        
+                        ConsoleManager.log("Destroy [" + i + "]", false);
+                        
+                        LobbyState.lobbyList[i][0].destroy();
+                        LobbyState.lobbyList[i][1].destroy();
+                    }
+
+                    // Debug
                     ConsoleManager.log("Connecting to lobby:<br>" + args._id + ":" + args._name + " as " + PlayerData.playerName, true);
+
+                    // Connect
                     sfs.send(new SFS2X.JoinRoomRequest(args)); 
                 }
             );

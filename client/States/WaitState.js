@@ -97,7 +97,7 @@ var WaitState = {
 
     populatePlayerList: function(value, key, map) { 
 
-        console.log(value);
+        //console.log(value);
 
         renderText += "\nPlayer: " + value._name + " [" + value._id + "]";
 

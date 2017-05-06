@@ -72,18 +72,21 @@ var ProtocolManager = {
      * Called when a player joines the lobby.
      */
     onUserEnterRoom: function(event) {
+
         if (event.room.name == "Lobby Zone") {
             ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") has connected.", true);
         }
         else {
             ConsoleManager.log("User " + event.user.name + " has joined the lobby.", true);
         }
+
     },
 
     /**
      * Called when a player leaves the lobby.
      */
     onUserExitRoom: function(event) {
+
         if (event.room.name == "Lobby Zone") {
             if (!event.user.isItMe) {
                 ConsoleManager.log("User " + event.user.name + " (" + event.user.id + ") has disconnected.", true);
@@ -97,6 +100,7 @@ var ProtocolManager = {
                 game.state.start("LobbyState");
             }
         }
+
     },
 
     /**
@@ -151,6 +155,24 @@ var ProtocolManager = {
      * Called when the client enters a lobby.
      */
     onRoomJoin: function(event) {
+
+        // Debug
+        ConsoleManager.log("Cleaning up...", false);
+
+        // Cleanup so that we don't get the lobby in list if we disconnect
+        for(i = 0; i < 5; i += 1) {
+            if(i >= LobbyState.lobbyList.length) {
+                ConsoleManager.log("End of lobby list", false);
+                ConsoleManager.log(LobbyState.lobbyList, false);
+
+                break;
+            }
+            
+            ConsoleManager.log("Destroy [" + i + "]", false);
+            
+            LobbyState.lobbyList[i][0].destroy();
+            LobbyState.lobbyList[i][1].destroy();
+        }
 
         ConsoleManager.success("Room join accepted:<br>" + event.room, true);
 
