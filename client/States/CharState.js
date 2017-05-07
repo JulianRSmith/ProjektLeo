@@ -60,9 +60,9 @@ var CharState = {
 
         // Character Buttons
         this.panelImageWidth = ((game.cache.getImage('leoArt').width / 4) + 32);
-        this.leoCharacterPanel = GUIManager.createCharacterPanel('playerLeo', 'leoArt', ScreenData.viewportCentreX - this.panelImageWidth);
-        this.boudCharacterPanel = GUIManager.createCharacterPanel('playerBoud', 'boudArt', ScreenData.viewportCentreX);
-        this.cleoCharacterPanel = GUIManager.createCharacterPanel('playerCleo', 'cleoArt', ScreenData.viewportCentreX + this.panelImageWidth);
+        this.leoCharacterPanel = GUIManager.createCharacterPanel('playerLeo', 'leoArt', ScreenData.viewportCentreX - this.panelImageWidth, this.charOnClick);
+        this.boudCharacterPanel = GUIManager.createCharacterPanel('playerBoud', 'boudArt', ScreenData.viewportCentreX, this.charOnClick);
+        this.cleoCharacterPanel = GUIManager.createCharacterPanel('playerCleo', 'cleoArt', ScreenData.viewportCentreX + this.panelImageWidth, this.charOnClick);
         
         // Add buttons
         this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
@@ -107,6 +107,43 @@ var CharState = {
 
         game.state.start('PlayState');
     
+    },
+
+    charOnClick: function(button) {
+
+        ConsoleManager.log("CharState::charOnClick() : charButton Event On Input Down : Running", false);
+        ConsoleManager.log(button._btnData, false);
+
+        console.log(CharState.leoCharacterPanel);
+        console.log(CharState.boudCharacterPanel);
+        console.log(CharState.cleoCharacterPanel);
+
+        // Reset all buttons
+        CharState.leoCharacterPanel.frame = 1;
+        CharState.leoCharacterPanel.inputEnabled = true;
+        
+        CharState.boudCharacterPanel.frame = 1;
+        CharState.boudCharacterPanel.inputEnabled = true;
+
+        CharState.cleoCharacterPanel.frame = 1;
+        CharState.cleoCharacterPanel.inputEnabled = true;
+
+        // Set this button passed into the method to selected
+        console.log(button);
+        button.animations.stop('hover');
+        button.inputEnabled = true;
+        button.frame = 0;
+
+        PlayerData.setSelectedCharacter(button._btnData.charName);
+
+        // If connected to the network, we must be in a lobby, send the player data to the server
+        if(NetworkManager.connected() && LobbyData.lobby != 0) { 
+            var data = [];
+            data.push(new SFS2X.SFSUserVariable("player_char", PlayerData.getSelectedCharacter()));
+
+            sfs.send(new SFS2X.SetUserVariablesRequest(data));
+        }
+
     },
      
     /**

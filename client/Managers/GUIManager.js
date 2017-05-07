@@ -70,7 +70,7 @@ var GUIManager = {
     /**
      * Creates a button for the character panel
      */
-    createCharacterPanel: function(characterName, imageName, imagePosition) {
+    createCharacterPanel: function(characterName, imageName, imagePosition, mainCallback) {
 
         // For debug
         ConsoleManager.log("GUIManager::createCharacterPanel() : Running", false);
@@ -81,54 +81,34 @@ var GUIManager = {
         charButton.inputEnabled = true;
         charButton.animations.add('hover', [1, 2, 3], 5, true);
         charButton.frame = 1;
+        charButton._btnData = {charName: characterName};
         
         charButton.events.onInputOver.add(function(){
-            
             charButton.animations.play('hover');
             game.canvas.style.cursor = "pointer";
-
         }, this);
         
         charButton.events.onInputOut.add(function(){
-
             charButton.animations.stop('hover');
             game.canvas.style.cursor = "default";
-
         }, this);
         
-        charButton.events.onInputDown.add(function(){
-            
-            ConsoleManager.log("GUIManager::createCharacterPanel() : charButton Event On Input Down : Running", false);
+        charButton.events.onInputDown.add(mainCallback, this);
 
-            charButton.animations.stop('hover');
-            charButton.inputEnabled = false;
-            charButton.frame = 0;
-
-            PlayerData.setSelectedCharacter(characterName);
-
-            // If connected to the network, we must be in a lobby, send the player data to the server
-            if(NetworkManager.connected() && LobbyData.lobby != 0) { 
-
-
-
-                var data = [];
-                data.push(new SFS2X.SFSUserVariable("player_char", PlayerData.getSelectedCharacter()));
-
-                sfs.send(new SFS2X.SetUserVariablesRequest(data));
-            }
-
-        }, this);
-        
         // Add placename bellow
         var nameBackground = game.add.sprite(imagePosition, 370, 'goldPlacename');
         nameBackground.anchor.x = 0.5;
         nameBackground.anchor.y = 0.5;
 
         // Add character names
-        var chosenName = getCharName(characterName);
-        var placeholderText = game.add.text(0, 0, chosenName, {font: "22px Calibri", fill: "#341e09", boundsAlignH: "center", boundsAlignV: "middle", stroke: "#b8b15c", strokeThickness: 1});
+        var placeholderText = game.add.text(0, 0, getCharName(characterName), {font: "22px Calibri", fill: "#341e09", boundsAlignH: "center", boundsAlignV: "middle", stroke: "#b8b15c", strokeThickness: 1});
         placeholderText.setTextBounds(imagePosition-55, 345, 110, 56);
         
+        console.log("------------------ createCharacterPanel");
+        console.log("return:");
+        console.log(charButton);
+        console.log("------------------ createCharacterPanel");
+
         return charButton;
     },
 
