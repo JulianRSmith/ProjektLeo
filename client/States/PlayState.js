@@ -145,9 +145,10 @@ var PlayState = {
         // do the magic, but for the sake of reducing dev time, this works.
         if(NetworkManager.connected()) { 
             var playerPos = [];
-            playerPos.push(new SFS2X.SFSUserVariable("x", player.x));
-            playerPos.push(new SFS2X.SFSUserVariable("y", player.y));
 
+            playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_X, player.x));
+            playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_Y, player.y));
+            
             sfs.send(new SFS2X.SetUserVariablesRequest(playerPos));
         }
         // For single player, update an AI player
@@ -163,7 +164,7 @@ var PlayState = {
         // game.debug.body(player);
         healthBar.forEachAlive(this.renderGroup, this);
         // game.debug.body(gameFloor);
-        this.game.debug.text('Time: ' + this.secTimer, ScreenData.screenWidth/2, 60, 'yellow', 'Segoe UI');
+        this.game.debug.text('Time: ' + this.secTimer, ScreenData.viewportWidth/2, 60, 'yellow', 'Segoe UI');
         
     },
     

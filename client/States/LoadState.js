@@ -35,7 +35,7 @@ var LoadState = {
         
         // Display loading text
         loadText = game.add.text(0, 0, 'Loading...', {font: "40px Calibri", fill: "#111111", boundsAlignH: "center", boundsAlignV: "middle"});
-        loadText.setTextBounds(0, 100, ScreenData.screenWidth, 100);
+        loadText.setTextBounds(0, 100, ScreenData.viewportWidth, 100);
         
         // Call asset loading functions
         this.loadImages();

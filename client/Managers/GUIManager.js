@@ -104,11 +104,6 @@ var GUIManager = {
         var placeholderText = game.add.text(0, 0, getCharName(characterName), {font: "22px Calibri", fill: "#341e09", boundsAlignH: "center", boundsAlignV: "middle", stroke: "#b8b15c", strokeThickness: 1});
         placeholderText.setTextBounds(imagePosition-55, 345, 110, 56);
         
-        console.log("------------------ createCharacterPanel");
-        console.log("return:");
-        console.log(charButton);
-        console.log("------------------ createCharacterPanel");
-
         return charButton;
     },
 
@@ -147,7 +142,7 @@ var GUIManager = {
 
         var imageWidth = game.cache.getImage(image).width;
 
-        for (i = 0; i < ScreenData.screenWidth; i += imageWidth) {
+        for (i = 0; i < ScreenData.viewportWidth; i += imageWidth) {
             var woodBorderTop = game.add.tileSprite(i, 0, imageWidth, imageWidth, image);
             var woodBorderBtm = game.add.tileSprite(i, ScreenData.viewportHeight - imageWidth, imageWidth, imageWidth, image);
         }
@@ -164,7 +159,7 @@ var GUIManager = {
 
         var imageWidth = game.cache.getImage(image).width;
         
-        for (i = 0; i < ScreenData.screenWidth; i += imageWidth) {
+        for (i = 0; i < ScreenData.viewportWidth; i += imageWidth) {
             var background = game.add.tileSprite(i, 0, imageWidth, imageWidth, image);
         }
 

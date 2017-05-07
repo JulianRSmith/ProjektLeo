@@ -45,7 +45,7 @@ var LobbyState = {
         // Text objects
         this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.lobbyText = game.add.text(0, 0, 'Select a Lobby', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
-        this.lobbyText.setTextBounds(0, 30, ScreenData.screenWidth, 50);
+        this.lobbyText.setTextBounds(0, 30, ScreenData.viewportWidth, 50);
         
         // Menu buttons 
         this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", function(){ $('#lobby-host').val(PlayerData.playerName); DOMManager.menuToggle("lobby-create"); });

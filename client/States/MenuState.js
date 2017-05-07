@@ -38,7 +38,7 @@ var MenuState = {
         this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         
         // Add game logo
-        this.gameLogo = game.add.sprite(ScreenData.screenWidth / 2, 200, 'gameLogo');
+        this.gameLogo = game.add.sprite(ScreenData.viewportWidth / 2, 200, 'gameLogo');
         this.gameLogo.anchor.setTo(0.5);
 
         // Menu buttons

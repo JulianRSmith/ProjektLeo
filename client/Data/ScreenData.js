@@ -39,7 +39,7 @@ var ScreenData = {
         // For debug
         ConsoleManager.log("ScreenData::init() : Running", false);
 
-		this.viewportWidth = this.screenWidth;
+		this.viewportWidth = 1024; //this.screenWidth;
 		this.viewportHeight = 600;
 
 		this.viewportCentreX = this.viewportWidth / 2;

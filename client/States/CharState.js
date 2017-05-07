@@ -54,7 +54,7 @@ var CharState = {
 
         // Title Text
         this.charText = game.add.text(0, 0, 'Select a Character', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
-        this.charText.setTextBounds(0, 80, ScreenData.screenWidth, 50);
+        this.charText.setTextBounds(0, 80, ScreenData.viewportWidth, 50);
 
         this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
 
@@ -65,8 +65,8 @@ var CharState = {
         this.cleoCharacterPanel = GUIManager.createCharacterPanel('playerCleo', 'cleoArt', ScreenData.viewportCentreX + this.panelImageWidth, this.charOnClick);
         
         // Add buttons
-        this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
-        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
+        this.buttonPlay = GUIManager.createButton('Select', ScreenData.viewportWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
+        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
         
         if (NetworkManager.connected()) {
             console.log("NETWORK CONNECT");
@@ -111,7 +111,7 @@ var CharState = {
 
     charOnClick: function(button) {
 
-        ConsoleManager.log("CharState::charOnClick() : charButton Event On Input Down : Running", false);
+        ConsoleManager.log("CharState::charOnClick() : charButton Event (CharStatecharOnClick) On Input Down : Running", false);
         ConsoleManager.log(button._btnData, false);
 
         console.log(CharState.leoCharacterPanel);
@@ -121,7 +121,7 @@ var CharState = {
         // Reset all buttons
         CharState.leoCharacterPanel.frame = 1;
         CharState.leoCharacterPanel.inputEnabled = true;
-        
+
         CharState.boudCharacterPanel.frame = 1;
         CharState.boudCharacterPanel.inputEnabled = true;
 
@@ -139,7 +139,8 @@ var CharState = {
         // If connected to the network, we must be in a lobby, send the player data to the server
         if(NetworkManager.connected() && LobbyData.lobby != 0) { 
             var data = [];
-            data.push(new SFS2X.SFSUserVariable("player_char", PlayerData.getSelectedCharacter()));
+            
+            data.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_CHAR, PlayerData.getSelectedCharacter()));
 
             sfs.send(new SFS2X.SetUserVariablesRequest(data));
         }

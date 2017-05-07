@@ -17,20 +17,27 @@ var PlayerData = {
     playerName: "Unknown Gladiator",
     playerCharacter: "Waiting...",
 
-    playerPosX: 0,
-    playerPosY: 0,
     playerAttackState: 0,
 
     currentState: "",
     
+    /**
+    * Sets the selected character.
+    */
     setSelectedCharacter: function (characterName) {
         this.playerCharacter = characterName
     },
     
+    /**
+    * Gets the selected character.
+    */
     getSelectedCharacter: function () {
         return this.playerCharacter
     },
     
+    /**
+    * Generates an enemy player when playing in singleplayer
+    */
     generateEnemyPlayer: function(characterName) {
         var charList = ["playerLeo","playerBoud","playerCleo"];
         for (var i = 0;i < charList.length;i++) {
@@ -45,12 +52,13 @@ var PlayerData = {
         return enemyChar;
     },
 
+    /**
+    * Resets the object back to the default values
+    */
     reset: function() {
 
         playerId = "Waiting...";
         playerCharacter = "Waiting...";
-        playerPosX = 0;
-        playerPosY = 0;
         playerAttackState = 0;
         currentState = "";
         

@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Set up game enviornemnt
-var game = new Phaser.Game(ScreenData.screenWidth, ScreenData.viewportHeight, Phaser.AUTO, 'game-viewport');
+var game = new Phaser.Game(ScreenData.viewportWidth, ScreenData.viewportHeight, Phaser.AUTO, 'game-viewport');
 
 // Game States
 game.state.add('BootState', BootState);

@@ -25,6 +25,12 @@ h3 {
     font-size: 1em;
 }
 
+canvas {
+	display: block;
+	margin: auto;
+}
+
+
 .pause-menu{
 	display: none;
 
