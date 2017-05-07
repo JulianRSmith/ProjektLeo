@@ -141,6 +141,8 @@ var PlayState = {
         }
         
         // If we're in a network game, send our position to the server
+        // It would be better to track what keys are pressed and have the server
+        // do the magic, but for the sake of reducing dev time, this works.
         if(NetworkManager.connected()) { 
             var playerPos = [];
             playerPos.push(new SFS2X.SFSUserVariable("x", player.x));

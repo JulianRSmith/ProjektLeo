@@ -110,20 +110,6 @@ var CharState = {
     },
      
     /**
-     * Sets the currently selected character.
-     */
-    charOnClick: function(characterName) {
-        
-        // For debug
-        console.log("CharState::charOnClick() : Running");
-
-        AudioManager.gameButtonClick.play();
-
-        PlayerData.setSelectedCharacter(characterName)
-
-    },
-    
-    /**
      * Return to menu on click.
      */
     menuOnClick: function() {
@@ -133,6 +119,11 @@ var CharState = {
 
         AudioManager.gameButtonClick.play();
         
+
+        if(NetworkManager.connected()) {
+            NetworkManager.disconnect();
+        }
+
         game.state.start("MenuState");
     
     },

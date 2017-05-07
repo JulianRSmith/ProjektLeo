@@ -43,5 +43,16 @@ var PlayerData = {
         var enemyChar = charList[pickChar];
         console.log(enemyChar)
         return enemyChar;
+    },
+
+    reset: function() {
+
+        playerId = "Waiting...";
+        playerCharacter = "Waiting...";
+        playerPosX = 0;
+        playerPosY = 0;
+        playerAttackState = 0;
+        currentState = "";
+        
     }
 };

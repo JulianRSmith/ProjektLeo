@@ -48,9 +48,7 @@ var NetworkManager = {
         sfs.addEventListener(SFS2X.SFSEvent.USER_ENTER_ROOM, ProtocolManager.onUserEnterRoom, this);
         sfs.addEventListener(SFS2X.SFSEvent.USER_EXIT_ROOM, ProtocolManager.onUserExitRoom, this);
 
-        //sfs.addEventListener(SFS2X.SFSEvent.PROXIMITY_LIST_UPDATE, onProximityListUpdate, this);
         sfs.addEventListener(SFS2X.SFSEvent.USER_VARIABLES_UPDATE, ProtocolManager.onUserVariablesUpdate, this);
-        //sfs.addEventListener(SFS2X.SFSEvent.PUBLIC_MESSAGE, onPublicMessage, this);
     	
     	// Connect
     	sfs.connect();

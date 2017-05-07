@@ -95,6 +95,7 @@ var ProtocolManager = {
         else {
             if (!event.user.isItMe) {
                 ConsoleManager.log("User " + event.user.name + " has left the lobby.", true);
+                game.state.start("WaitState");
             }
             else {
                 game.state.start("LobbyState");
@@ -191,9 +192,13 @@ var ProtocolManager = {
         var user = evtParams.user;
 
         // Check if the user changed position
-        if (changedVars.indexOf("x") != -1 || changedVars.indexOf("y") != -1)
-        {
+        if (changedVars.indexOf("x") != -1 || changedVars.indexOf("y") != -1) {
             console.log("[" + user + "] change position: [x:" + user.getVariable("x").value + ", y: " + user.getVariable("y").value + "]");
+        }
+
+        // User character select change
+        if (changedVars.indexOf("player_char") != -1) {
+            console.log("[" + user + "] change character: [character:" + user.getVariable("player_char").value + "]");
         }
     }
     

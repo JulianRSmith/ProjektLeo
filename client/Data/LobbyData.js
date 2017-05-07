@@ -5,5 +5,15 @@
 ************************************************************/
 
 var LobbyData = {
-	lobby: 0
+	lobby: 0,
+    lobbyCache: 0,
+    lobbyList: 0,
+
+    reset: function() {
+
+		lobby = 0;
+	    lobbyCache = 0;
+	    lobbyList = 0;
+	    
+    }
 }

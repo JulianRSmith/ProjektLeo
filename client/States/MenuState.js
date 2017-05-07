@@ -48,6 +48,12 @@ var MenuState = {
         
     },
 
+    update: function() {
+        // pretty much to clean the values from previous network games
+        LobbyData.reset();
+        PlayerData.reset();
+    },
+
     render: function() {
 
         this.serverText.setText("Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected");
