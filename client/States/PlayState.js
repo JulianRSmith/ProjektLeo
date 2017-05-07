@@ -270,5 +270,16 @@ var PlayState = {
                 this.oponent.animations.play('right');
             }
         }
+    },
+
+    /**
+    * Getting data from server for character select.
+    * Update here.
+    */
+    updatePlayer: function(user) {
+
+        ConsoleManager.log("PlayState::updatePlayer() : Got update for user position!", false);
+
+        console.log(user);
     }
 };

@@ -115,8 +115,10 @@ var ProtocolManager = {
         ConsoleManager.log("ProtocolManager::onDisconnect() : Running", false);
         ConsoleManager.warning("Disconnected by server<br>Reason: " + event.reason, true);
         
-        NetworkManager.networkConnected = false;
+        // Disconnect for safety (The SFS client api has a bug where server send unknown disconnect)
+        NetworkManager.disconnect();
         
+        // Return to menu
         game.state.start("MenuState");
 
     },

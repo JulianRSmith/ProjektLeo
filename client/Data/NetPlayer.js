@@ -6,7 +6,6 @@
 
 var NetPlayer = {
 	playerChar: 0,
-	playerName: 0,
 
 	playerX: 0,
 	playerY: 0,

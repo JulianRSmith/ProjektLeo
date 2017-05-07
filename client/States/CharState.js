@@ -58,12 +58,21 @@ var CharState = {
 
         this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
 
+
         // Character Buttons
         this.panelImageWidth = ((game.cache.getImage('leoArt').width / 4) + 32);
         this.leoCharacterPanel = GUIManager.createCharacterPanel('playerLeo', 'leoArt', ScreenData.viewportCentreX - this.panelImageWidth, this.charOnClick);
         this.boudCharacterPanel = GUIManager.createCharacterPanel('playerBoud', 'boudArt', ScreenData.viewportCentreX, this.charOnClick);
         this.cleoCharacterPanel = GUIManager.createCharacterPanel('playerCleo', 'cleoArt', ScreenData.viewportCentreX + this.panelImageWidth, this.charOnClick);
-        
+
+        this.p1Text = game.add.text(-100, -100, 'You', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+        this.p2Text = game.add.text(-100, -100, '<Waiting...>', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+
+        this.p1Text.anchor.set(0.5);
+        this.p2Text.anchor.set(0.5);
+
+        this.leaveButton = GUIManager.createButton('Leave Game', 100, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.leaveGame);
+
         // Add buttons
         this.buttonPlay = GUIManager.createButton('Select', ScreenData.viewportWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
@@ -94,6 +103,15 @@ var CharState = {
 
     },
     
+    leaveGame: function() {
+        
+        // Leave the last joined Room
+        sfs.send(new SFS2X.LeaveRoomRequest());
+
+        LobbyState.refreshOnCreate();
+        
+    },
+        
     /**
      * Starts the play state on click.
      */
@@ -169,6 +187,53 @@ var CharState = {
     populatePlayerList: function(value, key, map) { 
 
         playerList += "\nPlayer: " + value._name + " [" + value._id + "]";
+
+    },
+
+    /**
+    * Getting data from server for character select.
+    * Update here.
+    */
+    updatePlayer: function(user) {
+
+        ConsoleManager.log("CharState::updatePlayer() : Got update for user selection!", false);
+
+        console.log(user);
+        
+        if(!user.isItMe) { 
+            NetPlayer.playerChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
+            this.p2Text.setText("▲\n" + "  " + user.name + "  ");
+
+            if(NetPlayer.playerChar == "playerLeo") {
+                this.p2Text.position.x = this.leoCharacterPanel.position.x;
+                this.p2Text.position.y = this.leoCharacterPanel.position.y + 80;
+            }
+            if(NetPlayer.playerChar == "playerCleo") {
+                this.p2Text.position.x = this.cleoCharacterPanel.position.x;
+                this.p2Text.position.y = this.cleoCharacterPanel.position.y + 80;
+            }
+            if(NetPlayer.playerChar == "playerBoud") {
+                this.p2Text.position.x = this.boudCharacterPanel.position.x;
+                this.p2Text.position.y = this.boudCharacterPanel.position.y + 80;
+            }
+        }
+        else {
+            var myChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
+            this.p1Text.setText("  " + user.name + "  " + "\n▼");
+
+            if(myChar == "playerLeo") {
+                this.p1Text.position.x = this.leoCharacterPanel.position.x;
+                this.p1Text.position.y = this.leoCharacterPanel.position.y - 80;
+            }
+            if(myChar == "playerCleo") {
+                this.p1Text.position.x = this.cleoCharacterPanel.position.x;
+                this.p1Text.position.y = this.cleoCharacterPanel.position.y - 80;
+            }
+            if(myChar == "playerBoud") {
+                this.p1Text.position.x = this.boudCharacterPanel.position.x;
+                this.p1Text.position.y = this.boudCharacterPanel.position.y - 80;
+            }
+        }
 
     }
 }

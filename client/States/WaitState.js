@@ -36,7 +36,6 @@ var WaitState = {
         this.lobbyText = game.add.text(0, 0, 'Waiting for a player...', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
         this.lobbyText.setTextBounds(0, 200, ScreenData.viewportWidth, 50);
 
-
         this.leaveButton = GUIManager.createButton('Leave Game', 100, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.leaveGame);
 
         console.log(LobbyData.lobby);
@@ -85,27 +84,13 @@ var WaitState = {
         
     },
 
-    update: function() {
-        if(this.readyToStart) {
-            if(this.startButton == 0) {
-                this.startButton = GUIManager.createButton('Start Game', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.startGame);
-            }
-        }
-        else { 
-            if(this.startButton != 0) {
-                this.startButton[0].destroy();
-                this.startButton[1].destroy();
-                this.startButton = 0;
-            }
-        }
-    },
-
     leaveGame: function() {
         
         // Leave the last joined Room
         sfs.send(new SFS2X.LeaveRoomRequest());
 
         LobbyState.refreshOnCreate();
+        
     },
 
     populatePlayerList: function(value, key, map) { 
