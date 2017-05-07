@@ -181,6 +181,20 @@ var ProtocolManager = {
             game.state.start('WaitState');
         }
 
+    },
+
+    /**
+     * Makes an avatar move as soon as its position changes.
+     */
+    onUserVariablesUpdate: function(evtParams) {
+        var changedVars = evtParams.changedVars;
+        var user = evtParams.user;
+
+        // Check if the user changed position
+        if (changedVars.indexOf("x") != -1 || changedVars.indexOf("y") != -1)
+        {
+            console.log("[" + user + "] change position: [x:" + user.getVariable("x").value + ", y: " + user.getVariable("y").value + "]");
+        }
     }
     
 }

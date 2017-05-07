@@ -139,10 +139,19 @@ var PlayState = {
             player.body.velocity.y = -400;
             console.log("Player Jump")
         }
-        if (this.key_Space.isDown) {
-        } 
         
-        this.moveSinglePlayerOponent();
+        // If we're in a network game, send our position to the server
+        if(NetworkManager.connected()) { 
+            var playerPos = [];
+            playerPos.push(new SFS2X.SFSUserVariable("x", player.x));
+            playerPos.push(new SFS2X.SFSUserVariable("y", player.y));
+
+            sfs.send(new SFS2X.SetUserVariablesRequest(playerPos));
+        }
+        // For single player, update an AI player
+        else {
+            this.moveSinglePlayerOponent();
+        }
     
     },
     

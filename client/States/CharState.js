@@ -68,26 +68,29 @@ var CharState = {
         this.buttonPlay = GUIManager.createButton('Select', ScreenData.screenWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
         
-        if (LobbyData.lobby != 0){
-            console.log("NETWORK CONNECT")
-        } else {
-            console.log("NETWORK NOT CONNECTED")
+        if (NetworkManager.connected()) {
+            console.log("NETWORK CONNECT");
+        }
+        else {
+            console.log("NETWORK NOT CONNECTED");
         }
         
     },
 
     render: function() {
 
-        playerList = "";
-        LobbyData.lobby._userManager._usersById._c.forEach(CharState.populatePlayerList);
+        if(NetworkManager.connected()) {
+            playerList = "";
+            LobbyData.lobby._userManager._usersById._c.forEach(CharState.populatePlayerList);
 
-        this.serverText.setText(
-            "Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + 
-            " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + 
-            "\nPlayer: [ID: " + PlayerData.playerId + ", Name: " + PlayerData.playerName + "]" + 
-            "\nLobby: [ID: " + LobbyData.lobby.id + ", Name: " + LobbyData.lobby.name + "]" + 
-            "\n" + playerList
-        );
+            this.serverText.setText(
+                "Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + 
+                " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + 
+                "\nPlayer: [ID: " + PlayerData.playerId + ", Name: " + PlayerData.playerName + "]" + 
+                "\nLobby: [ID: " + LobbyData.lobby.id + ", Name: " + LobbyData.lobby.name + "]" + 
+                "\n" + playerList
+            );
+        }
 
     },
     
