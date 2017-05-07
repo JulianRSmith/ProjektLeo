@@ -96,6 +96,8 @@ var ProtocolManager = {
             if (!event.user.isItMe) {
                 ConsoleManager.log("User " + event.user.name + " has left the lobby.", true);
                 game.state.start("WaitState");
+
+                AudioManager.gameBattleTheme.stop();
             }
             else {
                 game.state.start("LobbyState");
