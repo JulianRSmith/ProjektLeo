@@ -62,6 +62,20 @@ var LobbyState = {
 
     },
 
+    reset: function () {
+        LobbyState.serverText = 0;
+        LobbyState.lobbyText = 0;
+        LobbyState.lobbyPage = 0;
+        LobbyState.lobbyList = [];
+        LobbyState.lobbyCache = [];
+        LobbyState.buttonMenu = 0;
+        LobbyState.buttonRefreshLobby = 0;
+        LobbyState.buttonCreateLobby = 0;
+        LobbyState.buttonServerDisconnect = 0;
+        LobbyState.nextState = 0;
+        LobbyState.prevState = 0;
+    },
+
     render: function() {
 
         this.serverText.setText(
@@ -243,6 +257,8 @@ var LobbyState = {
 
                 false
             );
+
+            console.log(LobbyState);
 
             LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name

@@ -52,6 +52,7 @@ var MenuState = {
         // pretty much to clean the values from previous network games
         LobbyData.reset();
         PlayerData.reset();
+        LobbyState.reset();
     },
 
     render: function() {
