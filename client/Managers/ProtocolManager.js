@@ -138,7 +138,6 @@ var ProtocolManager = {
         PlayerData.playerName = event.user._name;
         PlayerData.playerId = event.user._id;
 
-
         ConsoleManager.success("Login accepted for: [" + PlayerData.playerName + ": " + PlayerData.playerId + "]", true);
 
         NetworkManager.networkConnected = true; 
@@ -187,20 +186,30 @@ var ProtocolManager = {
     },
 
     /**
-     * Makes an avatar move as soon as its position changes.
+     * Updates any values which have been updated by other clients
      */
     onUserVariablesUpdate: function(evtParams) {
         var changedVars = evtParams.changedVars;
         var user = evtParams.user;
 
         // Check if the user changed position
-        if (changedVars.indexOf("x") != -1 || changedVars.indexOf("y") != -1) {
-            console.log("[" + user + "] change position: [x:" + user.getVariable("x").value + ", y: " + user.getVariable("y").value + "]");
+        if (changedVars.indexOf(NetData.NET_PLAYER_X) != -1 || changedVars.indexOf(NetData.NET_PLAYER_Y) != -1) {
+            console.log("[" + user + "] change position: [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ", y: " + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
+
+            // Pass the data into the PlayState
+            if(PlayerData.currentState == "PlayState") {
+                PlayState.updatePlayer(user);
+            }
         }
 
         // User character select change
         if (changedVars.indexOf("player_char") != -1) {
-            console.log("[" + user + "] change character: [character:" + user.getVariable("player_char").value + "]");
+            console.log("[" + user + "] change character: [character:" + user.getVariable(NetData.NET_PLAYER_CHAR).value + "]");
+
+            // Pass the data into the CharState
+            if(PlayerData.currentState == "CharState") {
+                CharState.updatePlayer(user);
+            }
         }
     }
     
