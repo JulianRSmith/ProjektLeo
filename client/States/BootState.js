@@ -16,6 +16,9 @@ var BootState = {
         // Start phaser pysics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        // Allow game to render in background
+        game.stage.disableVisibilityChange = true;
+
         // Call load state
         game.state.start('LoadState');
 

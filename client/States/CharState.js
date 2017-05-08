@@ -27,6 +27,10 @@ var CharState = {
     leoCharacterPanel: 0,
     boudCharacterPanel: 0,
     cleoCharaterPanel: 0,
+    readyButton: 0,
+    readyTimeout: 0,
+    timeLeft: 0,
+    timeInterval: 0,
 
     panelImageWidth: 0,
 
@@ -58,7 +62,6 @@ var CharState = {
 
         this.serverText = game.add.text(10, 40, '', {font: "14px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
 
-
         // Character Buttons
         this.panelImageWidth = ((game.cache.getImage('leoArt').width / 4) + 32);
         this.leoCharacterPanel = GUIManager.createCharacterPanel('playerLeo', 'leoArt', ScreenData.viewportCentreX - this.panelImageWidth, this.charOnClick);
@@ -71,11 +74,16 @@ var CharState = {
         this.p1Text.anchor.set(0.5);
         this.p2Text.anchor.set(0.5);
 
-        this.leaveButton = GUIManager.createButton('Leave Game', 100, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.leaveGame);
-
-        // Add buttons
-        this.buttonPlay = GUIManager.createButton('Select', ScreenData.viewportWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
-        this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
+        if(NetworkManager.connected()) {
+            // multiplayer
+            this.leaveButton = GUIManager.createButton('Leave Game', 100, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.leaveGame);
+            this.readyButton = GUIManager.createButton('Ready', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.setReady);
+        }
+        else {
+            // single player
+            this.buttonPlay = GUIManager.createButton('Select', ScreenData.viewportWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
+            this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
+        }
         
         if (NetworkManager.connected()) {
             console.log("NETWORK CONNECT");
@@ -102,7 +110,29 @@ var CharState = {
         }
 
     },
-    
+
+    update: function() {
+
+        if(PlayerData.playerReady && NetPlayer.playerReady) { 
+            if(CharState.readyTimeout == 0) {
+                CharState.timeLeft = 3;
+                CharState.timeInterval = setInterval(function() { 
+                    CharState.timeLeft--;
+                }, 1000);
+
+                CharState.readyTimeout = setTimeout(function() {
+                    game.state.start("PlayState");
+                    clearTimeout(CharState.readyTimeout);
+                    CharState.readyTimeout = 0;
+                }, 3000);
+            }
+            else {
+                CharState.readyButton[0].setText('Starting: ' + CharState.timeLeft + 's');
+            }
+        }
+
+    },
+
     leaveGame: function() {
         
         // Leave the last joined Room
@@ -111,7 +141,27 @@ var CharState = {
         LobbyState.refreshOnCreate();
         
     },
-        
+    
+    setReady: function() {
+        // TODO: set the player as ready. Lock all the character buttios.
+        CharState.leoCharacterPanel.inputEnabled = false;
+        CharState.boudCharacterPanel.inputEnabled = false;
+        CharState.cleoCharacterPanel.inputEnabled = false;
+
+        // If connected to the network, we must be in a lobby, send the player data to the server
+        if(NetworkManager.connected() && LobbyData.lobby != 0) { 
+            var data = [];
+            
+            data.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_READY, true));
+
+            sfs.send(new SFS2X.SetUserVariablesRequest(data));
+
+            CharState.readyButton[0].setText("Waiting...");
+            CharState.readyButton[0].inputEnabled = false;
+            CharState.readyButton[1].inputEnabled = false;
+        }
+    },
+
     /**
      * Starts the play state on click.
      */
@@ -194,44 +244,56 @@ var CharState = {
     * Getting data from server for character select.
     * Update here.
     */
-    updatePlayer: function(user) {
+    updatePlayer: function(user, type) {
 
         ConsoleManager.log("CharState::updatePlayer() : Got update for user selection!", false);
 
         console.log(user);
-        
-        if(!user.isItMe) { 
-            NetPlayer.playerChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
-            this.p2Text.setText("▲\n" + "  " + user.name + "  ");
+        if(type == "char_select") {
+            if(!user.isItMe) { 
+                NetPlayer.playerChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
+                this.p2Text.setText("▲\n" + "  " + user.name + "  ");
 
-            if(NetPlayer.playerChar == "playerLeo") {
-                this.p2Text.position.x = this.leoCharacterPanel.position.x;
-                this.p2Text.position.y = this.leoCharacterPanel.position.y + 80;
+                if(NetPlayer.playerChar == "playerLeo") {
+                    this.p2Text.position.x = this.leoCharacterPanel.position.x;
+                    this.p2Text.position.y = this.leoCharacterPanel.position.y + 80;
+                }
+                if(NetPlayer.playerChar == "playerCleo") {
+                    this.p2Text.position.x = this.cleoCharacterPanel.position.x;
+                    this.p2Text.position.y = this.cleoCharacterPanel.position.y + 80;
+                }
+                if(NetPlayer.playerChar == "playerBoud") {
+                    this.p2Text.position.x = this.boudCharacterPanel.position.x;
+                    this.p2Text.position.y = this.boudCharacterPanel.position.y + 80;
+                }
             }
-            if(NetPlayer.playerChar == "playerCleo") {
-                this.p2Text.position.x = this.cleoCharacterPanel.position.x;
-                this.p2Text.position.y = this.cleoCharacterPanel.position.y + 80;
-            }
-            if(NetPlayer.playerChar == "playerBoud") {
-                this.p2Text.position.x = this.boudCharacterPanel.position.x;
-                this.p2Text.position.y = this.boudCharacterPanel.position.y + 80;
+            else {
+                var myChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
+                this.p1Text.setText("  " + user.name + "  " + "\n▼");
+
+                if(myChar == "playerLeo") {
+                    this.p1Text.position.x = this.leoCharacterPanel.position.x;
+                    this.p1Text.position.y = this.leoCharacterPanel.position.y - 80;
+                }
+                if(myChar == "playerCleo") {
+                    this.p1Text.position.x = this.cleoCharacterPanel.position.x;
+                    this.p1Text.position.y = this.cleoCharacterPanel.position.y - 80;
+                }
+                if(myChar == "playerBoud") {
+                    this.p1Text.position.x = this.boudCharacterPanel.position.x;
+                    this.p1Text.position.y = this.boudCharacterPanel.position.y - 80;
+                }
             }
         }
-        else {
-            var myChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
-            this.p1Text.setText("  " + user.name + "  " + "\n▼");
 
-            if(myChar == "playerLeo") {
-                this.p1Text.position.x = this.leoCharacterPanel.position.x;
-                this.p1Text.position.y = this.leoCharacterPanel.position.y - 80;
+        if(type == "char_ready") { 
+            if(!user.isItMe) {
+                NetPlayer.playerReady = true;
+                this.p2Text.setText("(Ready!)\n" + "  " + user.name + "  ");
             }
-            if(myChar == "playerCleo") {
-                this.p1Text.position.x = this.cleoCharacterPanel.position.x;
-                this.p1Text.position.y = this.cleoCharacterPanel.position.y - 80;
-            }
-            if(myChar == "playerBoud") {
-                this.p1Text.position.x = this.boudCharacterPanel.position.x;
-                this.p1Text.position.y = this.boudCharacterPanel.position.y - 80;
+            else {
+                PlayerData.playerReady = true;
+                this.p1Text.setText("  " + user.name + "  " + "\n(Ready!)");
             }
         }
 

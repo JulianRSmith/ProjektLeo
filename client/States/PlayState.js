@@ -276,7 +276,7 @@ var PlayState = {
     * Getting data from server for character select.
     * Update here.
     */
-    updatePlayer: function(user) {
+    updatePlayer: function(user, type) {
 
         ConsoleManager.log("PlayState::updatePlayer() : Got update for user position!", false);
 

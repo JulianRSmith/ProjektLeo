@@ -200,17 +200,27 @@ var ProtocolManager = {
 
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
-                PlayState.updatePlayer(user);
+                PlayState.updatePlayer(user, "play_state");
             }
         }
 
         // User character select change
-        if (changedVars.indexOf("player_char") != -1) {
+        if (changedVars.indexOf(NetData.NET_PLAYER_CHAR) != -1) {
             console.log("[" + user + "] change character: [character:" + user.getVariable(NetData.NET_PLAYER_CHAR).value + "]");
 
             // Pass the data into the CharState
             if(PlayerData.currentState == "CharState") {
-                CharState.updatePlayer(user);
+                CharState.updatePlayer(user, "char_select");
+            }
+        }
+
+        // User ready
+        if (changedVars.indexOf(NetData.NET_PLAYER_READY) != -1) {
+            console.log("[" + user + "] is ready: [ready:" + user.getVariable(NetData.NET_PLAYER_READY).value + "]");
+
+            // Pass the data into the CharState
+            if(PlayerData.currentState == "CharState") {
+                CharState.updatePlayer(user, "char_ready");
             }
         }
     }

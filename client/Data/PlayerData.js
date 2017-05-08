@@ -16,10 +16,12 @@ var PlayerData = {
     playerId: "Waiting...",
     playerName: "Unknown Gladiator",
     playerCharacter: "Waiting...",
+    playerReady: 0,
 
     playerAttackState: 0,
 
     currentState: "",
+
     
     /**
     * Sets the selected character.

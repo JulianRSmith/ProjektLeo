@@ -48,6 +48,12 @@ var WaitState = {
 
     render: function() {
 
+        // Safety for when players leave the room.
+        NetPlayer.playerReady = false;
+        PlayerData.playerReady = false;
+
+        AudioManager.gameBattleTheme.stop();
+
         this.serverText.setText(
             "Server: " + SettingsManager.serverIP + ":" + SettingsManager.serverPort + 
             " | " + (NetworkManager.connected() ? "" : "Not ") + "Connected" + 
@@ -90,7 +96,7 @@ var WaitState = {
         sfs.send(new SFS2X.LeaveRoomRequest());
 
         LobbyState.refreshOnCreate();
-        
+
     },
 
     populatePlayerList: function(value, key, map) { 

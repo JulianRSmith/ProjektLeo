@@ -5,7 +5,9 @@
 ************************************************************/
 
 var NetPlayer = {
+
 	playerChar: 0,
+    playerReady: 0,
 
 	playerX: 0,
 	playerY: 0,
@@ -15,7 +17,7 @@ var NetPlayer = {
 	reset: function() {
 
 		playerChar = 0;
-		playerName = 0;
+    	playerReady = 0;
 
 		playerX = 0;
 		playerY = 0;
@@ -23,4 +25,5 @@ var NetPlayer = {
     	playerAttackState = 0;
 
 	}
+	
 }
