@@ -14,7 +14,9 @@ var ConsoleManager = {
 
 	success: function(message, push) {
 
-		console.log(message);
+		if(SettingsManager.debugMessages) {
+			console.log(message);
+		}
 
 		if(push && SettingsManager.debugToasts) {
 			toastr.success(message)
@@ -24,7 +26,9 @@ var ConsoleManager = {
 
 	log: function(message, push) {
 
-		console.log(message);
+		if(SettingsManager.debugMessages) {
+			console.log(message);
+		}
 
 		if(push && SettingsManager.debugToasts) {
 			toastr.info(message)
@@ -34,7 +38,9 @@ var ConsoleManager = {
 
 	error: function(message, push) { 
 		
-		console.error(message);
+		if(SettingsManager.debugMessages) {
+			console.error(message);
+		}
 
 		if(push && SettingsManager.debugToasts) {
 			toastr.error(message)
@@ -44,7 +50,9 @@ var ConsoleManager = {
 
 	warning: function(message, push) { 
 		
-		console.error(message);
+		if(SettingsManager.debugMessages) {
+			console.error(message);
+		}
 
 		if(push && SettingsManager.debugToasts) {
 			toastr.warning(message)

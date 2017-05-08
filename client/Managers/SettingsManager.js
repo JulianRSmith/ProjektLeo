@@ -14,6 +14,7 @@ var SettingsManager = {
     serverIP: "projectge.com",
     serverPort: 2020,
     debugToasts: true,
+    debugMessages: false,
 
     saveSettings: function() {
 
