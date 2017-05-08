@@ -77,6 +77,8 @@ var NetworkManager = {
 
         if(NetworkManager.connected()) {
             sfs.disconnect();
+
+            networkConnected = false;
         }
 
     },
