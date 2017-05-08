@@ -21,9 +21,15 @@ function createPlayer (xPos,spriteName) {
     playerCreate.body.collideWorldBounds = true;
     
     // Create the player animations
-    playerCreate.animations.add('right', [6, 7, 8], 10, true);
-    playerCreate.animations.add('left', [3, 4, 5], 10, true);
-    playerCreate.animations.add('attack', [12, 13, 14], 10, true);
+    if(!NetworkManager.connected()) {
+
+        // THIS DOES NOT WORK WHEN CONNECTED TO SERVER
+        // I NEED ONE OF YOU WHO WORKED ON THIS TO GET IT WORKING PLEASE!
+        // CAN'T SEE PLAYER SPRITE FOR THE OTHER PLAYER!
+        playerCreate.animations.add('right', [6, 7, 8], 10, true);
+        playerCreate.animations.add('left', [3, 4, 5], 10, true);
+        playerCreate.animations.add('attack', [12, 13, 14], 10, true);
+    }
     
     return playerCreate;
     

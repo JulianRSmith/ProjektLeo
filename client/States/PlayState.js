@@ -20,12 +20,17 @@ var PlayState = {
     secTimer: 0,
     userChar: 0,
     buttonMenu: 0,
-    aiActivated: false,
-    singlePlayer: false,
-    otherPlayerChar: false,
-    oponent: false,
-    delay: false,
-    key: "",
+    aiActivated: 0,
+    singlePlayer: 0,
+    otherPlayerChar: 0,
+    opponent: 0,
+    delay: 0,
+    key: 0,
+
+    p1Debug: 0,
+    p2Debug: 0,
+
+    otherDebugBox: 0,
     
     create: function () {
         
@@ -38,9 +43,8 @@ var PlayState = {
         // game.stage.backgroundColor = "#4488AA";
         var gameBackground = game.add.sprite(0, 0, 'battleBackground');
         
-        mainBattle = game.add.audio('musicBattle');
-        mainBattle.loop = true;
-        mainBattle.play();
+        AudioManager.gameBattleTheme.loop = true;
+        //AudioManager.gameBattleTheme.play();
         
         // Create the game's ground
         gameFloor = createGameGround();
@@ -49,7 +53,7 @@ var PlayState = {
         this.userChar = PlayerData.getSelectedCharacter();
         console.log("CHOSEN = " + this.userChar)
         
-        if (LobbyData.lobby == 0){
+        if (!NetworkManager.connected() && LobbyData.lobby == 0){
             this.singlePlayer = true;
             this.otherPlayerChar = PlayerData.generateEnemyPlayer(this.userChar)
             console.log("Single Player Game = " + this.singlePlayer)
@@ -61,7 +65,7 @@ var PlayState = {
         healthBar = createHealthBar(this.userChar);
         
         // Add characters name
-        addCharNames(this.userChar,this.otherPlayerChar);
+        addCharNames(this.userChar, (this.singlePlayer ? this.otherPlayerChar : NetPlayer.playerchar));
         
         // Enabled Keyboard
         this.keyboard = game.input.keyboard;
@@ -72,17 +76,22 @@ var PlayState = {
         game.physics.arcade.gravity.y = 700;
         
         // Create Player Sprite
-        player = createPlayer (32,this.userChar);
+        player = createPlayer (32, this.userChar);
         player.frame = 1;
         
-        if (this.singlePlayer) {
-            this.oponent = createPlayer(ScreenData.gameWidth-32,this.otherPlayerChar);
-        }
+        // NOT WORKING IN MULTIPLAYER.
+        PlayState.opponent = createPlayer(ScreenData.gameWidth-32, (this.singlePlayer ? this.otherPlayerChar : NetPlayer.playerchar));
+
+        // OPPONENT DOES NOT WORK WHEN CONNECTED.
+        // AGAIN, NEED SOMEONE TO FIX THIS AS I HAVE NO CLUE WHY!
+        PlayState.otherDebugBox = game.add.sprite(-100, -100, "otherPlayerDebug", { boundsAlignH: "center", boundsAlignV: "middle" });
         
         // Make the camera follow the player
         game.camera.follow(player);
         
-        
+        PlayState.p1Debug = game.add.text(240, 32, 'P1 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+        PlayState.p2Debug = game.add.text(240, 54, 'P2 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+
         // this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
     },
     
@@ -98,7 +107,7 @@ var PlayState = {
         // Don't allow the gmae floor and the player to overlap each other
         game.physics.arcade.collide(player, gameFloor);
         // Don't allow the gmae floor and the player to overlap each other
-        game.physics.arcade.collide(this.oponent, gameFloor);
+        game.physics.arcade.collide(PlayState.opponent, gameFloor);
         
         // Move player to the right
         if (this.key_Right.isDown) {
@@ -124,11 +133,11 @@ var PlayState = {
         }
         else if(this.key_A.isDown) {
             player.animations.play('attack');
-            this.game.physics.arcade.overlap(player, this.oponent,this.hit, null, this);
+            this.game.physics.arcade.overlap(player, PlayState.opponent, this.hit, null, this);
         }
         else if(this.key_S.isDown) {
             console.log("Player Kicks!")
-            this.game.physics.arcade.overlap(player, this.oponent,this.hit, null, this);
+            this.game.physics.arcade.overlap(player, PlayState.opponent, this.hit, null, this);
         }
         else {
             player.animations.stop();
@@ -153,7 +162,7 @@ var PlayState = {
         }
         // For single player, update an AI player
         else {
-            this.moveSinglePlayerOponent();
+            this.moveSinglePlayerOpponent();
         }
     
     },
@@ -221,10 +230,10 @@ var PlayState = {
         }
     },
     
-    moveSinglePlayerOponent: function() {
+    moveSinglePlayerOpponent: function() {
         var oponentHeading = "";
         
-        if (player.x < this.oponent.x) {
+        if (player.x < PlayState.opponent.x) {
             if (this.delay) {
                 console.log("DELAY")
                 var storeTime = this.secTimer;
@@ -232,22 +241,22 @@ var PlayState = {
                 if (oponentHeading == "left") {
                     if ((this.secTimer-storeTime) > 2) {
                         console.log((this.secTimer-storeTime))
-                        this.oponent.x-= 4;
+                        PlayState.opponent.x-= 4;
                     }
                 } else if (oponentHeading == "right") {
                     if ((this.secTimer-storeTime) > 2) {
                         console.log((this.secTimer-storeTime))
-                        this.oponent.x+= 4;
+                        PlayState.opponent.x+= 4;
                     }
                 }
                 this.delay = false;
             } else {
                 oponentHeading = "left"
-                this.oponent.x-= 4;
-                this.oponent.animations.play('left');
+                PlayState.opponent.x-= 4;
+                PlayState.opponent.animations.play('left');
             }
         }
-        if (player.x > this.oponent.x) {
+        if (player.x > PlayState.opponent.x) {
             if (this.delay) {
                 console.log("DELAY")
                 var storeTime = this.secTimer;
@@ -255,19 +264,19 @@ var PlayState = {
                 if (oponentHeading == "left") {
                     if ((this.secTimer-storeTime) > 2) {
                         console.log((this.secTimer-storeTime))
-                        this.oponent.x-= 4;
+                        PlayState.opponent.x-= 4;
                     }
                 } else if (oponentHeading == "right") {
                     if ((this.secTimer-storeTime) > 2) {
                         console.log((this.secTimer-storeTime))
-                        this.oponent.x+= 4;
+                        PlayState.opponent.x+= 4;
                     }
                 }
                 this.delay = false;
             } else {
                 oponentHeading = "right"
-                this.oponent.x+= 4;
-                this.oponent.animations.play('right');
+                PlayState.opponent.x+= 4;
+                PlayState.opponent.animations.play('right');
             }
         }
     },
@@ -278,8 +287,22 @@ var PlayState = {
     */
     updatePlayer: function(user, type) {
 
-        ConsoleManager.log("PlayState::updatePlayer() : Got update for user position!", false);
+        if(!user.isItMe) {
+            PlayState.p2Debug.setText(user.name + ": [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ",y:" + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
 
-        console.log(user);
+            console.log(PlayState.opponent);
+            console.log(user.getVariable(NetData.NET_PLAYER_X).value);
+            console.log(user.getVariable(NetData.NET_PLAYER_Y).value);
+
+            PlayState.opponent.x = user.getVariable(NetData.NET_PLAYER_X).value;
+            PlayState.opponent.y = user.getVariable(NetData.NET_PLAYER_Y).value;
+
+            PlayState.otherDebugBox.x = user.getVariable(NetData.NET_PLAYER_X).value;
+            PlayState.otherDebugBox.y = user.getVariable(NetData.NET_PLAYER_Y).value;
+        }
+        else {
+            PlayState.p1Debug.setText(user.name + ": [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ",y:" + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
+        }
+
     }
 };

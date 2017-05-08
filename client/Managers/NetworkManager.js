@@ -30,7 +30,7 @@ var NetworkManager = {
         sfs = new SFS2X.SmartFox(config);
             
     	// Set logging level
-    	sfs.logger.level = SFS2X.LogLevel.DEBUG;
+    	//sfs.logger.level = SFS2X.LogLevel.DEBUG;
 
     	// Add event listeners
     	sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, ProtocolManager.onConnect, this);

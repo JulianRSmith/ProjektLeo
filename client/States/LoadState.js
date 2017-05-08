@@ -85,6 +85,8 @@ var LoadState = {
         game.load.image('menuBackground', this.backgroundPath + 'menuBackground.png');
         game.load.image('woodBorder', this.othersPath + 'woodOutline.png');
         game.load.image('backgroundSmoke', this.othersPath + 'smoke.png');
+
+        game.load.image('otherPlayerDebug', this.othersPath + 'otherPlayerDebug.png');
         
         game.load.image('healthBarRed', this.othersPath + 'healthBar.png');
         game.load.image('healthBarBG', this.othersPath + 'healthBarBG.png');
