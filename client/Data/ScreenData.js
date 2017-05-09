@@ -34,8 +34,9 @@ var ScreenData = {
 	gameHeight: 0,
 	gameWidth: 0,
 	
-	transitionTime: 1100,
-
+	/**
+	* Setup the required values, important for game start.
+	*/
 	init: function() {
 
         // For debug
@@ -53,6 +54,9 @@ var ScreenData = {
 
 	},
 
+	/**
+	* Dumps the screen related values.
+	*/
 	debug: function() {
 
         // For debug

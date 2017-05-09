@@ -17,10 +17,11 @@ var PlayerData = {
     playerName: "Unknown Gladiator [" + String(Math.floor(Math.random() * 9999)) + "]",
     playerCharacter: "Waiting...",
     playerReady: 0,
+    playerInChar: 0,
 
     playerAttackState: 0,
 
-    currentState: "",
+    currentState: 0,
 
     
     /**
@@ -62,7 +63,8 @@ var PlayerData = {
         playerId = "Waiting...";
         playerCharacter = "Waiting...";
         playerAttackState = 0;
-        currentState = "";
+        playerInChar = 0;
+        currentState = 0;
         
     }
 };

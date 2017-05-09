@@ -54,19 +54,7 @@ var NetworkManager = {
     	sfs.connect();
     	
     },
-    
-    /**
-     * Sends a request to the server and specified route then sends the response to the callback method.
-     */
-    request: function(route, data, callback) {
-
-        // For debug
-        ConsoleManager.log("NetworkManager::request() : Running", false);
-
-        //pomelo.request(route, data, callback);
-
-    },
-    
+       
     /**
      * Disconnects the client from the server.
      */
@@ -75,11 +63,9 @@ var NetworkManager = {
         // For debug
         ConsoleManager.log("NetworkManager::disconnect() : Running", false);
 
-        if(NetworkManager.connected()) {
-            sfs.disconnect();
+        this.networkConnected = false;
 
-            networkConnected = false;
-        }
+        sfs.disconnect();
 
     },
 
@@ -89,7 +75,7 @@ var NetworkManager = {
     connected: function() {
 
         // For debug
-        // ConsoleManager.log("NetworkManager::connected() : Running", false);
+        ConsoleManager.log("NetworkManager::connected() : Running", false);
 
         return this.networkConnected;
 

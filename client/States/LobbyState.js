@@ -49,7 +49,7 @@ var LobbyState = {
         
         // Menu buttons 
         this.buttonCreateLobby = GUIManager.createButton('Create Lobby', ScreenData.viewportWidth / 2 - (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", function(){ $('#lobby-host').val(PlayerData.playerName); DOMManager.menuToggle("lobby-create"); });
-        this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.refreshOnCreate);
+        this.buttonRefreshLobby = GUIManager.createButton('Refresh List', ScreenData.viewportWidth / 2 - (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", function() { LobbyState.refreshOnCreate(); AudioManager.gameButtonClick.play(); });
         this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + (110*1), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.menuOnClick);
         this.buttonServerDisconnect = GUIManager.createButton('Disconnect', ScreenData.viewportWidth / 2 + (110*3), ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.disconnectOnClick);
 
@@ -116,6 +116,7 @@ var LobbyState = {
     },
     
     createOnClick: function() {
+
         // For debug
         ConsoleManager.log("LobbyState::createOnClick() : Running", false);
 
@@ -131,8 +132,7 @@ var LobbyState = {
             DOMManager.menuToggle('lobby-create');
 
             if(NetworkManager.connected()){
-                if ($("#gameNameIn").val() != "")
-                {
+                if ($("#gameNameIn").val() != "") {
                     // Basic game settings
                     var settings = new SFS2X.SFSGameSettings($('#lobby-name').val());
                     settings.groupId = "games";
@@ -147,6 +147,7 @@ var LobbyState = {
                 }
             }
         }
+
     },
     
     nextPageOnClick: function() {

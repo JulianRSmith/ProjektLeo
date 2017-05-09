@@ -15,6 +15,8 @@ var SettingsManager = {
     serverPort: 2020,
     debugToasts: true,
     debugMessages: false,
+    
+    transitionTime: 1100,
 
     saveSettings: function() {
 

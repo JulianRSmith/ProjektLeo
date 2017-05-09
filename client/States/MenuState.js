@@ -71,13 +71,16 @@ var MenuState = {
         
         AudioManager.gameButtonClick.play();
         
-        setTimeout(function(){game.state.start('CharState')},ScreenData.transitionTime);
+        setTimeout(function() { game.state.start('CharState') }, SettingsManager.transitionTime);
         
     },
 
     // Opens a connection to the server and displays the lobby on connect.
     lobbyListOnClick: function() {
-        woodTransitionOut();
+
+        // This value has true because we do not want to destroy the window
+        // transition as connecting to a network can take different amounts of time.
+        woodTransitionOut(true);
         
         // For debug
         ConsoleManager.log("MenuState::lobbyListOnClick() : Running", false);
@@ -91,14 +94,14 @@ var MenuState = {
             
             var connectInterval = setInterval(function() {
                 if(NetworkManager.connected()) {
-                    setTimeout(function(){game.state.start('LobbyState')},ScreenData.transitionTime);
+                    setTimeout(function() { game.state.start('LobbyState') }, SettingsManager.transitionTime);
                 }
                 
                 clearInterval(connectInterval);
             }, 500);
         }
         else {
-            setTimeout(function(){game.state.start('LobbyState')},ScreenData.transitionTime);
+            setTimeout(function() { game.state.start('LobbyState') }, SettingsManager.transitionTime);
         }
         
     },

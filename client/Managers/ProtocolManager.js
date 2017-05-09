@@ -60,7 +60,7 @@ var ProtocolManager = {
      */
     onRoomRemove: function(event) {
 
-        ConsoleManager.info("Lobby closed:<br>[" + event.room._name + ":" + event.room._id + "]", true);
+        ConsoleManager.log("Lobby closed:<br>[" + event.room._name + ":" + event.room._id + "]", true);
         
         if(PlayerData.currentState == "LobbyState") {
             LobbyState.refreshOnCreate();
@@ -95,12 +95,16 @@ var ProtocolManager = {
         else {
             if (!event.user.isItMe) {
                 ConsoleManager.log("User " + event.user.name + " has left the lobby.", true);
-                game.state.start("WaitState");
 
                 AudioManager.gameBattleTheme.stop();
+
+                woodTransitionOut();
+                setTimeout(function(){game.state.start('WaitState')}, SettingsManager.transitionTime);
+
             }
             else {
-                game.state.start("LobbyState");
+                woodTransitionOut();
+                setTimeout(function(){game.state.start('LobbyState')}, SettingsManager.transitionTime);
             }
         }
 
@@ -119,7 +123,8 @@ var ProtocolManager = {
         NetworkManager.disconnect();
         
         // Return to menu
-        game.state.start("MenuState");
+        woodTransitionOut();
+        setTimeout(function(){game.state.start('MenuState')}, SettingsManager.transitionTime);
 
     },
 
@@ -182,7 +187,9 @@ var ProtocolManager = {
 
         if(event.room.isGame) {
             LobbyData.lobby = event.room;
-            game.state.start('WaitState');
+
+            woodTransitionOut();
+            setTimeout(function(){game.state.start('WaitState')}, SettingsManager.transitionTime);
         }
 
     },
@@ -239,6 +246,31 @@ var ProtocolManager = {
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
                 PlayState.updatePlayer(user, "player_attack");
+            }
+        }
+
+        if (changedVars.indexOf(NetData.NET_PLAYER_INCHAR) != -1) {
+            ConsoleManager.log("[" + user + "] has joined CharState: [CharState:" + user.getVariable(NetData.NET_PLAYER_INCHAR).value + "]", true);
+            
+            if(!user.isItMe) {
+                ConsoleManager.success("Other player ready!", true);
+                NetPlayer.playerInChar = true;
+
+                if(PlayerData.playerInChar) {
+                    game.paused = false;
+
+                    CharState.syncText.destroy();
+                }
+            }
+            else { 
+                ConsoleManager.success("I am ready!", true);
+                PlayerData.playerInChar = true;
+
+                if(NetPlayer.playerInChar) {
+                    game.paused = false;
+
+                    CharState.syncText.destroy();
+                }
             }
         }
     }

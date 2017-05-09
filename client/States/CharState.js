@@ -78,14 +78,30 @@ var CharState = {
             // multiplayer
             this.leaveButton = GUIManager.createButton('Leave Game', 100, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.leaveGame);
             this.readyButton = GUIManager.createButton('Ready', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.setReady);
+
+            // Tell server that we're in character select
+            setTimeout(function() { 
+                var _waitOnCreate = [];
+                _waitOnCreate.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_INCHAR, true));
+
+                sfs.send(new SFS2X.SetUserVariablesRequest(_waitOnCreate));
+
+                console.log("Sent playerInChar state");
+            }, 1000);
         }
         else {
             // single player
             this.buttonPlay = GUIManager.createButton('Select', ScreenData.viewportWidth / 2 - 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.selectOnClick);
             this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
         }
-        
+
         woodTransitionIn();
+
+        if(NetworkManager.connected()) {
+            this.syncText = game.add.text(0, 0, 'Syncing players...', {font: "40px Calibri", fill: "#FFFFFF", boundsAlignH: "center", boundsAlignV: "middle"});
+            this.syncText.setTextBounds(0, 100, ScreenData.viewportWidth, 50);
+            game.paused = true;
+        }
         
     },
 
@@ -110,15 +126,16 @@ var CharState = {
 
         if(PlayerData.playerReady && NetPlayer.playerReady) { 
             if(CharState.readyTimeout == 0) {
+
                 CharState.timeLeft = 3;
                 CharState.timeInterval = setInterval(function() { 
                     CharState.timeLeft--;
                 }, 1000);
 
                 CharState.readyTimeout = setTimeout(function() {
-                    game.state.start("PlayState");
+                    woodTransitionOut();
+                    setTimeout(function() { game.state.start("PlayState"); CharState.readyTimeout = 0; }, SettingsManager.transitionTime);
                     clearTimeout(CharState.readyTimeout);
-                    CharState.readyTimeout = 0;
                 }, 3000);
             }
             else {
@@ -132,13 +149,12 @@ var CharState = {
         
         // Leave the last joined Room
         sfs.send(new SFS2X.LeaveRoomRequest());
-
-        LobbyState.refreshOnCreate();
         
     },
     
     setReady: function() {
-        // TODO: set the player as ready. Lock all the character buttios.
+
+        // Lock all character buttons        
         CharState.leoCharacterPanel.inputEnabled = false;
         CharState.boudCharacterPanel.inputEnabled = false;
         CharState.cleoCharacterPanel.inputEnabled = false;
@@ -155,26 +171,32 @@ var CharState = {
             CharState.readyButton[0].inputEnabled = false;
             CharState.readyButton[1].inputEnabled = false;
         }
+
     },
 
     /**
      * Starts the play state on click.
      */
     selectOnClick: function() {
+
+        // Start the transition to bring the windows in
         woodTransitionOut();
         
         // For debug
         console.log("CharState::selectOnClick() : Running");
 
+        // play sfx and stop musuc
         AudioManager.gameButtonClick.play();
         AudioManager.gameMainTheme.stop();
 
-        setTimeout(function(){game.state.start('PlayState')},ScreenData.transitionTime);
+        // Wait for transition
+        setTimeout(function() { game.state.start('PlayState') }, SettingsManager.transitionTime);
     
     },
 
     charOnClick: function(button) {
 
+        // For debug
         ConsoleManager.log("CharState::charOnClick() : charButton Event (CharStatecharOnClick) On Input Down : Running", false);
         ConsoleManager.log(button._btnData, false);
 
@@ -227,7 +249,7 @@ var CharState = {
             NetworkManager.disconnect();
         }
 
-        setTimeout(function(){game.state.start('MenuState')},ScreenData.transitionTime);
+        setTimeout(function() { game.state.start('MenuState') }, SettingsManager.transitionTime);
     
     },
 

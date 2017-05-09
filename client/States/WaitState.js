@@ -13,7 +13,7 @@ var WaitState = {
     room: 0,
 
 	create: function() {
-
+            
         PlayerData.currentState = "WaitState";
 
         // For debug
@@ -42,7 +42,10 @@ var WaitState = {
         ConsoleManager.log(LobbyData.lobby._userManager._usersById._c.entries(), false);
         ConsoleManager.log(Object.keys(LobbyData.lobby._userManager._usersById._c), false);
 
+        this.waitForTransition = false;
         room = sfs.lastJoinedRoom;
+
+        woodTransitionIn();
 
 	},
 
@@ -68,17 +71,23 @@ var WaitState = {
         if(LobbyData.lobby._userCount == 2) {
             var gameStarted = room.getVariable(SFS2X.ReservedRoomVariables.RV_GAME_STARTED).value;
 
+            this.lobbyText.setText("Ready to start!");
+
             if(!gameStarted) {
-                this.lobbyText.setText("Ready to start!");
                 
                 this.readyToStart = true;
             }
             else {
-                this.lobbyText.setText("Started!");
-
                 this.readyToStart = false;
 
-                game.state.start("CharState");
+                if(!this.waitForTransition) {
+                    this.waitForTransition = true;
+
+                    woodTransitionOut(true);
+                    setTimeout(function(){
+                        game.state.start('CharState');
+                    }, SettingsManager.transitionTime);
+                }
             }
 
         }
@@ -94,8 +103,6 @@ var WaitState = {
         
         // Leave the last joined Room
         sfs.send(new SFS2X.LeaveRoomRequest());
-
-        LobbyState.refreshOnCreate();
 
     },
 

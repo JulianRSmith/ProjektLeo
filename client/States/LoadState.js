@@ -60,9 +60,9 @@ var LoadState = {
         AudioManager.gameMainTheme.loop = true;
         
         
-        woodTransitionOut();
         // Start the menu state
-        setTimeout(function(){game.state.start('MenuState')},ScreenData.transitionTime);
+        woodTransitionOut();
+        setTimeout(function() { game.state.start('MenuState') }, SettingsManager.transitionTime);
 
     },
     
