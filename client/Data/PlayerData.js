@@ -14,7 +14,7 @@
 var PlayerData = {
     
     playerId: "Waiting...",
-    playerName: "Unknown Gladiator",
+    playerName: "Unknown Gladiator [" + String(Math.floor(Math.random() * 9999)) + "]",
     playerCharacter: "Waiting...",
     playerReady: 0,
 

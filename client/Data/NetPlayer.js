@@ -13,6 +13,10 @@ var NetPlayer = {
 	playerY: 0,
 
     playerAttackState: 0,
+    
+    setPlayer: function(thePlayerName) {
+    	this.playerChar = thePlayerName;
+    },
 
 	reset: function() {
 

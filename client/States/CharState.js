@@ -251,7 +251,8 @@ var CharState = {
         console.log(user);
         if(type == "char_select") {
             if(!user.isItMe) { 
-                NetPlayer.playerChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
+                // NetPlayer.playerChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;
+                NetPlayer.setPlayer(user.getVariable(NetData.NET_PLAYER_CHAR).value);
                 this.p2Text.setText("▲\n" + "  " + user.name + "  ");
 
                 if(NetPlayer.playerChar == "playerLeo") {

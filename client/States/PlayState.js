@@ -34,6 +34,7 @@ var PlayState = {
     
     create: function () {
         
+        
         PlayerData.currentState = "PlayState";
 
         // Set game world size
@@ -51,21 +52,22 @@ var PlayState = {
         
         // Get users chosen character
         this.userChar = PlayerData.getSelectedCharacter();
-        console.log("CHOSEN = " + this.userChar)
         
+        // Randomly select enemy player if in single player game
         if (!NetworkManager.connected() && LobbyData.lobby == 0){
             this.singlePlayer = true;
             this.otherPlayerChar = PlayerData.generateEnemyPlayer(this.userChar)
-            console.log("Single Player Game = " + this.singlePlayer)
+            console.log("Single Player Game = " + this.singlePlayer + " Enemy = " + this.otherPlayerChar)
         } else {
-            console.log("Multiplayer Game Started")
+            this.otherPlayerChar = NetPlayer.playerChar;
+            console.log("Multiplayer Game Started = " + this.otherPlayerChar)
         }
         
         // Create the health bar on screen
         healthBar = createHealthBar(this.userChar);
         
         // Add characters name
-        addCharNames(this.userChar, (this.singlePlayer ? this.otherPlayerChar : NetPlayer.playerchar));
+        addCharNames(this.userChar, this.otherPlayerChar);
         
         // Enabled Keyboard
         this.keyboard = game.input.keyboard;
@@ -80,18 +82,15 @@ var PlayState = {
         player.frame = 1;
         
         // NOT WORKING IN MULTIPLAYER.
-        PlayState.opponent = createPlayer(ScreenData.gameWidth-32, (this.singlePlayer ? this.otherPlayerChar : NetPlayer.playerchar));
-
-        // OPPONENT DOES NOT WORK WHEN CONNECTED.
-        // AGAIN, NEED SOMEONE TO FIX THIS AS I HAVE NO CLUE WHY!
-        PlayState.otherDebugBox = game.add.sprite(-100, -100, "otherPlayerDebug", { boundsAlignH: "center", boundsAlignV: "middle" });
+        this.opponent = createPlayer(ScreenData.gameWidth-32, this.otherPlayerChar);
         
         // Make the camera follow the player
         game.camera.follow(player);
         
-        PlayState.p1Debug = game.add.text(240, 32, 'P1 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
-        PlayState.p2Debug = game.add.text(240, 54, 'P2 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
-
+        if (!this.singlePlayer) {
+            PlayState.p1Debug = game.add.text(240, 32, 'P1 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+            PlayState.p2Debug = game.add.text(240, 54, 'P2 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+        }
         // this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
     },
     
@@ -223,10 +222,25 @@ var PlayState = {
     
     hit: function () {
         console.log("HIT");
-        if (player2Health >= 0) {
+        // If a multiplayer game
+        if (!this.singlePlayer) {
+            
             healthBar.getAt(1).body.setSize(player2Health,30,0,0);
             player2Health--;
-            console.log("Player player2Health!")
+            console.log("Player 2 Health = " + player2Health);
+            
+            var playerHealth = []
+            playerHealth.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_HEALTH, player1Health));
+            playerHealth.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_HEALTH, player2Health));
+            sfs.send(new SFS2X.SetUserVariablesRequest(playerHealth));
+            console.log("Push Test = " + playerHealth);
+        // If a single player game
+        } else {
+            if (player2Health >= 0) {
+                healthBar.getAt(1).body.setSize(player2Health,30,0,0);
+                player2Health--;
+                console.log("Player player2Health!")
+            }
         }
     },
     

@@ -223,6 +223,15 @@ var ProtocolManager = {
                 CharState.updatePlayer(user, "char_ready");
             }
         }
+        
+        if (changedVars.indexOf(NetData.NET_PLAYER_HEALTH) != -1) {
+            console.log("[" + user + "] change health: [health:" + user.getVariable(NetData.NET_PLAYER_HEALTH).value + "]");
+            
+            // Pass the data into the PlayState
+            if(PlayerData.currentState == "PlayState") {
+                PlayState.updatePlayer(user, "play_state");
+            }
+        }
     }
     
 }
