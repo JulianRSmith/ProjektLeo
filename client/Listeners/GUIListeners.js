@@ -16,7 +16,7 @@ var GUIListeners = {
     buttonHoverState: function() {
 
         // For debug
-        //ConsoleManager.log("GUIListeners::buttonHoverState() : Running", false);
+        ConsoleManager.log("GUIListeners::buttonHoverState() : Running", false);
 
         game.canvas.style.cursor = "pointer";
 
@@ -28,7 +28,7 @@ var GUIListeners = {
     buttonLeavestate: function() {
 
         // For debug
-        //ConsoleManager.log("GUIListeners::buttonLeavestate() : Running", false);
+        ConsoleManager.log("GUIListeners::buttonLeavestate() : Running", false);
 
         game.canvas.style.cursor = "default";
 

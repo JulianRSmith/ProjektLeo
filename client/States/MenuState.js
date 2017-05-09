@@ -27,7 +27,7 @@ var MenuState = {
 
         // Stop a theme if it is already plying so we don't have overlapping themes
         AudioManager.gameMainTheme.stop();
-        //AudioManager.gameMainTheme.play();
+        AudioManager.gameMainTheme.play();
 
         // Background objects
         GUIManager.backgroundTile('menuBackground');
@@ -46,6 +46,7 @@ var MenuState = {
         this.buttonGetLobbies = GUIManager.createButton('Lobbies', ScreenData.viewportWidth / 2, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.lobbyListOnClick);
         this.buttonServerSettings = GUIManager.createButton('Settings', ScreenData.viewportWidth / 2 + (110*2), ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.settingsOnClick);
         
+        woodTransitionIn();
     },
 
     update: function() {
@@ -53,6 +54,7 @@ var MenuState = {
         LobbyData.reset();
         PlayerData.reset();
     },
+    
 
     render: function() {
 
@@ -62,21 +64,21 @@ var MenuState = {
 
     // Function which calls when the player clicks the button
     menuOnClick: function() {
+        woodTransitionOut();
 
         // For debug
         ConsoleManager.log("MenuState::menuOnClick() : Running", false);
         
         AudioManager.gameButtonClick.play();
-
-
-        // TODO: Start character select state in single player mode.
-        game.state.start('CharState');
+        
+        setTimeout(function(){game.state.start('CharState')},ScreenData.transitionTime);
         
     },
 
     // Opens a connection to the server and displays the lobby on connect.
     lobbyListOnClick: function() {
-
+        woodTransitionOut();
+        
         // For debug
         ConsoleManager.log("MenuState::lobbyListOnClick() : Running", false);
 
@@ -89,14 +91,14 @@ var MenuState = {
             
             var connectInterval = setInterval(function() {
                 if(NetworkManager.connected()) {
-                    game.state.start("LobbyState");
+                    setTimeout(function(){game.state.start('LobbyState')},ScreenData.transitionTime);
                 }
                 
                 clearInterval(connectInterval);
             }, 500);
         }
         else {
-            game.state.start("LobbyState");
+            setTimeout(function(){game.state.start('LobbyState')},ScreenData.transitionTime);
         }
         
     },

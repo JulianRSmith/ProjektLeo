@@ -48,9 +48,9 @@ var PlayerData = {
             }
         }
         var pickChar = game.rnd.integerInRange(0, 1);
-        console.log(pickChar)
+        ConsoleManager.log(pickChar, false)
         var enemyChar = charList[pickChar];
-        console.log(enemyChar)
+        ConsoleManager.log(enemyChar, false)
         return enemyChar;
     },
 

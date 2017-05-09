@@ -58,9 +58,11 @@ var LoadState = {
 
         AudioManager.gameButtonClick.allowMultiple = true;
         AudioManager.gameMainTheme.loop = true;
-
+        
+        
+        woodTransitionOut();
         // Start the menu state
-        game.state.start('MenuState');
+        setTimeout(function(){game.state.start('MenuState')},ScreenData.transitionTime);
 
     },
     
@@ -90,6 +92,8 @@ var LoadState = {
         
         game.load.image('healthBarRed', this.othersPath + 'healthBar.png');
         game.load.image('healthBarBG', this.othersPath + 'healthBarBG.png');
+        
+        game.load.image('woodTransition', this.othersPath + 'woodTransition.png');
         
         game.load.image('goldPlacename', this.othersPath + 'goldArt.png');
         

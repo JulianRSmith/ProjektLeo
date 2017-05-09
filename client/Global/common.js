@@ -6,6 +6,25 @@
 
 ************************************************************/
 
+function woodTransitionOut () {
+    var woodenImageWidth = game.cache.getImage("woodTransition").width;
+    var woodenImage = game.add.image(0 - woodenImageWidth, 0, 'woodTransition');
+    var tween = game.add.tween(woodenImage).to( { x: 0 }, 0, Phaser.Easing.Linear.None, true, 0);
+    var woodenImage2 = game.add.image(ScreenData.viewportWidth, 0, 'woodTransition');
+    var tween2 = game.add.tween(woodenImage2).to( { x: woodenImageWidth }, 0, Phaser.Easing.Linear.None, true, 0);
+    tween.onComplete.add( function() {    setTimeout(function(){woodenImage.destroy();},100);});
+    tween2.onComplete.add( function() {    setTimeout(function(){woodenImage2.destroy();},100);});
+}
+function woodTransitionIn () {
+    var woodenImageWidth = game.cache.getImage("woodTransition").width;
+    var woodenImage = game.add.image(0, 0, 'woodTransition');
+    var tween = game.add.tween(woodenImage).to( { x: 0 - woodenImageWidth }, 0, Phaser.Easing.Linear.None, true, 0);
+    var woodenImage2 = game.add.image(ScreenData.viewportWidth/2, 0, 'woodTransition');
+    var tween2 = game.add.tween(woodenImage2).to( { x: ScreenData.viewportWidth}, 0, Phaser.Easing.Linear.None, true, 0);
+    tween.onComplete.add( function() {    setTimeout(function(){woodenImage.destroy();},100);});
+    tween2.onComplete.add( function() {    setTimeout(function(){woodenImage2.destroy();},100);});
+}
+
 /**
  * Creates the player
  */

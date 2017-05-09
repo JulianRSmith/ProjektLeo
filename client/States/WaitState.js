@@ -38,9 +38,9 @@ var WaitState = {
 
         this.leaveButton = GUIManager.createButton('Leave Game', 100, ScreenData.viewportHeight - 70, '#341e09', "buttonGreenNormal", this.leaveGame);
 
-        console.log(LobbyData.lobby);
-        console.log(LobbyData.lobby._userManager._usersById._c.entries());
-        console.log(Object.keys(LobbyData.lobby._userManager._usersById._c));
+        ConsoleManager.log(LobbyData.lobby, false);
+        ConsoleManager.log(LobbyData.lobby._userManager._usersById._c.entries(), false);
+        ConsoleManager.log(Object.keys(LobbyData.lobby._userManager._usersById._c), false);
 
         room = sfs.lastJoinedRoom;
 

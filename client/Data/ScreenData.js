@@ -33,6 +33,8 @@ var ScreenData = {
 	gameHeightBuffer: 0,
 	gameHeight: 0,
 	gameWidth: 0,
+	
+	transitionTime: 1100,
 
 	init: function() {
 

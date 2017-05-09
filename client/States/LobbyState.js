@@ -59,6 +59,8 @@ var LobbyState = {
         this.buttonPrevPage[1].angle = 180;
 
         this.refreshOnCreate();
+        
+        woodTransitionIn();
 
     },
     
@@ -84,7 +86,7 @@ var LobbyState = {
         var rooms = sfs.roomManager.getRoomList();
         var source = [];
 
-        console.log(rooms);
+        ConsoleManager.log(rooms);
 
         var roomCount = 0;
         for (i = 0; i < Object.keys(rooms).length; i++)
@@ -93,7 +95,7 @@ var LobbyState = {
 
             if (room.isGame && !room.isPasswordProtected && !room.isHidden)
             {
-                console.log(room);
+                ConsoleManager.log(room);
 
                 LobbyState.lobbyCache[roomCount] = {
                     id: room.id,
@@ -244,7 +246,7 @@ var LobbyState = {
                 false
             );
 
-            console.log(LobbyState);
+            ConsoleManager.log(LobbyState, false);
 
             LobbyState.lobbyList[i] = GUIManager.createLobbyButton(
                 // Lobby name

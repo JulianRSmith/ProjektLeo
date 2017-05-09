@@ -85,12 +85,7 @@ var CharState = {
             this.buttonMenu = GUIManager.createButton('Menu', ScreenData.viewportWidth / 2 + 110, ScreenData.viewportHeight - 110, '#341e09', "buttonGreenNormal", this.menuOnClick);
         }
         
-        if (NetworkManager.connected()) {
-            console.log("NETWORK CONNECT");
-        }
-        else {
-            console.log("NETWORK NOT CONNECTED");
-        }
+        woodTransitionIn();
         
     },
 
@@ -166,6 +161,7 @@ var CharState = {
      * Starts the play state on click.
      */
     selectOnClick: function() {
+        woodTransitionOut();
         
         // For debug
         console.log("CharState::selectOnClick() : Running");
@@ -173,7 +169,7 @@ var CharState = {
         AudioManager.gameButtonClick.play();
         AudioManager.gameMainTheme.stop();
 
-        game.state.start('PlayState');
+        setTimeout(function(){game.state.start('PlayState')},ScreenData.transitionTime);
     
     },
 
@@ -182,9 +178,9 @@ var CharState = {
         ConsoleManager.log("CharState::charOnClick() : charButton Event (CharStatecharOnClick) On Input Down : Running", false);
         ConsoleManager.log(button._btnData, false);
 
-        console.log(CharState.leoCharacterPanel);
-        console.log(CharState.boudCharacterPanel);
-        console.log(CharState.cleoCharacterPanel);
+        // console.log(CharState.leoCharacterPanel);
+        // console.log(CharState.boudCharacterPanel);
+        // console.log(CharState.cleoCharacterPanel);
 
         // Reset all buttons
         CharState.leoCharacterPanel.frame = 1;
@@ -197,7 +193,7 @@ var CharState = {
         CharState.cleoCharacterPanel.inputEnabled = true;
 
         // Set this button passed into the method to selected
-        console.log(button);
+        // console.log(button);
         button.animations.stop('hover');
         button.inputEnabled = true;
         button.frame = 0;
@@ -219,6 +215,7 @@ var CharState = {
      * Return to menu on click.
      */
     menuOnClick: function() {
+        woodTransitionOut();
         
         // For debug
         console.log("CharState::menuOnClick() : Running");
@@ -230,7 +227,7 @@ var CharState = {
             NetworkManager.disconnect();
         }
 
-        game.state.start("MenuState");
+        setTimeout(function(){game.state.start('MenuState')},ScreenData.transitionTime);
     
     },
 
@@ -248,7 +245,7 @@ var CharState = {
 
         ConsoleManager.log("CharState::updatePlayer() : Got update for user selection!", false);
 
-        console.log(user);
+        // console.log(user);
         if(type == "char_select") {
             if(!user.isItMe) { 
                 // NetPlayer.playerChar = user.getVariable(NetData.NET_PLAYER_CHAR).value;

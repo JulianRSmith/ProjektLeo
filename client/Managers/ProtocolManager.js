@@ -196,7 +196,7 @@ var ProtocolManager = {
 
         // Check if the user changed position
         if (changedVars.indexOf(NetData.NET_PLAYER_X) != -1 || changedVars.indexOf(NetData.NET_PLAYER_Y) != -1) {
-            console.log("[" + user + "] change position: [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ", y: " + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
+            ConsoleManager.log("[" + user + "] change position: [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ", y: " + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
 
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
@@ -206,7 +206,7 @@ var ProtocolManager = {
 
         // User character select change
         if (changedVars.indexOf(NetData.NET_PLAYER_CHAR) != -1) {
-            console.log("[" + user + "] change character: [character:" + user.getVariable(NetData.NET_PLAYER_CHAR).value + "]");
+            ConsoleManager.log("[" + user + "] change character: [character:" + user.getVariable(NetData.NET_PLAYER_CHAR).value + "]");
 
             // Pass the data into the CharState
             if(PlayerData.currentState == "CharState") {
@@ -216,7 +216,7 @@ var ProtocolManager = {
 
         // User ready
         if (changedVars.indexOf(NetData.NET_PLAYER_READY) != -1) {
-            console.log("[" + user + "] is ready: [ready:" + user.getVariable(NetData.NET_PLAYER_READY).value + "]");
+            ConsoleManager.log("[" + user + "] is ready: [ready:" + user.getVariable(NetData.NET_PLAYER_READY).value + "]");
 
             // Pass the data into the CharState
             if(PlayerData.currentState == "CharState") {
@@ -225,11 +225,20 @@ var ProtocolManager = {
         }
         
         if (changedVars.indexOf(NetData.NET_PLAYER_HEALTH) != -1) {
-            console.log("[" + user + "] change health: [health:" + user.getVariable(NetData.NET_PLAYER_HEALTH).value + "]");
+            ConsoleManager.log("[" + user + "] change health: [health:" + user.getVariable(NetData.NET_PLAYER_HEALTH).value + "]");
             
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
-                PlayState.updatePlayer(user, "play_state");
+                PlayState.updatePlayer(user, "player_health");
+            }
+        }
+        
+        if (changedVars.indexOf(NetData.NET_PLAYER_ATTACK) != -1) {
+            ConsoleManager.log("[" + user + "] has attacked: [attack:" + user.getVariable(NetData.NET_PLAYER_ATTACK).value + "]");
+            
+            // Pass the data into the PlayState
+            if(PlayerData.currentState == "PlayState") {
+                PlayState.updatePlayer(user, "player_attack");
             }
         }
     }

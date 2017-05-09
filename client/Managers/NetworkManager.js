@@ -24,13 +24,13 @@ var NetworkManager = {
     	config.host = host;
     	config.port = parseInt(port);
     	config.zone = "BasicExamples";
-    	config.debug = true;
+    	config.debug = false;
     	
     	// New client
         sfs = new SFS2X.SmartFox(config);
             
     	// Set logging level
-    	//sfs.logger.level = SFS2X.LogLevel.DEBUG;
+    	sfs.logger.level = SFS2X.LogLevel.ERROR;
 
     	// Add event listeners
     	sfs.addEventListener(SFS2X.SFSEvent.CONNECTION, ProtocolManager.onConnect, this);
