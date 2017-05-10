@@ -78,6 +78,10 @@ var ProtocolManager = {
         }
         else {
             ConsoleManager.log("User " + event.user.name + " has joined the lobby.", true);
+
+            if(!event.user.isItMe) {
+                NetPlayer.playerName = event.user.name;
+            }
         }
 
     },
@@ -203,7 +207,7 @@ var ProtocolManager = {
 
         // Check if the user changed position
         if (changedVars.indexOf(NetData.NET_PLAYER_X) != -1 || changedVars.indexOf(NetData.NET_PLAYER_Y) != -1) {
-            ConsoleManager.log("[" + user + "] change position: [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ", y: " + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
+            //ConsoleManager.log("[" + user + "] change position: [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ", y: " + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
 
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
@@ -213,7 +217,7 @@ var ProtocolManager = {
 
         // User character select change
         if (changedVars.indexOf(NetData.NET_PLAYER_CHAR) != -1) {
-            ConsoleManager.log("[" + user + "] change character: [character:" + user.getVariable(NetData.NET_PLAYER_CHAR).value + "]");
+            //ConsoleManager.log("[" + user + "] change character: [character:" + user.getVariable(NetData.NET_PLAYER_CHAR).value + "]");
 
             // Pass the data into the CharState
             if(PlayerData.currentState == "CharState") {
@@ -223,7 +227,7 @@ var ProtocolManager = {
 
         // User ready
         if (changedVars.indexOf(NetData.NET_PLAYER_READY) != -1) {
-            ConsoleManager.log("[" + user + "] is ready: [ready:" + user.getVariable(NetData.NET_PLAYER_READY).value + "]");
+            //ConsoleManager.log("[" + user + "] is ready: [ready:" + user.getVariable(NetData.NET_PLAYER_READY).value + "]");
 
             // Pass the data into the CharState
             if(PlayerData.currentState == "CharState") {
@@ -232,7 +236,7 @@ var ProtocolManager = {
         }
         
         if (changedVars.indexOf(NetData.NET_PLAYER_HEALTH) != -1) {
-            ConsoleManager.log("[" + user + "] change health: [health:" + user.getVariable(NetData.NET_PLAYER_HEALTH).value + "]");
+            //ConsoleManager.log("[" + user + "] change health: [health:" + user.getVariable(NetData.NET_PLAYER_HEALTH).value + "]");
             
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
@@ -241,7 +245,7 @@ var ProtocolManager = {
         }
         
         if (changedVars.indexOf(NetData.NET_PLAYER_ATTACK) != -1) {
-            ConsoleManager.log("[" + user + "] has attacked: [attack:" + user.getVariable(NetData.NET_PLAYER_ATTACK).value + "]");
+            //ConsoleManager.log("[" + user + "] has attacked: [attack:" + user.getVariable(NetData.NET_PLAYER_ATTACK).value + "]");
             
             // Pass the data into the PlayState
             if(PlayerData.currentState == "PlayState") {
@@ -250,10 +254,10 @@ var ProtocolManager = {
         }
 
         if (changedVars.indexOf(NetData.NET_PLAYER_INCHAR) != -1) {
-            ConsoleManager.log("[" + user + "] has joined CharState: [CharState:" + user.getVariable(NetData.NET_PLAYER_INCHAR).value + "]", true);
+            //ConsoleManager.log("[" + user + "] has joined CharState: [CharState:" + user.getVariable(NetData.NET_PLAYER_INCHAR).value + "]", false);
             
             if(!user.isItMe) {
-                ConsoleManager.success("Other player ready!", true);
+                //ConsoleManager.success("Other player ready!", true);
                 NetPlayer.playerInChar = true;
 
                 if(PlayerData.playerInChar) {
@@ -263,7 +267,7 @@ var ProtocolManager = {
                 }
             }
             else { 
-                ConsoleManager.success("I am ready!", true);
+                //ConsoleManager.success("I am ready!", true);
                 PlayerData.playerInChar = true;
 
                 if(NetPlayer.playerInChar) {
@@ -272,6 +276,44 @@ var ProtocolManager = {
                     CharState.syncText.destroy();
                 }
             }
+        }
+
+        if (changedVars.indexOf(NetData.NET_PLAYER_DIED) != -1) {
+            //ConsoleManager.log("[" + user + "] has joined CharState: [CharState:" + user.getVariable(NetData.NET_PLAYER_INCHAR).value + "]", false);
+            
+            if(!user.isItMe) {
+                NetPlayer.hasDied = true;
+                PlayState.deathText = game.add.text(0, 0, " You won this battle! ", {font: "40px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+                PlayState.deathText.setTextBounds(0, 200, ScreenData.viewportWidth, 50);
+            }
+            else { 
+                PlayerData.hasDied = true;
+                PlayState.deathText = game.add.text(0, 0, " You lost this battle! ", {font: "40px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
+                PlayState.deathText.setTextBounds(0, 200, ScreenData.viewportWidth, 50);
+            }
+
+            setTimeout(function(){
+                woodTransitionOut(true);
+
+                // Cleanup values
+                NetPlayer.playerChar = 0;
+                NetPlayer.playerReady = false;
+                NetPlayer.hasDied = false;
+
+                PlayerData.playerChar = 0;
+                PlayerData.playerReady = false;
+                PlayerData.hasDied = false;
+
+                CharState.readyButton[0].setText('Ready');
+                CharState.timeLeft = 3;
+
+                player1Health = 200;
+                player2Health = 200;
+
+                setTimeout(function() {
+                    game.state.start("CharState");
+                }, SettingsManager.transitionTime);
+            }, 3000);
         }
     }
     

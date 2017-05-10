@@ -52,8 +52,12 @@ var WaitState = {
     render: function() {
 
         // Safety for when players leave the room.
-        NetPlayer.playerReady = false;
-        PlayerData.playerReady = false;
+        NetPlayer.playerReady = 0;
+        PlayerData.playerReady = 0;
+        NetPlayer.hasDied = 0;
+        PlayerData.hasDied = 0;
+        NetPlayer.playerChar = 0;
+        PlayerData.playerChar = 0;
 
         AudioManager.gameBattleTheme.stop();
 

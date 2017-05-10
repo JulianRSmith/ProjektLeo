@@ -27,9 +27,13 @@ var PlayState = {
     delay: 0,
     key: 0,
 
+    _attackIsPressed: 0,
+
     _playerAttack: 0,
     _playerPos: 0,
     _playerHealth: 0,
+
+    _oPX: 0,
 
     p1Debug: 0,
     p2Debug: 0,
@@ -86,109 +90,133 @@ var PlayState = {
         player = createPlayer (32, this.userChar);
         player.frame = 1;
         
-        
         // Make the camera follow the player
         game.camera.follow(player);
         
         if (!this.singlePlayer) {
-            this.p1Debug = game.add.text(240, 32, 'P1 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
-            this.p2Debug = game.add.text(240, 54, 'P2 DEBUGTEXT', {font: "14px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
-        }
-        // this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
-        
-        woodTransitionIn();
-
-        // Game time
-        //this.secTimer = this.game.time.totalElapsedSeconds().toFixed(2);
-
-    },
-    
-    update: function () {
-
-        if (!this.aiActivated) {
-            this.checkAiHelp();
-        }
-        if (!this.singlePlayer) {
-            this.checkHealthUpdated();
-        }
-
-        // Don't allow the gmae floor and the player to overlap each other
-        game.physics.arcade.collide(player, gameFloor);
-        // Don't allow the gmae floor and the player to overlap each other
-        game.physics.arcade.collide(this.opponent, gameFloor);
-        
-        // Move player to the right
-        if (this.key_Right.isDown) {
-            if (this.key != "right"){
-                this.delay = true;
-                this.key = "right";
-            } else {
-                this.key = "right";
-            }
-            player.x+= 6;
-            player.animations.play('right');
-        }
-        // Move player to the left
-        else if (this.key_Left.isDown) {
-            if (this.key != "left"){
-                this.delay = true;
-                this.key = "left";
-            } else {
-                this.key = "left";
-            }
-            player.x-= 6;
-            player.animations.play('left');
-        }
-        else {
-            player.animations.stop();
-        }
-        
-        if(this.key_A.isDown) {
-            player.animations.play('attack');
-            
-            if(this.singlePlayer) {
-                this.game.physics.arcade.overlap(player, this.opponent, this.hit, null, this);
-            }
-            else {
-                this._playerAttack = [];
-                this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, true));
-                
-                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
-            }
-            
-        }
-        else if(this.key_A.isUp) {
-            if(!this.singlePlayer) {
-                this._playerAttack = [];
-                this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, false));
-                
-                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
-            }
-            // player.animations.stop();
-        }
-        
-        // Make the player jump only if they're touching the ground
-        if (this.key_Up.isDown && player.body.touching.down) {
-            player.body.velocity.y = -400;
-            //ConsoleManager.log("Player Jump")
-        }
-        
-        // If we're in a network game, send our position to the server
-        // It would be better to track what keys are pressed and have the server
-        // do the magic, but for the sake of reducing dev time, this works.
-        if(!this.singlePlayer) { 
             this._playerPos = [];
             this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_X, player.x));
             this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_Y, player.y));
             sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
-            
-            this.updateRemotePlayer();
         }
-        // For single player, update an AI player
-        else {
-            this.moveSinglePlayerOpponent();
-        }
+        // this.buttonMenu = GUIManager.createButton('Menu', ScreenData.screenWidth, ScreenData.viewportHeight - 70, '#FFFFFF', "buttonGreenNormal", this.menuOnClick);
+        
+        woodTransitionIn();
+    },
     
+    update: function () {
+
+        if(!PlayerData.hasDied && !NetPlayer.hasDied) {
+            var _pPX = player.x;
+            var _pPY = player.y;
+
+            // Game time
+            this.secTimer = this.game.time.totalElapsedSeconds().toFixed(2);
+
+
+            if (!this.aiActivated) {
+                this.checkAiHelp();
+            }
+            if (!this.singlePlayer) {
+                this.checkHealthUpdated();
+            }
+
+            // Don't allow the gmae floor and the player to overlap each other
+            game.physics.arcade.collide(player, gameFloor);
+            // Don't allow the gmae floor and the player to overlap each other
+            game.physics.arcade.collide(this.opponent, gameFloor);
+            
+            // Move player to the right
+            if (this.key_Right.isDown) {
+                if (this.key != "right"){
+                    this.delay = true;
+                    this.key = "right";
+                } else {
+                    this.key = "right";
+                }
+                player.x+= 6;
+                player.animations.play('right');
+            }
+            // Move player to the left
+            else if (this.key_Left.isDown) {
+                if (this.key != "left"){
+                    this.delay = true;
+                    this.key = "left";
+                } else {
+                    this.key = "left";
+                }
+                player.x-= 6;
+                player.animations.play('left');
+            }
+            else {
+                player.animations.stop();
+            }
+            
+            if(this.key_A.isDown) {
+                player.animations.play('attack');
+                
+                if(this.singlePlayer) {
+                    this.game.physics.arcade.overlap(player, this.opponent, this.hit, null, this);
+                }
+                else {
+                    this._playerAttack = [];
+                    this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, true));
+                    
+                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
+
+                    this._attackIsPressed = true;
+                }
+                
+            }
+            else if(this.key_A.isUp) {
+                if(!this.singlePlayer && this._attackIsPressed) {
+
+                    this._attackIsPressed = false;
+
+                    this._playerAttack = [];
+                    this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, false));
+                    
+                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
+
+                    //console.log("sending not attack");
+
+                    player.animations.stop();
+                }
+                // player.animations.stop();
+            }
+            
+            // Make the player jump only if they're touching the ground
+            if (this.key_Up.isDown && player.body.touching.down) {
+                player.body.velocity.y = -600;
+                //ConsoleManager.log("Player Jump")
+            }
+            
+            if(this.singlePlayer) { 
+                this.moveSinglePlayerOpponent();
+            }
+            else {
+                this.updateOtherPlayerAnims();
+            }
+
+            if(player.y < 422) {
+                this._playerPos = [];
+                this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_Y, player.y));
+                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
+            }
+            if(_pPX != player.x) {
+                this._playerPos = [];
+                this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_X, player.x));
+                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
+                //console.log("player pos changed.");
+            }
+
+            if(player1Health < 1) {
+                this._hasDied = [];
+                this._hasDied.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_DIED, true));
+                sfs.send(new SFS2X.SetUserVariablesRequest(this._hasDied));
+            }
+        }
+
     },
     
     // Displays debug information
@@ -198,7 +226,7 @@ var PlayState = {
         healthBar.forEachAlive(this.renderGroup, this);
         
         // game.debug.body(gameFloor);
-        //this.game.debug.text('Time: ' + this.secTimer, ScreenData.viewportWidth/2, 60, 'yellow', 'Segoe UI');
+        this.game.debug.text('Time: ' + this.secTimer, ScreenData.viewportWidth/2, 60, 'yellow', 'Segoe UI');
         
     },
     
@@ -214,7 +242,7 @@ var PlayState = {
     },
     
     renderGroup: function(member) {    
-        //game.debug.body(member);
+        game.debug.body(member);
     },
     
     checkAiHelp: function() {
@@ -255,7 +283,7 @@ var PlayState = {
                 player1Health--;
                 
                 this._playerHealth = []
-                this._playerHealth.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_HEALTH, player1Health), player1Health);
+                this._playerHealth.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_HEALTH, player1Health));
                 sfs.send(new SFS2X.SetUserVariablesRequest(this._playerHealth));
             }
         }
@@ -321,49 +349,18 @@ var PlayState = {
         }
     },
 
-    updateRemotePlayer: function() {
-        var oponentHeading = "";
-        
-        if (player.x < this.opponent.x) {
-            if (this.delay) {
-                //ConsoleManager.log("DELAY", false)
-                var storeTime = this.secTimer;
-                //ConsoleManager.log("STORE = " + storeTime, false)
-                if (oponentHeading == "left") {
-                    if ((this.secTimer-storeTime) > 2) {
-                        //ConsoleManager.log((this.secTimer-storeTime), false)
-                    }
-                } else if (oponentHeading == "right") {
-                    if ((this.secTimer-storeTime) > 2) {
-                        //ConsoleManager.log((this.secTimer-storeTime), false)
-                    }
-                }
-                this.delay = false;
-            } else {
-                oponentHeading = "left"
-                this.opponent.animations.play('left');
-            }
+    updateOtherPlayerAnims: function() {
+
+        if(this._oPX > this.opponent.x) {
+            this.opponent.animations.play('left');
         }
-        if (player.x > this.opponent.x) {
-            if (this.delay) {
-                //ConsoleManager.log("DELAY", false);
-                var storeTime = this.secTimer;
-                //ConsoleManager.log("STORE = " + storeTime, false)
-                if (oponentHeading == "left") {
-                    if ((this.secTimer-storeTime) > 2) {
-                        //ConsoleManager.log((this.secTimer-storeTime), false)
-                    }
-                } else if (oponentHeading == "right") {
-                    if ((this.secTimer-storeTime) > 2) {
-                        //ConsoleManager.log((this.secTimer-storeTime), false)
-                    }
-                }
-                this.delay = false;
-            } else {
-                oponentHeading = "right"
-                this.opponent.animations.play('right');
-            }
+        else if(this._oPX < this.opponent.x) {
+            this.opponent.animations.play('right');
         }
+        else {
+            this.opponent.animations.stop();
+        }
+
     },
 
     /**
@@ -371,6 +368,7 @@ var PlayState = {
     * Update here.
     */
     updatePlayer: function(user, type) {
+
         if (type == "play_state") {
             if(!user.isItMe) {
                 //this.p2Debug.setText(user.name + ": [x:" + user.getVariable(NetData.NET_PLAYER_X).value + ",y:" + user.getVariable(NetData.NET_PLAYER_Y).value + "]");
@@ -378,7 +376,9 @@ var PlayState = {
                 ////ConsoleManager.log(this.opponent, false);
                 ////ConsoleManager.log(user.getVariable(NetData.NET_PLAYER_X).value, false);
                 ////ConsoleManager.log(user.getVariable(NetData.NET_PLAYER_Y).value, false);
-        
+
+                this._oPX = this.opponent.x;
+
                 this.opponent.x = user.getVariable(NetData.NET_PLAYER_X).value;
                 this.opponent.y = user.getVariable(NetData.NET_PLAYER_Y).value;
             }
@@ -405,7 +405,9 @@ var PlayState = {
                 // If the user isn't the current user
                 if(user.getVariable(NetData.NET_PLAYER_ATTACK).value) {
                     // Is attacking
-                    console.log("ENEMY IS ATTACKING");
+                    //console.log("ENEMY IS ATTACKING");
+
+                    this.opponent.animations.play('attack');
                     this.game.physics.arcade.overlap(player, this.opponent, this.hit, null, this);
                     
                 } else {

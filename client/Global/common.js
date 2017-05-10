@@ -79,6 +79,8 @@ function createPlayer (xPos,spriteName) {
     playerCreate.animations.add('right', [6, 7, 8], 10, true);
     playerCreate.animations.add('left', [3, 4, 5], 10, true);
     playerCreate.animations.add('attack', [12, 13, 14], 10, true);
+
+    playerCreate.scale.setTo(0.5, 0.5);
     
     return playerCreate;
     

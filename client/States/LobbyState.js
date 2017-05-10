@@ -62,6 +62,9 @@ var LobbyState = {
         
         woodTransitionIn();
 
+        NetPlayer.hasDied = false;
+        PlayerData.hasDied = false;
+
     },
     
     render: function() {

@@ -14,5 +14,7 @@ var NetData = {
 	NET_PLAYER_READY: "player_ready",
 	NET_PLAYER_HEALTH: "player_health",
 	NET_PLAYER_ATTACK: "player_attack",
-	NET_PLAYER_INCHAR: "player_in_charselect"
+	NET_PLAYER_INCHAR: "player_in_charselect",
+	NET_PLAYER_DIED: "player_died"
+
 }
