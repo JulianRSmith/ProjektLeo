@@ -291,6 +291,8 @@ var ProtocolManager = {
                 PlayState.deathText = game.add.text(0, 0, " You lost this battle! ", {font: "40px Calibri", fill: "#FFFFFF", backgroundColor: "#333333", align: "center", boundsAlignH: "center", boundsAlignV: "middle"});
                 PlayState.deathText.setTextBounds(0, 200, ScreenData.viewportWidth, 50);
             }
+            
+            PlayState.deathText.fixedToCamera = true;
 
             setTimeout(function(){
                 woodTransitionOut(true);

@@ -159,10 +159,12 @@ var PlayState = {
                     this.game.physics.arcade.overlap(player, this.opponent, this.hit, null, this);
                 }
                 else {
-                    this._playerAttack = [];
-                    this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, true));
-                    
-                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
+                    if (!this.singlePlayer) {
+                        this._playerAttack = [];
+                        this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, true));
+                        
+                        sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
+                    }
 
                     this._attackIsPressed = true;
                 }
@@ -173,11 +175,13 @@ var PlayState = {
 
                     this._attackIsPressed = false;
 
-                    this._playerAttack = [];
-                    this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, false));
+                    if (!this.singlePlayer) {
+                        this._playerAttack = [];
+                        this._playerAttack.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_ATTACK, false));
+                        
+                        sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
+                    }
                     
-                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerAttack));
-
                     //console.log("sending not attack");
 
                     player.animations.stop();
@@ -199,21 +203,27 @@ var PlayState = {
             }
 
             if(player.y < 422) {
-                this._playerPos = [];
-                this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_Y, player.y));
-                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
+                if (!this.singlePlayer) {
+                    this._playerPos = [];
+                    this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_Y, player.y));
+                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
+                }
             }
             if(_pPX != player.x) {
-                this._playerPos = [];
-                this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_X, player.x));
-                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
-                //console.log("player pos changed.");
+                if (!this.singlePlayer) {
+                    this._playerPos = [];
+                    this._playerPos.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_X, player.x));
+                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerPos));
+                    //console.log("player pos changed.");
+                }
             }
 
             if(player1Health < 1) {
-                this._hasDied = [];
-                this._hasDied.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_DIED, true));
-                sfs.send(new SFS2X.SetUserVariablesRequest(this._hasDied));
+                if (!this.singlePlayer) {
+                    this._hasDied = [];
+                    this._hasDied.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_DIED, true));
+                    sfs.send(new SFS2X.SetUserVariablesRequest(this._hasDied));
+                }
             }
         }
 
@@ -237,8 +247,8 @@ var PlayState = {
         this.key_Right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         this.key_Up    = game.input.keyboard.addKey(Phaser.Keyboard.UP);
         this.key_Down  = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-        this.key_A = game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this.key_S = game.input.keyboard.addKey(Phaser.Keyboard.S);
+        this.key_A     = game.input.keyboard.addKey(Phaser.Keyboard.A);
+        this.key_S     = game.input.keyboard.addKey(Phaser.Keyboard.S);
     },
     
     renderGroup: function(member) {    
@@ -282,9 +292,11 @@ var PlayState = {
             if (player1Health >= 0) {
                 player1Health--;
                 
-                this._playerHealth = []
-                this._playerHealth.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_HEALTH, player1Health));
-                sfs.send(new SFS2X.SetUserVariablesRequest(this._playerHealth));
+                if (!this.singlePlayer) {
+                    this._playerHealth = []
+                    this._playerHealth.push(new SFS2X.SFSUserVariable(NetData.NET_PLAYER_HEALTH, player1Health));
+                    sfs.send(new SFS2X.SetUserVariablesRequest(this._playerHealth));
+                }
             }
         }
         // If a single player game
